@@ -1,10 +1,15 @@
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { Card, Stack, Typography, pxToRem, useTheme } from "@wso2/oxygen-ui";
-import { Calendar, ChevronRight, Clock4 } from "@wso2/oxygen-ui-icons-react";
+import { ChevronRight, Clock4 } from "@wso2/oxygen-ui-icons-react";
 import { Circle } from "@mui/icons-material";
 import { PriorityChip, StatusChip } from "@components/features/support";
 import { Link } from "react-router-dom";
 
 import { TYPE_CONFIG } from "./config";
+import type { Case } from "@src/types";
+
+dayjs.extend(relativeTime);
 
 export type ItemType = "case" | "chat" | "service" | "change";
 
@@ -26,17 +31,11 @@ export type Priority = "low" | "medium" | "high";
 export type ServiceCategory = "Security Update" | "Database Change" | "Infrastructure";
 
 interface BaseItemCardProps {
-  id: string;
-  title: string;
-  timestamp: string;
   to: string;
 }
 
-interface CaseItemCardProps extends BaseItemCardProps {
+interface CaseItemCardProps extends BaseItemCardProps, Case {
   type: "case";
-  priority: Priority;
-  status: Status;
-  assignee: string;
 }
 
 interface ChatItemCardProps extends BaseItemCardProps {
@@ -63,9 +62,9 @@ interface ChangeItemCardProps extends BaseItemCardProps {
 
 export type ItemCardProps = CaseItemCardProps | ChatItemCardProps | ServiceItemCardProps | ChangeItemCardProps;
 
-export function ItemCard(props: ItemCardProps) {
+export function ItemCard(props: CaseItemCardProps) {
   const theme = useTheme();
-  const { id, title, type, status, timestamp, to } = props;
+  const { type, to } = props;
   const { icon: Icon, color } = TYPE_CONFIG[type];
 
   return (
@@ -75,44 +74,24 @@ export function ItemCard(props: ItemCardProps) {
           <Stack direction="row" alignItems="center" gap={1}>
             <Icon size={pxToRem(18)} color={color} />
             <Typography variant="subtitle2" fontWeight="regular" color="text.secondary">
-              {id}
+              {props.number}
             </Typography>
-            {(type === "case" || type === "service") && <PriorityChip size="small" priority={props.priority} />}
-            {type === "change" && <PriorityChip size="small" prefix="Impact" priority={props.impact} />}
+            <PriorityChip size="small" id={props.severityId ?? "N/A"} />
           </Stack>
           <ChevronRight size={pxToRem(18)} color={theme.palette.text.secondary} />
         </Stack>
 
         <Typography variant="body1" color="text.primary">
-          {title}
+          {props.title}
         </Typography>
 
         <Stack direction="row" alignItems="center" gap={1}>
-          <StatusChip size="small" status={status} />
+          <StatusChip size="small" id={props.statusId ?? "N/A"} />
           <Circle sx={(theme) => ({ color: "text.tertiary", fontSize: theme.typography.pxToRem(4) })} />
           <Typography variant="subtitle2" fontWeight="regular" color="text.secondary">
-            {type === "case" && props.assignee}
-            {type === "chat" && `${props.count} messages`}
-            {(type === "service" || type === "change") && props.category}
+            {type === "case" && (props.assigned ?? "N/A")}
           </Typography>
-          {type === "chat" && (
-            <>
-              <Circle sx={(theme) => ({ color: "text.tertiary", fontSize: theme.typography.pxToRem(4) })} />
-              <Typography variant="subtitle2" fontWeight="regular" color="text.secondary">
-                {props.kb} KB
-              </Typography>
-            </>
-          )}
         </Stack>
-
-        {type === "change" && (
-          <Stack direction="row" alignItems="center" gap={1}>
-            <Calendar size={pxToRem(16)} color={theme.palette.text.secondary} />
-            <Typography variant="subtitle2" fontWeight="regular" color="text.secondary">
-              Scheduled: {props.scheduled}
-            </Typography>
-          </Stack>
-        )}
 
         <Stack gap={0.5} mt={1}>
           <Stack direction="row" alignItems="center" gap={1}>
@@ -122,7 +101,7 @@ export function ItemCard(props: ItemCardProps) {
               color="text.tertiary"
               sx={(theme) => ({ fontSize: theme.typography.pxToRem(14) })}
             >
-              {timestamp}
+              {dayjs(props.createdOn).fromNow()}
             </Typography>
           </Stack>
         </Stack>

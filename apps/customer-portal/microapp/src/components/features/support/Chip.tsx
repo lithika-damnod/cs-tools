@@ -1,26 +1,33 @@
-import { capitalize } from "@utils/others";
 import { Chip, type ChipProps } from "@wso2/oxygen-ui";
-import type { Priority, Status } from "./ItemCard";
 
 import { PRIORITY_CHIP_COLOR_CONFIG, STATUS_CHIP_COLOR_CONFIG } from "./config";
+import { useProject } from "@root/src/context/project";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { cases } from "@src/services/cases";
 
 interface PriorityChipProps extends Omit<ChipProps, "label"> {
   prefix?: string;
-  priority: Priority;
+  id: string;
 }
 
-export function PriorityChip({ prefix, priority, ...props }: PriorityChipProps) {
-  const color = PRIORITY_CHIP_COLOR_CONFIG[priority];
+export function PriorityChip({ prefix, id, ...props }: PriorityChipProps) {
+  const { projectId } = useProject();
+  const color = PRIORITY_CHIP_COLOR_CONFIG[id];
+  const label =
+    useSuspenseQuery(cases.filters(projectId!)).data.severities.find((severity) => severity.id === id)?.label ?? "N/A";
 
-  return <Chip color={color} label={`${prefix ? `${prefix}: ` : ""}${capitalize(priority)}`} {...props} />;
+  return <Chip color={color} label={`${prefix ? `${prefix}: ` : ""}${label}`} {...props} />;
 }
 
 interface StatusChipProps extends Omit<ChipProps, "label"> {
-  status: Status;
+  id: string;
 }
 
-export function StatusChip({ status, ...props }: StatusChipProps) {
-  const color = STATUS_CHIP_COLOR_CONFIG[status];
+export function StatusChip({ id, ...props }: StatusChipProps) {
+  const { projectId } = useProject();
+  const color = STATUS_CHIP_COLOR_CONFIG[id];
+  const label =
+    useSuspenseQuery(cases.filters(projectId!)).data.statuses.find((status) => status.id === id)?.label ?? "N/A";
 
-  return <Chip color={color} label={capitalize(status)} {...props} />;
+  return <Chip color={color} label={label} {...props} />;
 }
