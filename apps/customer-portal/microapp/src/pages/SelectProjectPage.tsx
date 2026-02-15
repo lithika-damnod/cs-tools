@@ -14,16 +14,14 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import { Suspense } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { Box, CircularProgress, SearchBar, Stack, Typography, useTheme } from "@wso2/oxygen-ui";
 import { Folder } from "@wso2/oxygen-ui-icons-react";
 import { ProjectCard } from "@components/features/projects";
 import { useNavigate } from "react-router-dom";
 import { useProject } from "@context/project";
-// import { useSuspenseQuery } from "@tanstack/react-query";
-// import { getProjects } from "@src/services/projects";
-
-import { MOCK_PROJECTS } from "@src/mocks/data/projects";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { projects } from "@src/services/projects";
 
 export default function SelectProjectPage() {
   return (
@@ -49,10 +47,21 @@ function SelectProjectContent() {
   const navigate = useNavigate();
   const { setProjectId } = useProject();
 
-  // const { data } = useSuspenseQuery({
-  //   queryKey: ["projects"],
-  //   queryFn: getProjects,
-  // });
+  const [search, setSearch] = useState("");
+  const { data: projectsData } = useSuspenseQuery(projects.all());
+
+  const data = useMemo(() => {
+    if (!search) return projectsData;
+
+    const normalizedSearch = search.toLowerCase();
+
+    return projectsData.filter(
+      (project) =>
+        project.id.toLowerCase().includes(normalizedSearch) ||
+        project.name.toLowerCase().includes(normalizedSearch) ||
+        project.description?.toLowerCase().includes(normalizedSearch),
+    );
+  }, [projectsData, search]);
 
   return (
     <Box minHeight="100vh" px={2.5} py={5}>
@@ -66,15 +75,22 @@ function SelectProjectContent() {
         Choose a project to access your support cases, chat history, and dashboard
       </Typography>
       <Stack mt={5} gap={3}>
-        <SearchBar size="small" placeholder="Search Projects" value="" sx={{ mt: 1 }} fullWidth />
-        {MOCK_PROJECTS.map((props) => (
+        <SearchBar
+          size="small"
+          placeholder="Search Projects"
+          value={search}
+          onChange={(e) => setSearch(e.currentTarget.value)}
+          sx={{ mt: 1 }}
+          fullWidth
+        />
+        {data.map((props) => (
           <ProjectCard
             key={props.id}
+            {...props}
             onClick={() => {
               setProjectId(props.id);
               navigate("/");
             }}
-            {...props}
           />
         ))}
       </Stack>

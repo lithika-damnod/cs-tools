@@ -1,7 +1,7 @@
 import { alpha, Chip, Stack, Typography, useTheme } from "@wso2/oxygen-ui";
-import type { ProjectCardProps } from "@components/features/projects";
 import { Check } from "@wso2/oxygen-ui-icons-react";
 import { Circle } from "@mui/icons-material";
+import type { Project } from "@src/types";
 
 import { PROJECT_STATUS_META } from "@config/constants";
 
@@ -9,10 +9,10 @@ export function ProjectPopoverItem({
   name,
   type,
   status,
-  numberOfOpenCases,
+  metrics,
   active = false,
   onClick,
-}: Pick<ProjectCardProps, "name" | "type" | "status" | "numberOfOpenCases"> & {
+}: Pick<Project, "name" | "type" | "status" | "metrics"> & {
   active?: boolean;
   onClick: () => void;
 }) {
@@ -51,7 +51,7 @@ export function ProjectPopoverItem({
       <Stack direction="row" alignItems="center" gap={1}>
         <Circle sx={(theme) => ({ fontSize: theme.typography.pxToRem(6), color: "primary.main" })} />
         <Typography color="text.secondary" sx={(theme) => ({ fontSize: theme.typography.pxToRem(13) })}>
-          {numberOfOpenCases} Open Cases
+          {metrics.cases ?? 0} Open Cases
         </Typography>
       </Stack>
     </Stack>
