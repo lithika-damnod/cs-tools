@@ -38,23 +38,12 @@ export default function CreateCasePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const messages = location.state?.messages || [];
+  const queryClient = useQueryClient();
   const { projectId } = useProject();
 
-  const issueTypeOptions = [
-    { value: 1, label: "Total Outage" },
-    { value: 2, label: "Partial Outage" },
-    { value: 3, label: "Performance Degradation" },
-    { value: 4, label: "Question" },
-    { value: 5, label: "Security or Compliance" },
-    { value: 6, label: "Error" },
-  ];
-
-  const severityLevelOptions = [
-    { value: 10, label: "Critical (P1)" },
-    { value: 11, label: "High (P2)" },
-    { value: 12, label: "Medium (P3)" },
-    { value: 14, label: "Catastrophic (P0)" },
-  ];
+  const { data: filters } = useSuspenseQuery(cases.filters(projectId!));
+  const issueTypeOptions = filters.issueTypes.map((type) => ({ value: Number(type.id), label: type.label }));
+  const severityLevelOptions = filters.severities.map((type) => ({ value: Number(type.id), label: type.label }));
 
   const formik = useFormik<CreateCaseFormValues>({
     initialValues: {
@@ -78,8 +67,6 @@ export default function CreateCasePage() {
       });
     },
   });
-
-  const queryClient = useQueryClient();
 
   const deploymentQuery = useQuery({
     ...projects.deployments(projectId!),
