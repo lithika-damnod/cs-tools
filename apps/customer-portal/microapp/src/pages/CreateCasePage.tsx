@@ -23,6 +23,8 @@ import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tansta
 import { useProject } from "@context/project";
 import { projects } from "@src/services/projects";
 import { cases } from "@src/services/cases";
+import type { CaseClassificationResponseDTO } from "@src/types";
+import { useEffect } from "react";
 
 type CreateCaseFormValues = {
   project: string;
@@ -38,6 +40,7 @@ export default function CreateCasePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const messages = location.state?.messages || [];
+  const classifications: CaseClassificationResponseDTO = location.state?.classifications;
   const queryClient = useQueryClient();
   const { projectId } = useProject();
 
@@ -102,6 +105,24 @@ export default function CreateCasePage() {
     },
   });
 
+  useEffect(() => {
+    if (!classifications) return;
+
+    const matchedType = issueTypeOptions.find((option) => option.label === classifications.issueType);
+    if (matchedType) formik.setFieldValue("type", matchedType.value);
+
+    const matchedSeverity = severityLevelOptions.find((option) => option.label.includes(classifications.severityLevel));
+    if (matchedSeverity) formik.setFieldValue("severity", matchedSeverity.value);
+
+    if (classifications.caseInfo.shortDescription) {
+      formik.setFieldValue("title", classifications.caseInfo.shortDescription);
+    }
+    if (classifications.caseInfo.description) {
+      formik.setFieldValue("description", classifications.caseInfo.description);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [classifications]);
+
   return (
     <>
       <Backdrop
@@ -138,7 +159,10 @@ export default function CreateCasePage() {
               label="Deployment Type"
               options={deploymentOptions}
               value={formik.values.deployment}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.handleChange(e);
+                formik.setFieldValue("product", "");
+              }}
               disabled={!formik.values.project || deploymentQuery.isLoading}
             />
             <SelectField
