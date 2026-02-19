@@ -19,11 +19,15 @@ import { Folder } from "@wso2/oxygen-ui-icons-react";
 import { Button, Stack, Typography, InputAdornment, pxToRem } from "@wso2/oxygen-ui";
 import { SelectField, TextField, ConversationSummary } from "@components/features/create";
 import { useFormik } from "formik";
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useProject } from "@context/project";
+import { projects } from "@src/services/projects";
+import { cases } from "@src/services/cases";
 
 type CreateCaseFormValues = {
-  project: number;
-  product: number;
-  deployment: number;
+  project: string;
+  product: string;
+  deployment: string;
   type: number;
   severity: number;
   title: string;
@@ -34,50 +38,78 @@ export default function CreateCasePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const messages = location.state?.messages || [];
+  const { projectId } = useProject();
 
-  const projects = [
-    { value: 0, label: "Dreamworks Inc" },
-    { value: 1, label: "Newsline Enterprise" },
-    { value: 2, label: "Goods Store Mart" },
+  const issueTypeOptions = [
+    { value: 1, label: "Total Outage" },
+    { value: 2, label: "Partial Outage" },
+    { value: 3, label: "Performance Degradation" },
+    { value: 4, label: "Question" },
+    { value: 5, label: "Security or Compliance" },
+    { value: 6, label: "Error" },
   ];
 
-  const products = [
-    { value: 0, label: "WSO2 API Manager v4.2.0" },
-    { value: 1, label: "WSO2 Identity Access Manager v4.2.0" },
-  ];
-
-  const deploymentTypes = [
-    { value: 0, label: "Production" },
-    { value: 1, label: "Staging" },
-    { value: 2, label: "Development" },
-  ];
-
-  const issueTypes = [
-    { value: 0, label: "Configuration Issue" },
-    { value: 1, label: "Query" },
-    { value: 2, label: "Security Vulnerability" },
-  ];
-
-  const severityLevels = [
-    { value: 0, label: "S1 Critical" },
-    { value: 1, label: "S2 Medium" },
-    { value: 2, label: "S3 Low" },
+  const severityLevelOptions = [
+    { value: 10, label: "Critical (P1)" },
+    { value: 11, label: "High (P2)" },
+    { value: 12, label: "Medium (P3)" },
+    { value: 14, label: "Catastrophic (P0)" },
   ];
 
   const formik = useFormik<CreateCaseFormValues>({
     initialValues: {
-      project: 0,
-      product: 0,
-      deployment: 0,
-      title: "API Gateway timeout issues in production",
-      description:
-        "Novera: Hi! I'm Novera, your AI-powered support assistant. How can I help you today? Please describe the issue you're experiencing. Customer: fadfad Novera: Thanks for those details. Based on what you've shared, here are a few things to check:",
-      type: 0,
-      severity: 0,
+      project: projectId!,
+      product: "",
+      deployment: "",
+      title: "",
+      description: "",
+      type: issueTypeOptions[0].value,
+      severity: severityLevelOptions[0].value,
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      mutation.mutate({
+        projectId: values.project,
+        deploymentId: values.deployment,
+        productId: values.product,
+        title: values.title,
+        description: values.description,
+        issueTypeKey: values.type,
+        severityKey: values.severity,
+      });
       navigate("/support");
+    },
+  });
+
+  const queryClient = useQueryClient();
+
+  const deploymentQuery = useQuery({
+    ...projects.deployments(projectId!),
+    enabled: !!formik.values.project,
+  });
+
+  const productQuery = useQuery({
+    ...projects.products(formik.values.deployment),
+    enabled: !!formik.values.deployment,
+  });
+
+  const projectsOptions = useSuspenseQuery(projects.all()).data.map((project) => ({
+    value: project.id,
+    label: project.name,
+  }));
+
+  const deploymentOptions =
+    deploymentQuery.data?.map((deployment) => ({ value: deployment.id, label: deployment.name })) ?? [];
+
+  const productOptions =
+    productQuery.data?.map((product) => ({
+      value: product.id,
+      label: product.name,
+    })) ?? [];
+
+  const mutation = useMutation({
+    ...cases.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cases"] });
     },
   });
 
@@ -88,7 +120,7 @@ export default function CreateCasePage() {
           <SelectField
             name="project"
             label="Project"
-            options={projects}
+            options={projectsOptions}
             value={formik.values.project}
             onChange={formik.handleChange}
             startAdornment={
@@ -98,18 +130,20 @@ export default function CreateCasePage() {
             }
           />
           <SelectField
-            name="product"
-            label="Product & Version"
-            options={products}
-            value={formik.values.product}
-            onChange={formik.handleChange}
-          />
-          <SelectField
             name="deployment"
             label="Deployment Type"
-            options={deploymentTypes}
+            options={deploymentOptions}
             value={formik.values.deployment}
             onChange={formik.handleChange}
+            disabled={!formik.values.project || deploymentQuery.isLoading}
+          />
+          <SelectField
+            name="product"
+            label="Product & Version"
+            options={productOptions}
+            value={formik.values.product}
+            onChange={formik.handleChange}
+            disabled={!formik.values.deployment || productQuery.isLoading}
           />
         </Stack>
         <Stack gap={4}>
@@ -127,14 +161,14 @@ export default function CreateCasePage() {
           <SelectField
             name="type"
             label="Issue Type"
-            options={issueTypes}
+            options={issueTypeOptions}
             value={formik.values.type}
             onChange={formik.handleChange}
           />
           <SelectField
             name="severity"
             label="Severity Levels"
-            options={severityLevels}
+            options={severityLevelOptions}
             value={formik.values.severity}
             onChange={formik.handleChange}
           />

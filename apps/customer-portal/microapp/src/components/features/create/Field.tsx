@@ -11,13 +11,22 @@ import {
 interface SelectFieldProps {
   name: string;
   label: string;
-  options: { value: number; label: string }[];
-  value?: number;
+  options: { value: number | string; label: string }[];
+  value?: number | string;
   startAdornment?: React.ReactNode;
-  onChange?: (event: SelectChangeEvent<number>) => void;
+  disabled?: boolean;
+  onChange?: (event: SelectChangeEvent<number | string>) => void;
 }
 
-export function SelectField({ name, label, options, value = 0, startAdornment, onChange }: SelectFieldProps) {
+export function SelectField({
+  name,
+  label,
+  options,
+  value = 0,
+  disabled = false,
+  startAdornment,
+  onChange,
+}: SelectFieldProps) {
   const seen = new Set();
   options = options.filter((option) => {
     if (seen.has(option.value)) return false;
@@ -37,6 +46,7 @@ export function SelectField({ name, label, options, value = 0, startAdornment, o
         sx={{ bgcolor: "background.paper" }}
         startAdornment={startAdornment}
         onChange={onChange}
+        disabled={disabled}
       >
         {options.map((option) => (
           <MenuItem key={option.value} value={option.value}>
