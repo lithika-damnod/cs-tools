@@ -1,4 +1,4 @@
-import { alpha, Chip, Stack, Typography, useTheme } from "@wso2/oxygen-ui";
+import { alpha, Chip, Skeleton, Stack, Typography, useTheme } from "@wso2/oxygen-ui";
 import { Check } from "@wso2/oxygen-ui-icons-react";
 import { Circle } from "@mui/icons-material";
 import type { Project } from "@src/types";
@@ -17,7 +17,7 @@ export function ProjectPopoverItem({
   onClick: () => void;
 }) {
   const theme = useTheme();
-  const statusChipColorVariant = PROJECT_STATUS_META[status].color;
+  const statusChipColorVariant = status ? PROJECT_STATUS_META[status].color : "default";
 
   return (
     <Stack
@@ -36,14 +36,18 @@ export function ProjectPopoverItem({
         {active && <Check color={theme.palette.primary.main} />}
       </Stack>
       <Stack direction="row" alignItems="center" gap={1.5}>
-        <Chip
-          label={status}
-          size="small"
-          sx={(theme) => ({
-            bgcolor: alpha(theme.palette[statusChipColorVariant].light, 0.1),
-            color: theme.palette[statusChipColorVariant].light,
-          })}
-        />
+        {status ? (
+          <Chip
+            label={status}
+            size="small"
+            sx={(theme) => ({
+              bgcolor: alpha(theme.palette[statusChipColorVariant].light, 0.1),
+              color: theme.palette[statusChipColorVariant].light,
+            })}
+          />
+        ) : (
+          <Skeleton variant="rounded" width={80} height={24} />
+        )}
         <Typography color="text.secondary" sx={(theme) => ({ fontSize: theme.typography.pxToRem(13) })}>
           {type}
         </Typography>
