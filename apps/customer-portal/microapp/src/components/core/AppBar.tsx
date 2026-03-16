@@ -13,14 +13,13 @@ import {
   Skeleton,
 } from "@wso2/oxygen-ui";
 
-import { NotificationBadge } from "@components/ui";
 import { ProjectSelector } from "@components/features/projects";
 import { useLayout } from "@src/context/layout";
 import { useProject } from "@context/project";
 
 import { APP_BAR_CONFIG } from "@components/layout/config";
 import { PROJECT_STATUS_META } from "@config/constants";
-import { ArrowLeft, Bell, ChevronDown, Folder, Grip, LogOut } from "@wso2/oxygen-ui-icons-react";
+import { ArrowLeft, ChevronDown, Folder, Grip } from "@wso2/oxygen-ui-icons-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { projects } from "@src/services/projects";
 import { goToMyAppsScreen } from "../microapp-bridge";
@@ -69,7 +68,6 @@ export function AppBar() {
         {config.showNotifications && (
           <Stack direction="row" justifyContent="space-between" alignItems="center" mb={0.5}>
             <ExitButton />
-            {/* <NotificationButton to="/notifications" /> */}
           </Stack>
         )}
 
@@ -96,7 +94,7 @@ export function AppBar() {
         </Stack>
 
         {config.showProjectSelector && (
-          <Button sx={{ justifyContent: "space-between", p: 0 }} onClick={openProjectSelector} disableRipple>
+          <Button sx={{ justifyContent: "space-between", p: 0, mt: 2 }} onClick={openProjectSelector} disableRipple>
             <Stack direction="row" sx={{ alignItems: "center" }} gap={1}>
               <Folder color={theme.palette.text.secondary} size={pxToRem(18)} />
               <Typography variant="body1" color="text.secondary" sx={{ textTransform: "initial" }}>
@@ -132,27 +130,6 @@ export function AppBar() {
       {/* Popovers */}
       <ProjectSelector anchorEl={projectSelectorAnchor} open={isProjectSelectorOpen} onClose={closeProjectSelector} />
     </>
-  );
-}
-
-function NotificationButton({ to }: { to: string }) {
-  const theme = useTheme();
-
-  return (
-    <IconButton
-      disableRipple
-      component={Link}
-      to={to}
-      sx={{
-        position: "absolute",
-        top: "var(--safe-top)",
-        right: 10,
-        p: 0,
-      }}
-    >
-      <Bell size={pxToRem(20)} color={theme.palette.text.secondary} />
-      <NotificationBadge badgeContent={1} color="primary" overlap="circular" />
-    </IconButton>
   );
 }
 
