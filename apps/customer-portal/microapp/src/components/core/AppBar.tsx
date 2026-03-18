@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   AppBar as MuiAppBar,
   Button,
@@ -11,7 +11,6 @@ import {
   useTheme,
   alpha,
   Skeleton,
-  Box,
 } from "@wso2/oxygen-ui";
 
 import { ProjectSelector } from "@components/features/projects";
