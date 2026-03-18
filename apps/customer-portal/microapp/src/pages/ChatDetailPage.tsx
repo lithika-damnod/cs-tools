@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Box, Divider, Grid, Skeleton, Stack, Typography, pxToRem } from "@wso2/oxygen-ui";
 import { BookOpen, MessageSquare } from "@wso2/oxygen-ui-icons-react";
 import { StatusChip } from "@components/features/support";
@@ -125,10 +125,6 @@ export default function ChatDetailPage() {
       layout.setTitleOverride(undefined);
     };
   }, [data, overlineSlotVariant]);
-
-  useEffect(() => {
-    console.log("variant:", overlineSlotVariant);
-  }, [overlineSlotVariant]);
 
   return (
     <>
