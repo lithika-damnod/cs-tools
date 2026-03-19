@@ -14,7 +14,6 @@ export function RoleSelector({ value, onChange }: RoleSelectorProps) {
   return (
     <RadioGroup value={value} onChange={(event) => onChange(event.target.value as Role)}>
       <Stack gap={0.5}>
-        <RoleOption role="Admin" />
         <RoleOption role="Portal User" />
         <RoleOption role="System User" />
       </Stack>

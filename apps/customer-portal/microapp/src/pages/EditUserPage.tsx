@@ -1,5 +1,17 @@
 import { useState, type ReactNode } from "react";
-import { Avatar, Box, Button, Card, colors, pxToRem, Stack, TextField, Typography, useTheme } from "@wso2/oxygen-ui";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CircularProgress,
+  colors,
+  pxToRem,
+  Stack,
+  TextField,
+  Typography,
+  useTheme,
+} from "@wso2/oxygen-ui";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { InvitationSummaryContent, RoleSelector } from "@components/features/users";
 import { useProject } from "@context/project";
@@ -16,7 +28,10 @@ export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "e
   const queryClient = useQueryClient();
   const state = location.state as { email?: string; role?: Role; firstName?: string; lastName?: string };
 
-  const [role, setRole] = useState<Role>(state?.role ?? "Portal User");
+  const defaultUserRole = "Portal User";
+  const [role, setRole] = useState<Role>(
+    state?.role ? (state.role === "Admin" ? defaultUserRole : state.role) : defaultUserRole,
+  );
   const [email, setEmail] = useState(state?.email ?? "");
   const [firstName, setFirstName] = useState(state?.firstName ?? "");
   const [lastName, setLastName] = useState(state?.lastName ?? "");
@@ -115,6 +130,11 @@ export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "e
       )}
 
       <Button
+        disabled={
+          mode === "edit"
+            ? role === (state.role ? (state.role === "Admin" ? defaultUserRole : state.role) : defaultUserRole)
+            : false
+        }
         variant="contained"
         onClick={() => {
           if (mode === "invite")
@@ -125,6 +145,14 @@ export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "e
               isCsIntegrationUser: true,
               isSecurityContact: false,
             });
+
+          if (mode === "edit") {
+            const isSecurityContact = role === "System User";
+
+            editUserMutation.mutate({
+              isSecurityContact,
+            });
+          }
         }}
       >
         {mode === "invite" ? "Send Invitation" : "Save Changes"}
