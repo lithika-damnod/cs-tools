@@ -29,34 +29,8 @@ export function ConversationSummary({ messages }: { messages: ChatMessage[] }) {
             Messages Exchanged
           </Typography>
           <Typography variant="h6" fontWeight="medium">
-            6
+            {messages.length}
           </Typography>
-        </Stack>
-        <Stack>
-          <Typography variant="caption" color="text.secondary">
-            Troubleshooting attempts
-          </Typography>
-          <Stack direction="row" alignItems="center" gap={1}>
-            <Box color="success.main">
-              <CircleCheck size={pxToRem(16)} />
-            </Box>
-            <Typography variant="body2" fontWeight="medium">
-              2 Steps Completed
-            </Typography>
-          </Stack>
-        </Stack>
-        <Stack>
-          <Typography variant="caption" color="text.secondary">
-            Articles Reviewed
-          </Typography>
-          <Stack direction="row" alignItems="center" gap={1}>
-            <Box color={colors.blue[500]}>
-              <BookOpen size={pxToRem(16)} />
-            </Box>
-            <Typography variant="body2" fontWeight="medium">
-              3 Articles Suggested
-            </Typography>
-          </Stack>
         </Stack>
         {messages.length > 0 && (
           <Accordion
