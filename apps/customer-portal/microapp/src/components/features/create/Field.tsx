@@ -9,6 +9,7 @@ import {
   alpha,
   pxToRem,
   Typography,
+  FormHelperText,
 } from "@wso2/oxygen-ui";
 import { Sparkle } from "@wso2/oxygen-ui-icons-react";
 import type { ReactNode } from "react";
@@ -23,6 +24,8 @@ interface SelectFieldProps {
   placeholder?: string;
   startAdornment?: React.ReactNode;
   disabled?: boolean;
+  error?: boolean;
+  helperText?: string;
   onChange?: (event: SelectChangeEvent<number | string>) => void;
 }
 
@@ -33,6 +36,8 @@ export function SelectField({
   value = 0,
   disabled = false,
   required = false,
+  error = false,
+  helperText,
   aiLabel,
   placeholder,
   startAdornment,
@@ -61,6 +66,7 @@ export function SelectField({
         {aiLabel && <AILabel label={aiLabel} />}
       </Stack>
       <Select
+        error={error}
         displayEmpty={placeholder !== undefined}
         name={name}
         value={value}
@@ -84,6 +90,11 @@ export function SelectField({
           </MenuItem>
         ))}
       </Select>
+      {helperText && (
+        <FormHelperText error={error} sx={{ m: 0, mt: -0.5 }}>
+          {helperText}
+        </FormHelperText>
+      )}
     </FormControl>
   );
 }
@@ -95,7 +106,9 @@ export function TextField({
   multiline = false,
   rows = 10,
   required = false,
+  error = false,
   placeholder,
+  helperText,
   aiLabel,
   startAdornment,
   onChange,
@@ -109,8 +122,11 @@ export function TextField({
   required?: boolean;
   aiLabel?: string;
   startAdornment?: React.ReactNode;
+  error?: boolean;
+  helperText?: string;
 
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <FormControl component={Stack} gap={1} fullWidth>
@@ -126,6 +142,7 @@ export function TextField({
         {aiLabel && <AILabel label={aiLabel} />}
       </Stack>
       <MuiTextField
+        error={error}
         name={name}
         value={value}
         placeholder={placeholder}
@@ -145,6 +162,11 @@ export function TextField({
         }}
         onChange={onChange}
       />
+      {helperText && (
+        <FormHelperText error={error} sx={{ m: 0, mt: -0.5 }}>
+          {helperText}
+        </FormHelperText>
+      )}
     </FormControl>
   );
 }
