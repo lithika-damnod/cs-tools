@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   AppBar as MuiAppBar,
@@ -23,6 +23,7 @@ import { ArrowLeft, ChevronDown, Folder, Grip } from "@wso2/oxygen-ui-icons-reac
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { projects } from "@src/services/projects";
 import { goToMyAppsScreen } from "../microapp-bridge";
+import { useThemeMode } from "@root/src/context/theme";
 
 export function AppBar() {
   const theme = useTheme();
@@ -35,6 +36,19 @@ export function AppBar() {
 
   const [projectSelectorAnchor, setProjectSelectorAnchor] = useState<HTMLButtonElement | null>(null);
   const isProjectSelectorOpen = Boolean(projectSelectorAnchor);
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new ResizeObserver(([entry]) => {
+      document.documentElement.style.setProperty("--app-bar-height", `${entry.contentRect.height}px`);
+    });
+
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
 
   const navigateBack = () => navigate(-1);
 
@@ -51,13 +65,16 @@ export function AppBar() {
 
   const statusChipColorVariant = project.status ? PROJECT_STATUS_META[project.status].color : "default";
 
+  const mode = useThemeMode();
+
   return (
     <>
       <MuiAppBar
+        ref={ref}
         position="sticky"
         elevation={0}
         sx={{
-          backgroundColor: "background.paper",
+          backgroundColor: `${mode === "light" ? "white" : "black"} !important`,
           display: "flex",
           flexDirection: "column",
           gap: 1,
