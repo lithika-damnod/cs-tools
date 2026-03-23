@@ -1,7 +1,6 @@
 import { useState, type ReactNode } from "react";
 import {
   Avatar,
-  Backdrop,
   Box,
   Button,
   Card,
@@ -22,6 +21,7 @@ import type { Role } from "@src/types";
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { users } from "../services/users";
 import { projects } from "../services/projects";
+import { useNotify } from "../context/snackbar";
 
 export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "edit" }) {
   const location = useLocation();
@@ -39,6 +39,7 @@ export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "e
 
   const { projectId } = useProject();
   const project = useSuspenseQuery(projects.all()).data.find((project) => project.id === projectId);
+  const notify = useNotify();
 
   const createUserMutation = useMutation({
     ...users.create(projectId!),
@@ -46,6 +47,7 @@ export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "e
       queryClient.resetQueries({ queryKey: ["users", projectId] });
       navigate(-1);
     },
+    onError: () => notify.error("Failed to invite user. Please try again."),
   });
 
   const editUserMutation = useMutation({
@@ -54,6 +56,7 @@ export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "e
       queryClient.resetQueries({ queryKey: ["users", projectId] });
       navigate(-1);
     },
+    onError: () => notify.error("Failed to edit user. Please try again."),
   });
 
   const deleteUserMutation = useMutation({
@@ -62,22 +65,11 @@ export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "e
       queryClient.resetQueries({ queryKey: ["users", projectId] });
       navigate(-1);
     },
+    onError: () => notify.error("Failed to delete user. Please try again."),
   });
 
   return (
     <>
-      <Backdrop
-        sx={{
-          color: "primary.contrastText",
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          flexDirection: "column",
-          gap: 2,
-          pointerEvents: "none",
-        }}
-        open={createUserMutation.isPending || editUserMutation.isPending || deleteUserMutation.isPending}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
       <Stack gap={2}>
         {mode === "edit" && <UserSummaryCard firstName={firstName} lastName={lastName} email={email} />}
         {mode === "invite" && <InvitationNotice />}
@@ -139,7 +131,7 @@ export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "e
         {mode === "edit" && (
           <>
             <PermissionDetails />
-            <DangerZone onDelete={deleteUserMutation.mutate} />
+            <DangerZone onDelete={deleteUserMutation.mutate} isPending={deleteUserMutation.isPending} />
           </>
         )}
 
@@ -150,6 +142,11 @@ export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "e
               : false
           }
           variant="contained"
+          startIcon={
+            createUserMutation.isPending || editUserMutation.isPending ? (
+              <CircularProgress size={16} color="inherit" />
+            ) : undefined
+          }
           onClick={() => {
             if (mode === "invite")
               createUserMutation.mutate({
@@ -169,7 +166,13 @@ export default function EditUserPage({ mode = "invite" }: { mode?: "invite" | "e
             }
           }}
         >
-          {mode === "invite" ? "Send Invitation" : "Save Changes"}
+          {mode === "invite"
+            ? createUserMutation.isPending
+              ? "Sending..."
+              : "Send Invitation"
+            : editUserMutation.isPending
+              ? "Saving..."
+              : "Save Changes"}
         </Button>
 
         <Button
@@ -303,7 +306,7 @@ function UserSummaryCard({ firstName, lastName, email }: { firstName: string; la
   );
 }
 
-function DangerZone({ onDelete }: { onDelete: () => void }) {
+function DangerZone({ isPending, onDelete }: { isPending: boolean; onDelete: () => void }) {
   return (
     <Card component={Stack} sx={{ bgcolor: colors.red[50], p: 1.5 }}>
       <Typography variant="body2" fontWeight="medium" color="error">
@@ -312,8 +315,14 @@ function DangerZone({ onDelete }: { onDelete: () => void }) {
       <Typography variant="subtitle2" color="text.secondary">
         Send an email invitation directly to a user to join this project. The invitation link will be valid for 7 days.
       </Typography>
-      <Button variant="contained" color="error" startIcon={<Trash2 />} sx={{ mt: 3 }} onClick={onDelete}>
-        Remove User from Project
+      <Button
+        variant="contained"
+        color="error"
+        startIcon={isPending ? <CircularProgress size={16} color="inherit" /> : <Trash2 />}
+        sx={{ mt: 3 }}
+        onClick={onDelete}
+      >
+        {isPending ? "Removing..." : "Remove User from Project"}
       </Button>
     </Card>
   );
