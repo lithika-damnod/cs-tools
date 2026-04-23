@@ -88,7 +88,6 @@ export function PieChartWidget({ title, data, ...props }: PieChartWidgetProps) {
               width: "100%",
               display: "grid",
               placeItems: "center",
-              pointerEvents: "none",
             }}
           >
             {total}

@@ -14,6 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CheckIcon, CircleX, Download, Image, Paperclip, PlusIcon, User, Users } from "@wso2/oxygen-ui-icons-react";
 import { Box, Card, Grid, IconButton, Skeleton, Stack, Typography, pxToRem } from "@wso2/oxygen-ui";
@@ -232,10 +234,22 @@ export default function CaseDetailPage() {
               <InfoField label="Category" value={isLoading || isFiltersLoading ? undefined : (issueType ?? "N/A")} />
             </Grid>
             <Grid size={6}>
-              <InfoField label="Last Updated" value={data?.updatedOn && fromNow(data.updatedOn)} />
+              <InfoField label="Last Updated" value={data?.updatedOn && dayjs(data.updatedOn).fromNow()} />
             </Grid>
             <Grid size={6}>
-              <InfoField label="Created" value={data?.createdOn ? format(data.createdOn) : undefined} />
+              <InfoField
+                label="Created"
+                value={data?.createdOn
+                  ?.toLocaleString("en-US", {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  })
+                  .replace("at", " ")}
+              />
             </Grid>
           </Grid>
         </SectionCard>

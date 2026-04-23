@@ -24,10 +24,10 @@ import {
   ServiceRequestListContent,
   type ItemCardProps,
 } from "@components/features/support";
-import { Box, Skeleton, Stack } from "@wso2/oxygen-ui";
+import { Skeleton, Stack } from "@wso2/oxygen-ui";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useLayout } from "@context/layout";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo } from "react";
 import { ErrorBoundary } from "../components/core";
 import { SecurityReportAnalysisListContent } from "../components/features/support/SecurityReportAnalysisListContent";
 import { EngagementListContent } from "../components/features/support/EngagementListContent";
@@ -37,9 +37,7 @@ import { STATUS_MODE_TYPES } from "../utils/filters";
 import EmptyState from "../components/shared/EmptyState";
 import { AnnouncementListContent } from "../components/features/support/AnnouncementListContent";
 
-export type ModeType = (OfStatusModeType | OfSeverityModeType) & {
-  title: string;
-};
+export type ModeType = OfStatusModeType | OfSeverityModeType;
 
 export interface OfStatusModeType {
   type: "status";
@@ -48,10 +46,10 @@ export interface OfStatusModeType {
 
 export interface OfSeverityModeType {
   type: "severity";
-  id: string | number;
+  severity: string;
 }
 
-export default function AllItemsPage({ type }: { type: ItemCardProps["type"] | "multiple" }) {
+export default function AllItemsPage({ type }: { type: ItemCardProps["type"] }) {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const filter = searchParams.get("filter") ?? "all";
@@ -65,15 +63,28 @@ export default function AllItemsPage({ type }: { type: ItemCardProps["type"] | "
   useEffect(() => {
     if (!mode) return;
 
-    setTitleOverride(mode.title);
+    const value = (() => {
+      switch (mode.type) {
+        case "status":
+          switch (mode.status) {
+            case "action_required":
+              return "Action Required";
+
+            case "outstanding":
+              return "Outstanding";
+
+            case "resolved":
+              return "Resolved";
+          }
+      }
+    })();
+
+    setTitleOverride(value);
 
     return () => {
       setTitleOverride(undefined);
     };
   }, [mode]);
-
-  const resolvedTypes =
-    type === "multiple" ? (mode?.type === "status" ? (STATUS_MODE_TYPES[mode.status] ?? []) : []) : type;
 
   return (
     <Stack gap={2}>
@@ -93,26 +104,13 @@ export default function AllItemsPage({ type }: { type: ItemCardProps["type"] | "
   );
 }
 
-function ItemsListContentSingle({
-  type,
-  filter,
-  search,
-  mode,
-  grouped,
-  onCountChange,
-}: {
-  type: ItemCardProps["type"];
-  filter: string;
-  search: string;
-  mode?: ModeType;
-  grouped?: boolean;
-  onCountChange?: (count: number | undefined) => void;
-}) {
+function ItemsListContent({ type, filter, search }: { type: ItemCardProps["type"]; filter: string; search: string }) {
+  const location = useLocation();
+  const mode: ModeType | undefined = location.state?.mode;
+
   switch (type) {
     case "case":
-      return (
-        <CaseListContent filter={filter} search={search} mode={mode} grouped={grouped} onCountChange={onCountChange} />
-      );
+      return <CaseListContent filter={filter} search={search} mode={mode} />;
     case "chat":
       return <ChatListContent filter={filter} search={search} />;
     case "service":
@@ -211,8 +209,8 @@ export function FilterAppBarSlot({ type }: { type: ItemCardProps["type"] }) {
   const mode: ModeType | undefined = location.state?.mode;
 
   const showTabs = useMemo(() => {
-    if (mode) {
-      return false;
+    if (mode?.type === "status") {
+      return (["action_required", "outstanding"] as (typeof mode.status)[]).includes(mode.status);
     }
     return true;
   }, [mode]);

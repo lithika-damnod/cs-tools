@@ -16,7 +16,7 @@
 
 import { Grid, colors, pxToRem } from "@wso2/oxygen-ui";
 import { Activity, CircleCheck, Clock4, OctagonAlert } from "@wso2/oxygen-ui-icons-react";
-import { MetricWidget, PieChartWidget, type PieDataItem } from "@components/features/dashboard";
+import { MetricWidget, PieChartWidget } from "@components/features/dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { cases } from "@src/services/cases";
 import { useProject } from "@context/project";
@@ -66,22 +66,16 @@ export default function HomePage() {
 
   const totalInteractions = isInteractionsLoading
     ? undefined
-    : (multipleCaseTypesStats?.actionRequiredCount ?? 0) +
-      (hasChangeRequestReadAccess ? (changeRequestCaseTypeStats?.actionRequiredCount ?? 0) : 0);
+    : (multipleCaseTypesStats?.totalCount ?? 0) +
+      (hasChangeRequestReadAccess ? (changeRequestCaseTypeStats?.totalCount ?? 0) : 0);
 
   const activeInteractions = isInteractionsLoading
     ? undefined
     : (multipleCaseTypesStats?.outstandingCount ?? 0) +
       (hasChangeRequestReadAccess ? (changeRequestCaseTypeStats?.outstandingCount ?? 0) : 0);
 
-  const resolvedThisMonth =
-    multipleCaseTypesStats?.resolvedCases?.pastThirtyDays === undefined &&
-    (!hasChangeRequestReadAccess || changeRequestCaseTypeStats?.resolvedCount?.pastThirtyDays === undefined)
-      ? undefined
-      : (multipleCaseTypesStats?.resolvedCases?.pastThirtyDays ?? 0) +
-        (hasChangeRequestReadAccess ? (changeRequestCaseTypeStats?.resolvedCount?.pastThirtyDays ?? 0) : 0);
-
-  const averageResponseTime = multipleCaseTypesStats?.averageResponseTime;
+  const resolvedThisMonth = defaultCaseTypeStats?.resolvedCases.pastThirtyDays;
+  const averageResponseTime = defaultCaseTypeStats?.averageResponseTime;
 
   const outstandingSupportCasesPieData = defaultCaseTypeStats?.outstandingSeverityCount.map((item) => ({
     id: item.id,
@@ -152,11 +146,7 @@ export default function HomePage() {
             value={totalInteractions}
             icon={<OctagonAlert size={pxToRem(18)} color={colors.orange[500]} />}
             onClick={() =>
-              navigate("/multiple/all", {
-                state: {
-                  mode: { type: "status", status: "action_required", title: "Action Required Items" } as ModeType,
-                },
-              })
+              navigate("/cases/all", { state: { mode: { type: "status", status: "action_required" } as ModeType } })
             }
           />
         </Grid>
@@ -166,21 +156,17 @@ export default function HomePage() {
             value={activeInteractions}
             icon={<Clock4 size={pxToRem(18)} color={colors.yellow[700]} />}
             onClick={() =>
-              navigate("/multiple/all", {
-                state: { mode: { type: "status", status: "outstanding", title: "Outstanding Items" } as ModeType },
-              })
+              navigate("/cases/all", { state: { mode: { type: "status", status: "outstanding" } as ModeType } })
             }
           />
         </Grid>
         <Grid size={6}>
           <MetricWidget
-            label="Closed (30d)"
+            label="Closed"
             value={resolvedThisMonth}
             icon={<CircleCheck size={pxToRem(18)} color={colors.green[600]} />}
             onClick={() =>
-              navigate("/multiple/all", {
-                state: { mode: { type: "status", status: "resolved", title: "Closed Items (30d)" } as ModeType },
-              })
+              navigate("/cases/all", { state: { mode: { type: "status", status: "resolved" } as ModeType } })
             }
           />
         </Grid>

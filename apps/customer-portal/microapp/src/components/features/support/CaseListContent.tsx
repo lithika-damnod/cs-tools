@@ -17,55 +17,26 @@ import {
 import { GroupAccordion } from "../../ui/GroupAccordion";
 import { useResolvedDateRange } from "@root/src/utils/useResolvedDateRange";
 
-export function CaseListContent({
-  filter,
-  search,
-  mode,
-  grouped = false,
-  onCountChange,
-}: {
-  filter: string;
-  search: string;
-  mode?: ModeType;
-  grouped?: boolean;
-  onCountChange?: (count: number | undefined) => void;
-}) {
+export function CaseListContent({ filter, search, mode }: { filter: string; search: string; mode?: ModeType }) {
   const { projectId } = useProject();
 
   const filters: GetCasesRequestDto["filters"] = {};
-
-  const resolvedDateRange = useResolvedDateRange(mode);
 
   if (mode) {
     switch (mode.type) {
       case "status":
         switch (mode.status) {
           case "action_required":
-            filters.statusIds = ACTION_REQUIRED_CASE_STATUS_IDS;
+            filters.statusIds = [18, 6];
             break;
 
           case "outstanding":
-            filters.statusIds = OUTSTANDING_CASE_STATUS_IDS;
+            filters.statusIds = [1, 10, 6, 1006];
             break;
 
-          case "resolved": {
-            const now = new Date();
-            const past = new Date();
-            past.setDate(now.getDate() - 30);
-
-            filters.statusIds = RESOLVED_CASE_STATUS_IDS;
-            filters.closedStartDate = resolvedDateRange?.closedStartDate;
-            filters.closedEndDate = resolvedDateRange?.closedEndDate;
+          case "resolved":
+            filters.statusIds = [3];
             break;
-          }
-        }
-        break;
-
-      case "severity":
-        switch (mode.type) {
-          case "severity":
-            filters.statusIds = OUTSTANDING_CASE_STATUS_IDS;
-            filters.severityId = Number(mode.id);
         }
     }
   }
