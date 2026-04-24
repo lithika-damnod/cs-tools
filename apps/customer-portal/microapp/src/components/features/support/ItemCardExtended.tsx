@@ -14,6 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import {
   Box,
   Card,
@@ -89,17 +91,10 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
       <CardActionArea component={Link} to={to}>
         <Stack bgcolor="background.paper" p={2} gap={2}>
           <Stack gap={0.8}>
-            <Stack direction="row" justifyContent="space-between" gap={3}>
-              <Stack direction="row" alignItems="center" gap={1} sx={{ flex: 1, minWidth: 0 }}>
-                <Icon size={pxToRem(19)} color={color} style={{ flexShrink: 0 }} />
-                <Typography noWrap variant="subtitle2" color="text.secondary">
-                  {type !== "chat" && props.internalId && (
-                    <>
-                      {props.internalId}
-                      <span style={{ opacity: 0.5, margin: "0 4px" }}>|</span>
-                    </>
-                  )}
-
+            <Stack direction="row" justifyContent="space-between" gap={5}>
+              <Stack direction="row" alignItems="center" flexWrap="wrap" gap={1}>
+                <Icon size={pxToRem(19)} color={color} />
+                <Typography variant="subtitle2" color="text.secondary">
                   {props.number}
                 </Typography>
                 {(type === "case" || type === "service" || type === "sra") && (
@@ -109,12 +104,13 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                 {type === "engagement" && <Chip size="small" label={props.engagementType ?? "Unspecified"} />}
                 {type === "change" && (
                   <>
-                    <PriorityChip type="change" size="small" id={props.impactId} />
+                    <PriorityChip type="change" size="small" prefix="Impact" id={props.impactId} />
+                    <Chip size="small" label={props.requestType ?? "N/A"} />
                   </>
                 )}
               </Stack>
               <Stack direction="row" gap={2}>
-                {type !== "announcement" && <StatusChip type={type} size="small" id={props.statusId} />}
+                <StatusChip type={type} size="small" id={props.statusId} />
                 <Box color="text.secondary">
                   <ChevronRight size={pxToRem(18)} />
                 </Box>
@@ -127,8 +123,7 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                   type === "service" ||
                   type === "change" ||
                   type === "sra" ||
-                  type === "engagement" ||
-                  type === "announcement") &&
+                  type === "engagement") &&
                   props.title}
                 {type === "chat" && props.description}
               </Typography>
@@ -136,8 +131,7 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                 type === "service" ||
                 type === "change" ||
                 type === "sra" ||
-                type === "engagement" ||
-                type === "announcement") && (
+                type === "engagement") && (
                 <Typography
                   variant="subtitle2"
                   color="text.secondary"
@@ -203,8 +197,6 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                         return props.createdBy;
                       case "change":
                         return props.assignedTeam ?? "N/A";
-                      case "announcement":
-                        return <StatusChip type={type} size="small" id={props.statusId} />;
                     }
                   })()}
                 </Typography>
@@ -240,10 +232,9 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                   case "service":
                   case "sra":
                   case "engagement":
-                  case "announcement":
-                    return `Created ${fromNow(props.createdOn)}`;
+                    return `Created ${dayjs(props.createdOn).fromNow()}`;
                   case "change":
-                    return `Updated ${fromNow(props.updatedOn)}`;
+                    return `Updated ${dayjs(props.updatedOn).fromNow()}`;
                 }
               })()}
             </Typography>

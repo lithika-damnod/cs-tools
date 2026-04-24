@@ -24,10 +24,10 @@ import {
   ServiceRequestListContent,
   type ItemCardProps,
 } from "@components/features/support";
-import { Skeleton, Stack } from "@wso2/oxygen-ui";
+import { Box, Skeleton, Stack } from "@wso2/oxygen-ui";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useLayout } from "@context/layout";
-import { useEffect, useLayoutEffect, useMemo } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "../components/core";
 import { SecurityReportAnalysisListContent } from "../components/features/support/SecurityReportAnalysisListContent";
 import { EngagementListContent } from "../components/features/support/EngagementListContent";
@@ -35,7 +35,6 @@ import ErrorState from "../components/shared/ErrorState";
 import { useQueryErrorResetBoundary } from "@tanstack/react-query";
 import { STATUS_MODE_TYPES } from "../utils/filters";
 import EmptyState from "../components/shared/EmptyState";
-import { AnnouncementListContent } from "../components/features/support/AnnouncementListContent";
 
 export type ModeType = OfStatusModeType | OfSeverityModeType;
 
@@ -86,6 +85,9 @@ export default function AllItemsPage({ type }: { type: ItemCardProps["type"] }) 
     };
   }, [mode]);
 
+  const resolvedTypes: ItemCardProps["type"] | ItemCardProps["type"][] =
+    mode?.type === "status" ? (STATUS_MODE_TYPES[mode.status] ?? type) : type;
+
   return (
     <Stack gap={2}>
       <ErrorBoundary
@@ -104,13 +106,26 @@ export default function AllItemsPage({ type }: { type: ItemCardProps["type"] }) 
   );
 }
 
-function ItemsListContent({ type, filter, search }: { type: ItemCardProps["type"]; filter: string; search: string }) {
-  const location = useLocation();
-  const mode: ModeType | undefined = location.state?.mode;
-
+function ItemsListContentSingle({
+  type,
+  filter,
+  search,
+  mode,
+  grouped,
+  onCountChange,
+}: {
+  type: ItemCardProps["type"];
+  filter: string;
+  search: string;
+  mode?: ModeType;
+  grouped?: boolean;
+  onCountChange?: (count: number | undefined) => void;
+}) {
   switch (type) {
     case "case":
-      return <CaseListContent filter={filter} search={search} mode={mode} />;
+      return (
+        <CaseListContent filter={filter} search={search} mode={mode} grouped={grouped} onCountChange={onCountChange} />
+      );
     case "chat":
       return <ChatListContent filter={filter} search={search} />;
     case "service":
@@ -153,8 +168,6 @@ function ItemsListContent({ type, filter, search }: { type: ItemCardProps["type"
           onCountChange={onCountChange}
         />
       );
-    case "announcement":
-      return <AnnouncementListContent filter={filter} search={search} />;
     default:
       return null;
   }
@@ -178,6 +191,7 @@ function ItemsListContent({
   const [counts, setCounts] = useState<Record<number, number | undefined>>({});
 
   const handleCountChange = useCallback((index: number, count: number | undefined) => {
+    console.log("handling count change");
     setCounts((prev) => ({ ...prev, [index]: count }));
   }, []);
 
@@ -209,8 +223,8 @@ export function FilterAppBarSlot({ type }: { type: ItemCardProps["type"] }) {
   const mode: ModeType | undefined = location.state?.mode;
 
   const showTabs = useMemo(() => {
-    if (mode?.type === "status") {
-      return (["action_required", "outstanding"] as (typeof mode.status)[]).includes(mode.status);
+    if (mode) {
+      return false;
     }
     return true;
   }, [mode]);

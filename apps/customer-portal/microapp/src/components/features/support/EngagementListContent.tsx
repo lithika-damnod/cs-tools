@@ -10,7 +10,6 @@ import { ITEM_DETAIL_PATHS } from "@root/src/config/constants";
 import { engagements } from "@root/src/services/engagements";
 import { useEffect } from "react";
 import { GroupAccordion } from "../../ui/GroupAccordion";
-import { useResolvedDateRange } from "@root/src/utils/useResolvedDateRange";
 
 export function EngagementListContent({
   filter,
@@ -29,8 +28,6 @@ export function EngagementListContent({
 
   const filters: GetCasesRequestDto["filters"] = {};
 
-  const resolvedDateRange = useResolvedDateRange(mode);
-
   if (mode) {
     switch (mode.type) {
       case "status":
@@ -45,8 +42,6 @@ export function EngagementListContent({
 
           case "resolved":
             filters.statusIds = [3];
-            filters.closedStartDate = resolvedDateRange?.closedStartDate;
-            filters.closedEndDate = resolvedDateRange?.closedEndDate;
             break;
         }
     }

@@ -8,16 +8,22 @@ import EmptyState from "../../shared/EmptyState";
 import { Typography } from "@wso2/oxygen-ui";
 import React, { useEffect } from "react";
 import { ItemCardExtended } from "./ItemCardExtended";
-import {
-  ACTION_REQUIRED_CASE_STATUS_IDS,
-  ITEM_DETAIL_PATHS,
-  OUTSTANDING_CASE_STATUS_IDS,
-  RESOLVED_CASE_STATUS_IDS,
-} from "@root/src/config/constants";
+import { ITEM_DETAIL_PATHS } from "@root/src/config/constants";
 import { GroupAccordion } from "../../ui/GroupAccordion";
-import { useResolvedDateRange } from "@root/src/utils/useResolvedDateRange";
 
-export function CaseListContent({ filter, search, mode }: { filter: string; search: string; mode?: ModeType }) {
+export function CaseListContent({
+  filter,
+  search,
+  mode,
+  grouped = false,
+  onCountChange,
+}: {
+  filter: string;
+  search: string;
+  mode?: ModeType;
+  grouped?: boolean;
+  onCountChange?: (count: number | undefined) => void;
+}) {
   const { projectId } = useProject();
 
   const filters: GetCasesRequestDto["filters"] = {};

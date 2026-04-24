@@ -11,11 +11,10 @@ import {
   ACTION_REQUIRED_CHANGE_REQUEST_STATUS_IDS,
   ITEM_DETAIL_PATHS,
   OUTSTANDING_CHANGE_REQUESTS_STATUS_IDS,
-  RESOLVED_CHANGE_REQUEST_STATUS_IDS,
+  RESOLVED_CASE_STATUS_IDS,
 } from "@root/src/config/constants";
 import { GroupAccordion } from "../../ui/GroupAccordion";
 import { useEffect } from "react";
-import { useResolvedDateRange } from "@root/src/utils/useResolvedDateRange";
 
 export function ChangeRequestListContent({
   filter,
@@ -34,8 +33,6 @@ export function ChangeRequestListContent({
 
   const filters: GetChangeRequestsRquestDto["filters"] = {};
 
-  const resolvedDateRange = useResolvedDateRange(mode);
-
   if (mode) {
     switch (mode.type) {
       case "status":
@@ -48,16 +45,9 @@ export function ChangeRequestListContent({
             filters.stateKeys = OUTSTANDING_CHANGE_REQUESTS_STATUS_IDS;
             break;
 
-          case "resolved": {
-            const now = new Date();
-            const past = new Date();
-            past.setDate(now.getDate() - 30);
-
-            filters.stateKeys = RESOLVED_CHANGE_REQUEST_STATUS_IDS;
-            filters.closedStartDate = resolvedDateRange?.closedStartDate;
-            filters.closedEndDate = resolvedDateRange?.closedEndDate;
+          case "resolved":
+            filters.stateKeys = RESOLVED_CASE_STATUS_IDS;
             break;
-          }
         }
     }
   }

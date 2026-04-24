@@ -10,7 +10,6 @@ import { ITEM_DETAIL_PATHS } from "@root/src/config/constants";
 import { securityReportAnalysis } from "@root/src/services/sra";
 import { useEffect } from "react";
 import { GroupAccordion } from "../../ui/GroupAccordion";
-import { useResolvedDateRange } from "@root/src/utils/useResolvedDateRange";
 
 export function SecurityReportAnalysisListContent({
   filter,
@@ -29,8 +28,6 @@ export function SecurityReportAnalysisListContent({
 
   const filters: GetCasesRequestDto["filters"] = {};
 
-  const resolvedDateRange = useResolvedDateRange(mode);
-
   if (mode) {
     switch (mode.type) {
       case "status":
@@ -45,8 +42,6 @@ export function SecurityReportAnalysisListContent({
 
           case "resolved":
             filters.statusIds = [3];
-            filters.closedStartDate = resolvedDateRange?.closedStartDate;
-            filters.closedEndDate = resolvedDateRange?.closedEndDate;
             break;
         }
     }
