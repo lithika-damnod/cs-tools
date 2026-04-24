@@ -151,4 +151,5 @@ export const PLURALS: Record<ItemCardProps["type"], string> = {
   change: "Change Requests",
   sra: "Security Report Analysis",
   engagement: "Engagements",
+  announcement: "Announcements",
 };

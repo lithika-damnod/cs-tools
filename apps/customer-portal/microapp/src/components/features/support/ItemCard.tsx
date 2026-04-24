@@ -26,6 +26,8 @@ import type { Chat } from "@src/types/chat.model";
 import type { ServiceRequestSummary } from "@root/src/types/service.model";
 import { useDateTime } from "@root/src/utils/useDateTime";
 
+dayjs.extend(relativeTime);
+
 export type ItemType = "case" | "chat" | "service" | "change" | "sra" | "engagement" | "announcement";
 
 export type Status =
@@ -124,7 +126,7 @@ export function ItemCard(props: ItemCardProps) {
         </Typography>
 
         <Stack direction="row" alignItems="center" gap={1}>
-          {type !== "announcement" && type !== "engagement" && (
+          {type !== "announcement" && (
             <>
               <StatusChip type={type} size="small" id={props.statusId} />
               <Circle sx={(theme) => ({ color: "text.tertiary", fontSize: theme.typography.pxToRem(4) })} />
@@ -174,13 +176,7 @@ export function ItemCard(props: ItemCardProps) {
               {fromNow(props.createdOn)}
             </Typography>
           </Stack>
-          {(type === "case" || type === "sra" || type === "service") && (
-            <PriorityChip size="small" id={props.severityId} />
-          )}
-          {type === "change" && <PriorityChip type="change" size="small" prefix="Impact" id={props.impactId} />}
-          {(type === "announcement" || type === "engagement") && (
-            <StatusChip type={type} size="small" id={props.statusId} />
-          )}
+          {type === "announcement" && <StatusChip type={type} size="small" id={props.statusId} />}
         </Stack>
       </Stack>
     </Card>

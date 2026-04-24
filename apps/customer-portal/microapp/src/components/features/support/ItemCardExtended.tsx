@@ -110,7 +110,7 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                 )}
               </Stack>
               <Stack direction="row" gap={2}>
-                <StatusChip type={type} size="small" id={props.statusId} />
+                {type !== "announcement" && <StatusChip type={type} size="small" id={props.statusId} />}
                 <Box color="text.secondary">
                   <ChevronRight size={pxToRem(18)} />
                 </Box>
@@ -123,7 +123,8 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                   type === "service" ||
                   type === "change" ||
                   type === "sra" ||
-                  type === "engagement") &&
+                  type === "engagement" ||
+                  type === "announcement") &&
                   props.title}
                 {type === "chat" && props.description}
               </Typography>
@@ -131,7 +132,8 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                 type === "service" ||
                 type === "change" ||
                 type === "sra" ||
-                type === "engagement") && (
+                type === "engagement" ||
+                type === "announcement") && (
                 <Typography
                   variant="subtitle2"
                   color="text.secondary"
@@ -197,6 +199,8 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                         return props.createdBy;
                       case "change":
                         return props.assignedTeam ?? "N/A";
+                      case "announcement":
+                        return <StatusChip type={type} size="small" id={props.statusId} />;
                     }
                   })()}
                 </Typography>
@@ -232,6 +236,7 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                   case "service":
                   case "sra":
                   case "engagement":
+                  case "announcement":
                     return `Created ${dayjs(props.createdOn).fromNow()}`;
                   case "change":
                     return `Updated ${dayjs(props.updatedOn).fromNow()}`;

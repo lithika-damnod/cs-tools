@@ -25,14 +25,16 @@ import { RichText, SectionCard } from "@components/shared";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { cases } from "@src/services/cases";
-import { useDateTime } from "../utils/useDateTime";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 export default function AnnouncementDetailPage() {
   const layout = useLayout();
 
   const { id } = useParams();
   const { data } = useQuery(cases.get(id!));
-  const { fromNow, format } = useDateTime();
 
   const ref = useRef<HTMLSpanElement>(null);
   const [overlineSlotVariant, setOverlineSlotVariant] = useState<"normal" | "shrunk">("normal");
@@ -60,12 +62,7 @@ export default function AnnouncementDetailPage() {
 
   useLayoutEffect(() => {
     layout.setTitleOverride(
-      <OverlineSlot
-        variant={overlineSlotVariant}
-        type="announcement"
-        id={data?.number ? `${data.internalId} | ${data.number}` : undefined}
-        title={data?.title}
-      />,
+      <OverlineSlot variant={overlineSlotVariant} type="announcement" id={data?.number} title={data?.title} />,
     );
 
     return () => {
@@ -93,7 +90,19 @@ export default function AnnouncementDetailPage() {
         <SectionCard>
           <Grid spacing={1.5} container>
             <Grid size={6}>
-              <InfoField label="Created" value={data?.createdOn ? format(data.createdOn) : undefined} />
+              <InfoField
+                label="Created"
+                value={data?.createdOn
+                  ?.toLocaleString("en-US", {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  })
+                  .replace("at", " ")}
+              />
             </Grid>
             <Grid size={6}>
               <InfoField
@@ -108,7 +117,7 @@ export default function AnnouncementDetailPage() {
               />
             </Grid>
             <Grid size={6}>
-              <InfoField label="Last Updated" value={data?.updatedOn ? fromNow(data.updatedOn) : undefined} />
+              <InfoField label="Last Updated" value={data?.updatedOn && dayjs(data.updatedOn).fromNow()} />
             </Grid>
           </Grid>
         </SectionCard>
