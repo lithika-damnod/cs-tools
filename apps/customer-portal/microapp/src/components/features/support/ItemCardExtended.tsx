@@ -14,8 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import {
   Box,
   Card,
@@ -237,9 +235,9 @@ export function ItemCardExtended(props: ItemCardExtendedProps) {
                   case "sra":
                   case "engagement":
                   case "announcement":
-                    return `Created ${dayjs(props.createdOn).fromNow()}`;
+                    return `Created ${fromNow(props.createdOn)}`;
                   case "change":
-                    return `Updated ${dayjs(props.updatedOn).fromNow()}`;
+                    return `Updated ${fromNow(props.updatedOn)}`;
                 }
               })()}
             </Typography>

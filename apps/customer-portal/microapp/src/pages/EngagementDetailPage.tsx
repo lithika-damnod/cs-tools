@@ -185,7 +185,7 @@ export default function EngagementDetailPage() {
             ) : (
               <>
                 {comments.map(({ id, content, createdOn, createdBy }) => (
-                  <Comment key={id} author={createdBy} timestamp={format(createdOn)}>
+                  <Comment key={id} author={createdBy} timestamp={fromNow(createdOn)}>
                     <RichText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
                   </Comment>
                 ))}

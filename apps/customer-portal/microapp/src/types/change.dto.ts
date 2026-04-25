@@ -75,5 +75,5 @@ export interface GetChangeRequestsRquestDto {
 
 export type ChangeRequestsStatsDto = Pick<
   CasesStatsDto,
-  "totalCount" | "actionRequiredCount" | "activeCount" | "outstandingCount" | "stateCount"
+  "totalCount" | "actionRequiredCount" | "activeCount" | "outstandingCount" | "stateCount" | "resolvedCases"
 >;

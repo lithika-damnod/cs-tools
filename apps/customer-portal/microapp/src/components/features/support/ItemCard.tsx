@@ -26,8 +26,6 @@ import type { Chat } from "@src/types/chat.model";
 import type { ServiceRequestSummary } from "@root/src/types/service.model";
 import { useDateTime } from "@root/src/utils/useDateTime";
 
-dayjs.extend(relativeTime);
-
 export type ItemType = "case" | "chat" | "service" | "change" | "sra" | "engagement" | "announcement";
 
 export type Status =
