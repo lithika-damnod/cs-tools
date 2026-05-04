@@ -17,8 +17,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ArrowLeftRightIcon,
+  ArrowUpRight,
   CheckIcon,
-  Download,
   Image,
   Paperclip,
   PlusIcon,
@@ -180,23 +180,13 @@ export default function CaseDetailPage() {
   }, [comments]);
 
   const [previewAttachment, setPreviewAttachment] = useState<Attachment | null>(null);
-  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
-  const [, setIsPreviewLoading] = useState(false);
 
-  const handlePreviewOpen = async (attachment: Attachment, blob: Blob) => {
+  const handlePreviewOpen = async (attachment: Attachment) => {
     setPreviewAttachment(attachment);
-    setIsPreviewLoading(true);
-    try {
-      const url = URL.createObjectURL(blob);
-      setPreviewSrc(url);
-    } finally {
-      setIsPreviewLoading(false);
-    }
   };
 
   const handlePreviewClose = () => {
     setPreviewAttachment(null);
-    setPreviewSrc(null);
   };
 
   return (
@@ -322,7 +312,6 @@ export default function CaseDetailPage() {
         open={Boolean(previewAttachment)}
         attachment={previewAttachment}
         onClose={handlePreviewClose}
-        src={previewSrc}
       />
 
       <div ref={bottomRef} />
@@ -335,27 +324,9 @@ function AttachmentCard({
   onPreview,
 }: {
   attachment: Attachment;
-  onPreview: (attachment: Attachment, blob: Blob) => void;
+  onPreview: (attachment: Attachment) => void;
 }) {
-  const queryClient = useQueryClient();
   const { fromNow } = useDateTime();
-
-  const handlePreview = async () => {
-    const data = await queryClient.fetchQuery(cases.attachment(attachment.id));
-
-    const [prefix, base64] = data.content.split(",");
-    const mimeType = prefix.split(":")[1].split(";")[0];
-
-    const byteCharacters = atob(base64);
-    const byteArray = new Uint8Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteArray[i] = byteCharacters.charCodeAt(i);
-    }
-
-    const blob = new Blob([byteArray], { type: mimeType });
-
-    onPreview(attachment, blob);
-  };
 
   return (
     <>
@@ -385,8 +356,8 @@ function AttachmentCard({
               {attachment.createdBy} · {fromNow(attachment.createdOn)}
             </Typography>
           </Stack>
-          <IconButton onClick={handlePreview}>
-            <Download size={pxToRem(18)} />
+          <IconButton onClick={() => onPreview(attachment)}>
+            <ArrowUpRight size={pxToRem(18)} />
           </IconButton>
         </Stack>
       </Card>
