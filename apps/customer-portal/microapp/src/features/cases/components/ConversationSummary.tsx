@@ -16,19 +16,25 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Card, pxToRem, Stack, Typography } from "@wso2/oxygen-ui";
 import { ChevronDown, MessagesSquare } from "@wso2/oxygen-ui-icons-react";
 
-import { type ChatMessage, MessageBubble } from "@features/chats/components";
+import { useCreateCase } from "@features/cases/hooks";
+import { Bubble } from "@features/chats/components";
 
-export function ConversationSummary({ messages }: { messages: ChatMessage[] }) {
+export function ConversationSummary() {
+  const {
+    state: { messages },
+  } = useCreateCase();
+
   return (
     <Card sx={{ bgcolor: "background.paper" }} p={1.5} component={Stack} gap={1}>
       <Stack direction="row" alignItems="center" gap={1}>
         <Box color="primary.main">
-          <MessagesSquare size={pxToRem(18)} />
+          <MessagesSquare size={18} />
         </Box>
         <Typography variant="body1" fontWeight="medium">
           Conversation Summary
         </Typography>
       </Stack>
+
       <Stack gap={1}>
         <Stack>
           <Typography variant="caption" color="text.secondary">
@@ -38,6 +44,7 @@ export function ConversationSummary({ messages }: { messages: ChatMessage[] }) {
             {messages.length}
           </Typography>
         </Stack>
+
         {messages.length > 0 && (
           <Accordion
             elevation={0}
@@ -59,7 +66,7 @@ export function ConversationSummary({ messages }: { messages: ChatMessage[] }) {
             <AccordionDetails sx={{ p: 0 }}>
               <Stack gap={2}>
                 {messages.map((message, index) => (
-                  <MessageBubble key={index} {...message} sx={{ bgcolor: "background.default" }} />
+                  <Bubble key={index} {...message} />
                 ))}
               </Stack>
             </AccordionDetails>

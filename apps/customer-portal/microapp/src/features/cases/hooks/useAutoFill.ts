@@ -1,118 +1,68 @@
-// Copyright (c) 2026 WSO2 LLC. (https://www.wso2.com).
-//
-// WSO2 LLC. licenses this file to you under the Apache License,
-// Version 2.0 (the "License"); you may not use this file except
-// in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
-import { useAppBar } from "@context/layout";
+import { useFormikContext } from "formik";
 
-import type { CaseClassificationResponseDto } from "@features/cases/types/case.dto";
-import type { Case } from "@features/cases/types/case.model";
+import { useClassification } from "@features/cases/context";
+import { type CreateCaseFormValues, useCreateCase, useCreateCaseFormOptions } from "@features/cases/hooks";
 
-type SelectOption<T> = { value: T; label: string };
+export function useAutoFill() {
+  const { setFieldValue } = useFormikContext<CreateCaseFormValues>();
+  const { set } = useClassification();
+  const { projects, deployments, products, issueTypes, severities } = useCreateCaseFormOptions();
 
-type UseAutoFillOptions = {
-  classifications: CaseClassificationResponseDto | undefined;
-  relatedCase: Case | undefined;
-  deploymentOptions: SelectOption<string>[];
-  productOptions: SelectOption<string>[];
-  issueTypeOptions: SelectOption<number>[] | undefined;
-  severityLevelOptions: SelectOption<number>[] | undefined;
-  deploymentsFieldDisabled: boolean;
-  setFieldValue: (field: string, value: unknown) => void;
-};
+  const { state } = useCreateCase();
+  const classifications = state.classifications;
 
-export function useAutoFill({
-  classifications,
-  relatedCase,
-  deploymentOptions,
-  productOptions,
-  issueTypeOptions,
-  severityLevelOptions,
-  deploymentsFieldDisabled,
-  setFieldValue,
-}: UseAutoFillOptions) {
-  const [classified, setClassified] = useState(new Set<string>());
+  const hasRunRef = useRef(false);
 
   useEffect(() => {
-    if (!classifications) return;
+    if (!classifications || hasRunRef.current) return;
 
-    const autoFilledFields = new Set<string>();
+    const isReady = [projects, deployments, products, issueTypes, severities].every(({ pending }) => !pending);
+    if (!isReady) return;
 
-    const matchedDeployment = deploymentOptions.find((option) => option.label === classifications.caseInfo.environment);
-    if (matchedDeployment && !deploymentsFieldDisabled) {
-      setFieldValue("deployment", matchedDeployment.value);
-      autoFilledFields.add("deployment");
+    const classifiedFields: string[] = [];
+
+    const { caseInfo, issueType, severityLevel } = classifications;
+    const { environment, productName, shortDescription, description } = caseInfo || {};
+
+    const deploymentMatch = deployments.options.find((d) => d.label === environment);
+    if (deploymentMatch) {
+      setFieldValue("deployment", String(deploymentMatch.value));
+      classifiedFields.push("deployment");
     }
 
-    const matchedProduct = productOptions.find((option) => option.label === classifications.caseInfo.productName);
-    if (matchedProduct) {
-      setFieldValue("product", matchedProduct.value);
-      autoFilledFields.add("product");
+    const productMatch = products.options.find((p) => p.label === productName);
+    if (productMatch) {
+      setFieldValue("product", String(productMatch.value));
+      classifiedFields.push("product");
     }
 
-    const matchedType = issueTypeOptions?.find((option) => option.label === classifications.issueType);
-    if (matchedType) {
-      setFieldValue("type", matchedType.value);
-      autoFilledFields.add("type");
+    const typeMatch = issueTypes.options.find((i) => i.label === issueType);
+    if (typeMatch) {
+      setFieldValue("type", String(typeMatch.value));
+      classifiedFields.push("type");
     }
 
-    const matchedSeverity = severityLevelOptions?.find((option) =>
-      option.label.includes(classifications.severityLevel),
-    );
-    if (matchedSeverity) {
-      setFieldValue("severity", matchedSeverity.value);
-      autoFilledFields.add("severity");
+    const severityMatch = severities.options.find((s) => s.label === severityLevel);
+    if (severityMatch) {
+      setFieldValue("severity", String(severityMatch.value));
+      classifiedFields.push("severity");
     }
 
-    if (classifications.caseInfo.shortDescription) {
-      setFieldValue("title", classifications.caseInfo.shortDescription);
-      autoFilledFields.add("title");
+    if (shortDescription) {
+      setFieldValue("title", shortDescription);
+      classifiedFields.push("title");
     }
 
-    if (classifications.caseInfo.description) {
-      setFieldValue("description", classifications.caseInfo.description);
-      autoFilledFields.add("description");
+    if (description) {
+      setFieldValue("description", description);
+      classifiedFields.push("description");
     }
 
-    setClassified(autoFilledFields);
-  }, [classifications, deploymentOptions]);
-
-  useAppBar({ title: relatedCase ? "Create Related Case" : undefined }, [relatedCase]);
-
-  useEffect(() => {
-    if (!relatedCase) return;
-
-    setFieldValue("title", relatedCase.title);
-
-    const matchedDeployment = deploymentOptions.find((option) => option.label === relatedCase.deployment);
-    if (matchedDeployment) {
-      setFieldValue("deployment", matchedDeployment.value);
+    if (classifiedFields.length > 0) {
+      set(classifiedFields);
     }
-
-    const matchedProduct = productOptions.find((option) => option.label === relatedCase.product);
-    if (matchedProduct) {
-      setFieldValue("product", matchedProduct.value);
-    }
-  }, [relatedCase, deploymentOptions]);
-
-  useEffect(() => {
-    if (!deploymentsFieldDisabled) return;
-    if (!deploymentOptions.length) return;
-
-    setFieldValue("deployment", deploymentOptions[0].value);
-  }, [deploymentsFieldDisabled]);
-
-  return { classified, setClassified };
+    hasRunRef.current = true;
+  }, [classifications, deployments, products, issueTypes, severities]);
 }

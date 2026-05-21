@@ -13,18 +13,28 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useNotify } from "@context/snackbar";
 
 import { cases } from "@features/cases/api/cases.queries";
+import type { Case, CaseClassificationResponseDto } from "@features/cases/types";
+import type { ChatMessage } from "@features/chats/types";
+
+interface CreateCaseNavigationState {
+  messages?: ChatMessage[];
+  classifications?: CaseClassificationResponseDto;
+  case?: Case;
+}
 
 export function useCreateCase() {
   const navigate = useNavigate();
   const notify = useNotify();
   const queryClient = useQueryClient();
+  const location = useLocation();
+  const state = location.state as CreateCaseNavigationState | null;
 
   const mutation = useMutation({
     ...cases.create,
@@ -39,5 +49,12 @@ export function useCreateCase() {
     },
   });
 
-  return { mutation };
+  return {
+    state: {
+      messages: state?.messages || [],
+      classifications: state?.classifications ?? null,
+      case: state?.case ?? null,
+    },
+    create: mutation,
+  };
 }

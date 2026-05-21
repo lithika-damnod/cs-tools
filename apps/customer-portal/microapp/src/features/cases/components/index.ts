@@ -18,3 +18,4 @@ export * from "./Field";
 export * from "./ConversationSummary";
 export * from "./ClassificationBadge";
 export * from "./CaseReference";
+export * from "./CreateCaseForm";
