@@ -28,10 +28,12 @@ import { useDateTime } from "@shared/hooks/useDateTime";
 import type { useDetailComments } from "@shared/hooks/useDetailComments";
 
 import { AttachmentPreviewDialog, RichText, SectionCard } from "@components/common";
-import { CommentSkeleton, InfoField, MenuOptions, OverlineSlot, StickyCommentBar } from "@components/detail";
+import { CommentSkeleton, InfoField, MenuOptions, OverlineSlot } from "@components/detail";
 import { Comment } from "@components/detail";
 import type { MenuOptionProps } from "@components/detail";
 import { PriorityChip, StatusChip } from "@components/support";
+
+import { CommentBar } from "../../detail/components";
 
 type CaseDetailViewProps = {
   data: Case | undefined;
@@ -187,13 +189,7 @@ export function CaseDetailView({
           </Stack>
         </SectionCard>
       </Stack>
-      <StickyCommentBar
-        placeholder="Add Comment"
-        value={comment}
-        onChange={setComment}
-        onSend={handleSend}
-        loading={isSendingComment}
-      />
+      <CommentBar />
       <AttachmentPreviewDialog
         open={Boolean(previewAttachment)}
         attachment={previewAttachment}

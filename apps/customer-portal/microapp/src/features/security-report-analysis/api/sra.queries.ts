@@ -16,7 +16,10 @@
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 
 import type { GetCasesRequestDto } from "@features/cases/types/case.dto";
-import { getAllSecurityReportAnalysis, getSecurityReportAnalysis } from "@features/sra/api/sra.api";
+import {
+  getAllSecurityReportAnalysis,
+  getSecurityReportAnalysis,
+} from "@features/security-report-analysis/api/sra.api";
 
 export const securityReportAnalysis = {
   get: (id: string) =>

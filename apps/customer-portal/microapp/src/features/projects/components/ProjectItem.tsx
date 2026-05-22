@@ -1,4 +1,4 @@
-import { Button, Card, colors, Grid, pxToRem, Skeleton, Stack, Typography } from "@wso2/oxygen-ui";
+import { Button, Card, CardActions, colors, Grid, Skeleton, Stack, Typography } from "@wso2/oxygen-ui";
 import { ArrowRight, CircleAlert, MessageSquare } from "@wso2/oxygen-ui-icons-react";
 
 import { useProject } from "@context/project";
@@ -10,15 +10,17 @@ export function ProjectItem(props: Project) {
 
   return (
     <Card sx={{ bgcolor: "background.paper" }}>
-      <Stack p={2} gap={1}>
-        <Typography variant="subtitle2">{props.projectKey}</Typography>
+      <Stack sx={{ p: 2, gap: 1 }}>
+        <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>
+          {props.projectKey}
+        </Typography>
         <Typography variant="h6" mt={-0.8}>
           {props.name}
         </Typography>
       </Stack>
 
-      <Grid spacing={1.5} sx={{ p: 2, bgcolor: "background.default" }} container>
-        <Grid size={{ xs: 6 }} sx={{ p: 2, direction: "row", alignItems: "center" }} spacing={1} container>
+      <Grid sx={{ p: 2, spacing: 1, bgcolor: "background.default" }} container>
+        <Grid size={{ xs: 6 }} sx={{ display: "flex", direction: "row", alignItems: "center", gap: 1 }}>
           <CircleAlert size={18} />
           <Typography variant="body2">Outstanding:</Typography>
           <Typography variant="body2" color={colors.red[300]}>
@@ -26,7 +28,7 @@ export function ProjectItem(props: Project) {
           </Typography>
         </Grid>
 
-        <Grid size={{ xs: 6 }} sx={{ p: 2, direction: "row", alignItems: "center" }} spacing={1} container>
+        <Grid size={{ xs: 6 }} sx={{ display: "flex", direction: "row", alignItems: "center", gap: 1 }}>
           <MessageSquare size={18} />
           <Typography variant="body2">Chats:</Typography>
           <Typography variant="body2" color={colors.indigo[300]}>
@@ -35,14 +37,17 @@ export function ProjectItem(props: Project) {
         </Grid>
       </Grid>
 
-      <Button
-        variant="contained"
-        endIcon={<ArrowRight size={pxToRem(18)} />}
-        sx={{ textTransform: "initial", width: "100%", m: 2, mt: 3 }}
-        onClick={() => setProjectId(props.id)}
-      >
-        View Dashboard
-      </Button>
+      <CardActions sx={{ px: 2, py: 3 }}>
+        <Button
+          fullWidth
+          variant="contained"
+          endIcon={<ArrowRight size={18} />}
+          sx={{ textTransform: "initial" }}
+          onClick={() => setProjectId(props.id)}
+        >
+          View Dashboard
+        </Button>
+      </CardActions>
     </Card>
   );
 }
@@ -58,10 +63,7 @@ export function ProjectItemSkeleton() {
       <Grid p={2} spacing={1.5} sx={{ bgcolor: "background.default" }} container>
         {Array.from({ length: 2 }).map((_, i) => (
           <Grid key={i} size={{ xs: 6 }}>
-            <Stack gap={0.5}>
-              <Skeleton variant="text" width="40%" height={14} />
-              <Skeleton variant="text" width="60%" height={24} />
-            </Stack>
+            <Skeleton variant="text" width="90%" height={24} />
           </Grid>
         ))}
       </Grid>

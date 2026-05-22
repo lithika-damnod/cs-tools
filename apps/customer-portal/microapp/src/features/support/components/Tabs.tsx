@@ -17,7 +17,7 @@ import { Tabs as MuiTabs, Tab } from "@wso2/oxygen-ui";
 
 import { useProject } from "@context/project";
 
-import { CASE_TYPE_PLURAL_LABEL, CASE_TYPES } from "@shared/constants";
+import { CASE_TYPE_PLURAL_LABELS, CASE_TYPES } from "@shared/constants";
 import type { CaseType } from "@shared/types";
 
 interface TabsProps {
@@ -31,13 +31,13 @@ export function Tabs({ value, onTabChange }: TabsProps) {
 
   return (
     <MuiTabs variant="scrollable" value={value} onChange={(_, value) => onTabChange(value)}>
-      <Tab label={CASE_TYPE_PLURAL_LABEL[CASE_TYPES.DEFAULT]} value={CASE_TYPES.DEFAULT} disableRipple />
+      <Tab label={CASE_TYPE_PLURAL_LABELS[CASE_TYPES.DEFAULT]} value={CASE_TYPES.DEFAULT} disableRipple />
 
-      <Tab label={CASE_TYPE_PLURAL_LABEL[CASE_TYPES.CHAT]} value={CASE_TYPES.CHAT} disableRipple />
+      <Tab label={CASE_TYPE_PLURAL_LABELS[CASE_TYPES.CHAT]} value={CASE_TYPES.CHAT} disableRipple />
 
       {hasServiceRequestReadAccess && (
         <Tab
-          label={CASE_TYPE_PLURAL_LABEL[CASE_TYPES.SERVICE_REQUEST]}
+          label={CASE_TYPE_PLURAL_LABELS[CASE_TYPES.SERVICE_REQUEST]}
           value={CASE_TYPES.SERVICE_REQUEST}
           disableRipple
         />
@@ -45,23 +45,23 @@ export function Tabs({ value, onTabChange }: TabsProps) {
 
       {hasChangeRequestReadAccess && (
         <Tab
-          label={CASE_TYPE_PLURAL_LABEL[CASE_TYPES.CHANGE_REQUEST]}
+          label={CASE_TYPE_PLURAL_LABELS[CASE_TYPES.CHANGE_REQUEST]}
           value={CASE_TYPES.CHANGE_REQUEST}
           disableRipple
         />
       )}
 
       <Tab
-        label={CASE_TYPE_PLURAL_LABEL[CASE_TYPES.SECURITY_REPORT_ANALYSIS]}
+        label={CASE_TYPE_PLURAL_LABELS[CASE_TYPES.SECURITY_REPORT_ANALYSIS]}
         value={CASE_TYPES.SECURITY_REPORT_ANALYSIS}
         disableRipple
       />
 
       {hasEngagementsReadAccess && (
-        <Tab label={CASE_TYPE_PLURAL_LABEL[CASE_TYPES.ENGAGEMENT]} value={CASE_TYPES.ENGAGEMENT} disableRipple />
+        <Tab label={CASE_TYPE_PLURAL_LABELS[CASE_TYPES.ENGAGEMENT]} value={CASE_TYPES.ENGAGEMENT} disableRipple />
       )}
 
-      <Tab label={CASE_TYPE_PLURAL_LABEL[CASE_TYPES.ANNOUNCEMENT]} value={CASE_TYPES.ANNOUNCEMENT} disableRipple />
+      <Tab label={CASE_TYPE_PLURAL_LABELS[CASE_TYPES.ANNOUNCEMENT]} value={CASE_TYPES.ANNOUNCEMENT} disableRipple />
     </MuiTabs>
   );
 }

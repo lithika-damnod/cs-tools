@@ -1,4 +1,4 @@
-import { MESSAGE_AUTHOR_TYPES } from "@root/src/shared/constants";
+import { MESSAGE_AUTHOR_TYPES } from "@shared/constants";
 
 import { BubbleAgent, type BubbleAgentProps } from "./BubbleAgent";
 import { BubbleAgentSkeleton } from "./BubbleAgentSkeleton";

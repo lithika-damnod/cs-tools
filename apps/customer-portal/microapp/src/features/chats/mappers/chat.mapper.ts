@@ -16,7 +16,7 @@
 import type { ChatDto, MessageResponseDto } from "@features/chats/types/chat.dto";
 import type { Chat, Message } from "@features/chats/types/chat.model";
 
-import { parseApiDate } from "@shared/utils/date.utils";
+import { toDate } from "@shared/utils";
 
 export function toMessage(dto: MessageResponseDto, direction: "outgoing" | "incoming"): Message {
   return {
@@ -33,7 +33,7 @@ export function toChat(dto: ChatDto): Chat {
     number: dto.number,
     description: dto.initialMessage,
     count: dto.messageCount,
-    createdOn: parseApiDate(dto.createdOn),
+    createdOn: toDate(dto.createdOn),
     createdBy: dto.createdBy,
     statusId: dto.state?.id,
   };

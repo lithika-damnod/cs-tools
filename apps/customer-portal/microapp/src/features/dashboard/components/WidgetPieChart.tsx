@@ -1,6 +1,6 @@
+import { Circle } from "@mui/icons-material";
 import { Box, CardActionArea, Skeleton, Stack, Typography } from "@wso2/oxygen-ui";
 import { PieChart as OxygenPieChart } from "@wso2/oxygen-ui-charts-react";
-import { Circle } from "@wso2/oxygen-ui-icons-react";
 
 import { WidgetRoot } from "@features/dashboard/components";
 

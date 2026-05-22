@@ -16,7 +16,7 @@
 import type { ChangeRequestDto, ChangeRequestsDto } from "@features/changes/types/change.dto";
 import type { ChangeRequest, ChangeRequestSummary } from "@features/changes/types/change.model";
 
-import { parseApiDate } from "@shared/utils/date.utils";
+import { toDate } from "@shared/utils";
 
 export function toChangeRequestSummary(dto: ChangeRequestsDto["changeRequests"][number]): ChangeRequestSummary {
   return {
@@ -29,9 +29,9 @@ export function toChangeRequestSummary(dto: ChangeRequestsDto["changeRequests"][
     impactId: dto.impact?.id,
     statusId: dto.state?.id,
     assignedTeam: dto.assignedTeam?.label,
-    endDate: dto.endDate ? parseApiDate(dto.endDate) : undefined,
-    createdOn: parseApiDate(dto.createdOn),
-    updatedOn: parseApiDate(dto.updatedOn),
+    endDate: dto.endDate ? toDate(dto.endDate) : undefined,
+    createdOn: toDate(dto.createdOn),
+    updatedOn: toDate(dto.updatedOn),
   };
 }
 
@@ -45,11 +45,11 @@ export function toChangeRequest(dto: ChangeRequestDto): ChangeRequest {
     requestType: dto.type?.label,
     impactId: dto.impact?.id,
     statusId: dto.state?.id,
-    endDate: dto.endDate ? parseApiDate(dto.endDate) : undefined,
-    createdOn: parseApiDate(dto.createdOn),
-    updatedOn: parseApiDate(dto.updatedOn),
+    endDate: dto.endDate ? toDate(dto.endDate) : undefined,
+    createdOn: toDate(dto.createdOn),
+    updatedOn: toDate(dto.updatedOn),
     createdBy: dto.createdBy,
-    approvedOn: dto.approvedOn ? parseApiDate(dto.approvedOn) : undefined,
+    approvedOn: dto.approvedOn ? toDate(dto.approvedOn) : undefined,
     approvedBy: dto.approvedBy?.label ?? undefined,
     duration: dto.duration ?? undefined,
     hasCustomerApproved: dto.hasCustomerApproved,

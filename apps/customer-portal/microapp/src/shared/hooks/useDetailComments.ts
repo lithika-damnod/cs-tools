@@ -13,12 +13,13 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { useScrollTo } from "@root/src/shared/utils/useScroll";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { cases } from "@features/cases/api/cases.queries";
+
+import { scrollTo } from "@shared/utils";
 
 export function useDetailComments(id: string) {
   const queryClient = useQueryClient();
@@ -30,7 +31,7 @@ export function useDetailComments(id: string) {
   });
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  useScrollTo(scrollRef, [comments]);
+  useEffect(() => scrollTo(scrollRef), [comments]);
 
   const mutation = useMutation({
     ...cases.createComment(id),

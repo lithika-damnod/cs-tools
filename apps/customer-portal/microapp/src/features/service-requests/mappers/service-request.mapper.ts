@@ -16,14 +16,14 @@
 import type { ServiceRequestDto, ServiceRequestsDto } from "@features/service-requests/types/service-request.dto";
 import type { ServiceRequest, ServiceRequestSummary } from "@features/service-requests/types/service-request.model";
 
-import { parseApiDate } from "@shared/utils/date.utils";
+import { toDate } from "@shared/utils";
 
 export function toServiceRequestSummary(dto: ServiceRequestsDto["cases"][number]): ServiceRequestSummary {
   return {
     id: dto.id,
     internalId: dto.internalId,
     number: dto.number,
-    createdOn: parseApiDate(dto.createdOn),
+    createdOn: toDate(dto.createdOn),
     createdBy: dto.createdBy,
     title: dto.title,
     description: dto.description ?? "",
@@ -39,8 +39,8 @@ export function toServiceRequest(dto: ServiceRequestDto): ServiceRequest {
     id: dto.id,
     internalId: dto.internalId,
     number: dto.number,
-    createdOn: parseApiDate(dto.createdOn),
-    updatedOn: parseApiDate(dto.updatedOn),
+    createdOn: toDate(dto.createdOn),
+    updatedOn: toDate(dto.updatedOn),
     createdBy: dto.createdBy,
     title: dto.title,
     description: dto.description ?? "",

@@ -9,7 +9,9 @@ import { MESSAGE_AUTHOR_TYPES, NOVERA_INITIAL_MESSAGE } from "@shared/constants"
 
 export function useConversation(committed: BubbleProps | null, reset: () => void) {
   const { fromNow } = useDateTime();
-  const [messages, setMessages] = useState<BubbleProps[]>([NOVERA_INITIAL_MESSAGE]);
+  const [messages, setMessages] = useState<BubbleProps[]>([
+    { ...NOVERA_INITIAL_MESSAGE, animated: false, thinking: false },
+  ]);
 
   useEffect(() => {
     if (committed) {

@@ -29,8 +29,10 @@ import type { useDetailComments } from "@shared/hooks/useDetailComments";
 
 import { RichText, SectionCard } from "@components/common";
 import EmptyState from "@components/common/EmptyState";
-import { Comment, CommentSkeleton, InfoField, OverlineSlot, StickyCommentBar } from "@components/detail";
+import { Comment, CommentSkeleton, InfoField, OverlineSlot } from "@components/detail";
 import { PriorityChip, StatusChip } from "@components/support";
+
+import { CommentBar } from "../../detail/components";
 
 type SraDetailViewProps = {
   data: Case | undefined;
@@ -134,13 +136,7 @@ export function SraDetailView({ data, isLoading, comments }: SraDetailViewProps)
           </Stack>
         </SectionCard>
       </Stack>
-      <StickyCommentBar
-        placeholder="Add Comment"
-        value={comment}
-        onChange={setComment}
-        onSend={handleSend}
-        loading={isSendingComment}
-      />
+      <CommentBar />
       <div ref={bottomRef} />
     </>
   );

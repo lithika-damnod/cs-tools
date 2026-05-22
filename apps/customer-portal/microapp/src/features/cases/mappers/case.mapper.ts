@@ -16,14 +16,14 @@
 import type { AttachmentDto, CaseDto, CasesDto, CommentDto } from "@features/cases/types/case.dto";
 import type { Attachment, Case, CaseSummary, Comment } from "@features/cases/types/case.model";
 
-import { parseApiDate } from "@shared/utils/date.utils";
+import { toDate } from "@shared/utils";
 
 export function toCaseSummary(dto: CasesDto["cases"][number]): CaseSummary {
   return {
     id: dto.id,
     internalId: dto.internalId,
     number: dto.number,
-    createdOn: parseApiDate(dto.createdOn),
+    createdOn: toDate(dto.createdOn),
     createdBy: dto.createdBy,
     title: dto.title,
     description: dto.description ?? "",
@@ -41,9 +41,9 @@ export function toCase(dto: CaseDto): Case {
     id: dto.id,
     internalId: dto.internalId,
     number: dto.number,
-    createdOn: parseApiDate(dto.createdOn),
+    createdOn: toDate(dto.createdOn),
     createdBy: dto.createdBy,
-    updatedOn: parseApiDate(dto.updatedOn),
+    updatedOn: toDate(dto.updatedOn),
     title: dto.title,
     description: dto.description ?? "",
     assigned: dto.assignedEngineer?.label,
@@ -64,14 +64,14 @@ export function toComment(dto: CommentDto): Comment {
   return {
     id: dto.id,
     content: dto.content,
-    createdOn: parseApiDate(dto.createdOn),
+    createdOn: toDate(dto.createdOn),
     createdBy: dto.createdBy,
     attachments: dto.inlineAttachments.map((a) => ({
       id: a.id,
       type: "others" as const,
       fileName: a.fileName,
       downloadUrl: a.downloadUrl,
-      createdOn: parseApiDate(a.createdOn),
+      createdOn: toDate(a.createdOn),
       createdBy: a.createdBy,
     })),
   };
@@ -83,7 +83,7 @@ export function toAttachment(dto: AttachmentDto): Attachment {
     type: /^image\//.test(dto.type) ? "image" : "others",
     fileName: dto.name,
     downloadUrl: dto.downloadUrl,
-    createdOn: parseApiDate(dto.createdOn),
+    createdOn: toDate(dto.createdOn),
     createdBy: dto.createdBy,
   };
 }

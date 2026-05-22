@@ -29,7 +29,7 @@ import { useStream } from "@features/chats/hooks/useStream";
 import { ROUTES } from "@shared/constants";
 import { scrollTo } from "@shared/utils";
 
-import { StickyCommentBar } from "@components/detail";
+import { CommentBar } from "../features/detail/components";
 
 export default function ChatPage() {
   const navigate = useNavigate();
@@ -68,15 +68,7 @@ export default function ChatPage() {
         {draft && <Bubble {...draft} onAnimationComplete={finish} />}
         <div ref={bottomRef} />
       </Stack>
-      <StickyCommentBar
-        loading={pending}
-        disabled={status !== WebSocket.OPEN}
-        value={comment}
-        placeholder="Type your message"
-        onChange={setComment}
-        onSend={handleSend}
-        topSlot={messages.length > 2 && <PromptCreateCase onCreateCase={handleCreateCase} />}
-      />
+      <CommentBar />
     </>
   );
 }

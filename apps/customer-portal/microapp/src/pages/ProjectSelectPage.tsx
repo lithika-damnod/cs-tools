@@ -30,21 +30,23 @@ export default function ProjectSelectPage() {
         Choose a project to access your support cases, chat history, and dashboard
       </Typography>
 
-      <SearchBar
-        fullWidth
-        size="small"
-        placeholder="Search Projects"
-        value={filters.search}
-        onChange={(e) => set({ search: e.currentTarget.value })}
-        sx={{ mt: 4, bgcolor: "background.paper" }}
-      />
+      <Stack sx={{ gap: 2.5, mt: 3.5 }}>
+        <SearchBar
+          fullWidth
+          size="small"
+          placeholder="Search Projects"
+          value={filters.search}
+          onChange={(e) => set({ search: e.currentTarget.value })}
+          sx={{ bgcolor: "background.paper" }}
+        />
 
-      <ErrorBoundary
-        onError={() => notify.error("Failed to load projects. Try again later.")}
-        fallback={<ProjectsListSkeleton />}
-      >
-        <ProjectsList />
-      </ErrorBoundary>
+        <ErrorBoundary
+          onError={() => notify.error("Failed to load projects. Try again later.")}
+          fallback={<ProjectsListSkeleton />}
+        >
+          <ProjectsList />
+        </ErrorBoundary>
+      </Stack>
 
       <Typography variant="body2" textAlign="center" color="text.secondary" p={5}>
         Need access to another project? Contact your administrator
