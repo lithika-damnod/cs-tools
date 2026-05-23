@@ -9,7 +9,7 @@ export function ProjectItem(props: Project) {
   const { setProjectId } = useProject();
 
   return (
-    <Card sx={{ bgcolor: "background.paper" }}>
+    <Card sx={{ bgcolor: "background.paper", mb: 1.5 }}>
       <Stack sx={{ p: 2, gap: 1 }}>
         <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>
           {props.projectKey}
@@ -54,7 +54,7 @@ export function ProjectItem(props: Project) {
 
 export function ProjectItemSkeleton() {
   return (
-    <Card sx={{ bgcolor: "background.paper" }}>
+    <Card sx={{ bgcolor: "background.paper", mb: 1.5 }}>
       <Stack p={2} gap={1}>
         <Skeleton variant="text" width="30%" sx={{ fontSize: "subtitle2.fontSize" }} />
         <Skeleton variant="text" width="100%" height={32} sx={{ mt: -0.8 }} />

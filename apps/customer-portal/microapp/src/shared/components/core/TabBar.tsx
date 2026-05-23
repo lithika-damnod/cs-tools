@@ -26,7 +26,7 @@ import { useThemeMode } from "@context/theme";
 
 export function TabBar() {
   const ref = useRef<HTMLDivElement>(null);
-  const { activeTabIndex } = useLayout();
+  const { tabIndex } = useLayout();
   const { isAdmin } = useMe();
   const mode = useThemeMode();
 
@@ -52,7 +52,7 @@ export function TabBar() {
       pt={1}
       pb={4}
     >
-      <BottomNavigation value={activeTabIndex} showLabels>
+      <BottomNavigation value={tabIndex} showLabels>
         <BottomNavigationAction component={Link} to="/" label="Home" icon={<House />} disableRipple />
         <BottomNavigationAction component={Link} to="/support" label="Support" icon={<MessageSquare />} disableRipple />
         <BottomNavigationAction

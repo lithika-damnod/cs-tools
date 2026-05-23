@@ -38,9 +38,9 @@ export function InfiniteList<TItem, TError>(props: InfiniteListProps<TItem, TErr
   const virtualizer = useVirtualizer({
     count: allItems.length,
     getScrollElement: () => scrollRef.current,
-    estimateSize: () => 88,
+    estimateSize: () => 200,
     measureElement: (element) => element.getBoundingClientRect().height,
-    overscan: 5,
+    overscan: 10,
   });
 
   const sentinelRef = useCallback(
@@ -55,7 +55,7 @@ export function InfiniteList<TItem, TError>(props: InfiniteListProps<TItem, TErr
             fetchNextPage();
           }
         },
-        { root: scrollRef.current, threshold: 0.1 },
+        { threshold: 0.1 },
       );
 
       if (node) observer.current.observe(node);
@@ -90,11 +90,7 @@ export function InfiniteList<TItem, TError>(props: InfiniteListProps<TItem, TErr
         ))}
       </div>
 
-      {hasNextPage && (
-        <div ref={sentinelRef} style={{ padding: 1 }}>
-          {sentinel}
-        </div>
-      )}
+      {(!data || hasNextPage) && <div ref={sentinelRef}>{sentinel}</div>}
 
       {data && !hasNextPage && tail}
     </div>

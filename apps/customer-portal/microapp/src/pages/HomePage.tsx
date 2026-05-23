@@ -13,12 +13,24 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+import { useDeclareLayout } from "@context/layout";
+
 import { DashboardView } from "@features/dashboard/components";
 import { useDashboardStats } from "@features/dashboard/hooks";
+
+import { Tab } from "@shared/constants";
 
 import { Fab } from "@components/core";
 
 export default function HomePage() {
+  useDeclareLayout({
+    tabIndex: Tab.Home,
+    visibility: {
+      exitButton: true,
+      projectSelector: true,
+    },
+  });
+
   const dashboardStats = useDashboardStats();
 
   return (

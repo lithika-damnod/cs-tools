@@ -23,12 +23,25 @@ import {
   getProject,
   getProjectFeatures,
 } from "@features/projects/api/projects.api";
-import type { GetProductsRequestDto } from "@features/projects/types/project.dto";
+import type { GetAllProjectsRequestDto, GetProductsRequestDto } from "@features/projects/types/project.dto";
 
 import type { Pagination } from "@shared/types";
 
 export const projects = {
-  all: () => queryOptions({ queryKey: ["projects"], queryFn: getAllProjects }),
+  all: (body: GetAllProjectsRequestDto = {}) =>
+    queryOptions({ queryKey: ["projects"], queryFn: () => getAllProjects(body) }),
+
+  paginated: (body: GetAllProjectsRequestDto = {}) =>
+    infiniteQueryOptions({
+      queryKey: ["projects", "paginated", body],
+      queryFn: ({ pageParam }) => getAllProjects({ ...body, pagination: { ...body.pagination, offset: pageParam } }),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage) => {
+        const { offset, limit, totalRecords } = lastPage.pagination;
+        const nextOffset = offset + limit;
+        return nextOffset >= totalRecords ? undefined : nextOffset;
+      },
+    }),
 
   get: (id: string) => queryOptions({ queryKey: ["project", id], queryFn: () => getProject(id) }),
 

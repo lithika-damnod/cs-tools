@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { goToMyAppsScreen } from "@src/bridge";
-import { IconButton, pxToRem, Typography } from "@wso2/oxygen-ui";
+import { IconButton, Typography } from "@wso2/oxygen-ui";
 import { Grip } from "@wso2/oxygen-ui-icons-react";
 
 import { ConfirmDialog } from "@shared/components/common";
@@ -11,19 +11,8 @@ export function ExitButton() {
 
   return (
     <>
-      <IconButton
-        disableRipple
-        color="error"
-        sx={{
-          gap: 1,
-          position: "absolute",
-          top: "var(--safe-top)",
-          left: 10,
-          p: 0,
-        }}
-        onClick={() => setOpen(true)}
-      >
-        <Grip size={pxToRem(20)} />
+      <IconButton disableRipple color="error" sx={{ gap: 1 }} onClick={() => setOpen(true)}>
+        <Grip size={20} />
         <Typography>Go to Apps</Typography>
       </IconButton>
 

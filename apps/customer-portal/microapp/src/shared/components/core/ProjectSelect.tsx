@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Box, Button, pxToRem, Stack, Typography } from "@wso2/oxygen-ui";
+import { Box, Button, Stack, Typography } from "@wso2/oxygen-ui";
 import { ChevronDown, Folder } from "@wso2/oxygen-ui-icons-react";
 
 import { useProject } from "@context/project";
@@ -18,17 +18,17 @@ export function ProjectSelect() {
 
   return (
     <>
-      <Button sx={{ justifyContent: "space-between", p: 0, mt: 2 }} onClick={open} disableRipple>
-        <Stack direction="row" sx={{ alignItems: "center", flexGrow: 1, minWidth: 0, gap: 1 }}>
+      <Button sx={{ justifyContent: "space-between", px: 1 }} onClick={open} disableRipple>
+        <Stack direction="row" sx={{ flexGrow: 1, minWidth: 0, gap: 1 }}>
           <Box color="text.secondary">
-            <Folder size={pxToRem(18)} />
+            <Folder size={18} />
           </Box>
           <Typography variant="body1" color="text.secondary" sx={{ textTransform: "initial" }} noWrap>
             {project.name}
           </Typography>
         </Stack>
         <Box color="text.secondary">
-          <ChevronDown size={pxToRem(18)} />
+          <ChevronDown size={18} />
         </Box>
       </Button>
 

@@ -1,23 +1,51 @@
-import { type PopoverProps, Stack } from "@wso2/oxygen-ui";
+import { useProject } from "@root/src/context/project";
+import { type PopoverProps, Stack, Typography } from "@wso2/oxygen-ui";
+import { Inbox } from "@wso2/oxygen-ui-icons-react";
 
-import { ProjectPopoverItem } from "@features/projects/components";
+import { ProjectPopoverItem, ProjectPopoverItemSkeleton } from "@features/projects/components";
+import { useProjectsList } from "@features/projects/hooks";
 
-export function ProjectPopoverList({ onClose }: { onClose: PopoverProps["onClose"] }) {
-  const { projects, projectId, setProjectId } = useProjectSelector();
+import { InfiniteList } from "@shared/components/common";
+
+export function ProjectPopoverList({ search, onClose }: { search: string; onClose: PopoverProps["onClose"] }) {
+  const { projectId, setProjectId } = useProject();
+  const query = useProjectsList(search);
+
+  const totalRecords = query.data?.pages[0].pagination.totalRecords;
 
   return (
-    <Stack gap={1} pt={1}>
-      {projects.map((props) => (
+    <InfiniteList
+      {...query}
+      sentinel={<ProjectPopoverListSkeleton />}
+      tail={
+        totalRecords === 0 && (
+          <Stack direction="row" gap={1} px={1.5} sx={{ opacity: 0.6 }}>
+            <Inbox />
+            <Typography>No projects found</Typography>
+          </Stack>
+        )
+      }
+    >
+      {(item) => (
         <ProjectPopoverItem
-          {...props}
-          key={props.id}
-          active={props.id === projectId}
+          {...item}
+          active={item.id === projectId}
           onClick={() => {
-            setProjectId(props.id);
+            setProjectId(item.id);
             onClose?.({}, "backdropClick");
           }}
         />
+      )}
+    </InfiniteList>
+  );
+}
+
+function ProjectPopoverListSkeleton() {
+  return (
+    <>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <ProjectPopoverItemSkeleton key={index} />
       ))}
-    </Stack>
+    </>
   );
 }

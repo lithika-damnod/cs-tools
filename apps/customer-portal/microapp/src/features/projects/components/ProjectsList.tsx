@@ -1,21 +1,16 @@
 import { ProjectItem, ProjectItemSkeleton } from "@features/projects/components";
 import { useProjectsList } from "@features/projects/hooks";
 
-import { EmptyState } from "@shared/components/common";
+import { EmptyState, InfiniteList } from "@shared/components/common";
 
 export function ProjectsList() {
-  const { data, isLoading } = useProjectsList();
-
-  if (isLoading) return <ProjectsListSkeleton />;
-
-  if (!data?.length) return <EmptyState />;
+  const query = useProjectsList();
+  const tail = query.data?.pages[0].pagination.totalRecords === 0 && <EmptyState />;
 
   return (
-    <>
-      {data.map((props) => (
-        <ProjectItem key={props.id} {...props} />
-      ))}
-    </>
+    <InfiniteList {...query} sentinel={<ProjectsListSkeleton />} tail={tail}>
+      {(item) => <ProjectItem {...item} />}
+    </InfiniteList>
   );
 }
 

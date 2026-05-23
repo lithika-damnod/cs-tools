@@ -13,12 +13,23 @@ export default function ProjectSelectPage() {
   const { filters, set } = useFilters();
 
   return (
-    <Box sx={{ minHeight: "100dvh", px: 2.5, py: 5, mt: "var(--safe-top)" }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={0.5}>
+    <>
+      <Stack
+        direction="row"
+        sx={{
+          mb: 4,
+          pb: 0.5,
+          pt: "var(--safe-top)",
+          bgcolor: "background.default",
+          position: "sticky",
+          top: 0,
+          zIndex: 999,
+        }}
+      >
         <ExitButton />
       </Stack>
 
-      <Stack direction="row" justifyContent="center" alignItems="center" gap={1}>
+      <Stack direction="row" justifyContent="center" alignItems="center" gap={1} px={1.5}>
         <Box color="primary.main">
           <Folder size={24} />
         </Box>
@@ -26,11 +37,11 @@ export default function ProjectSelectPage() {
           Select Your Project
         </Typography>
       </Stack>
-      <Typography variant="body2" color="text.secondary" textAlign="center" lineHeight={1.5} px={3} mt={1.5}>
+      <Typography variant="body2" color="text.secondary" textAlign="center" lineHeight={1.5} px={3} mt={1}>
         Choose a project to access your support cases, chat history, and dashboard
       </Typography>
 
-      <Stack sx={{ gap: 2.5, mt: 3.5 }}>
+      <Stack sx={{ px: 1.5, gap: 2.5, mt: 3.5 }}>
         <SearchBar
           fullWidth
           size="small"
@@ -51,6 +62,6 @@ export default function ProjectSelectPage() {
       <Typography variant="body2" textAlign="center" color="text.secondary" p={5}>
         Need access to another project? Contact your administrator
       </Typography>
-    </Box>
+    </>
   );
 }

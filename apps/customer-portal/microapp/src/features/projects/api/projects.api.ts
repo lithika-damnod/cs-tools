@@ -26,6 +26,7 @@ import apiClient from "@infrastructure/api/client";
 import { toDeployment, toProduct, toProject, toProjectSummary } from "@features/projects/mappers/project.mapper";
 import type {
   DeploymentProductsDto,
+  GetAllProjectsRequestDto,
   GetProductsRequestDto,
   ProjectDeploymentsDto,
   ProjectDto,
@@ -36,9 +37,17 @@ import type { Deployment, Product, Project, ProjectInfo } from "@features/projec
 
 import type { PaginatedArray, Pagination } from "@shared/types";
 
-export const getAllProjects = async (): Promise<Project[]> => {
-  const projects = (await apiClient.post<ProjectsDto>(PROJECTS_ENDPOINT, {})).data.projects;
-  return projects.map(toProjectSummary);
+export const getAllProjects = async (body: GetAllProjectsRequestDto): Promise<PaginatedArray<Project>> => {
+  const projects = (await apiClient.post<ProjectsDto>(PROJECTS_ENDPOINT, body)).data;
+  const projectsWithStats = (await Promise.all(projects.projects.map(toProjectSummary))) as PaginatedArray<Project>;
+
+  projectsWithStats.pagination = {
+    totalRecords: projects.totalRecords,
+    offset: projects.offset,
+    limit: projects.limit,
+  };
+
+  return projectsWithStats;
 };
 
 export const getProject = async (id: string): Promise<ProjectInfo> => {

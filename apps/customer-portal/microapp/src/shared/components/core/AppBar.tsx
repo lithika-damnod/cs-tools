@@ -10,10 +10,10 @@
 // Unless required by applicable law or agreed to in writing,
 // software distributed under the License is distributed on an
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
+// KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { AppBar as MuiAppBar, Stack, Typography } from "@wso2/oxygen-ui";
+import { AppBar as MuiAppBar, Stack, Toolbar, Typography } from "@wso2/oxygen-ui";
 
 import { useLayout } from "@context/layout";
 import { useThemeMode } from "@context/theme";
@@ -29,22 +29,27 @@ export function AppBar() {
   const { back } = useNavigation();
 
   return (
-    <>
-      <MuiAppBar
-        ref={ref}
-        position="sticky"
-        elevation={0}
+    <MuiAppBar
+      ref={ref}
+      position="sticky"
+      elevation={0}
+      sx={{
+        backgroundColor: mode === "light" ? "background.paper" : "background.default",
+        position: "sticky",
+        pt: "var(--safe-top)",
+      }}
+    >
+      <Toolbar
+        disableGutters
         sx={{
-          backgroundColor: `${mode === "light" ? "white" : "black"} !important`,
-          display: "flex",
           flexDirection: "column",
-          gap: 1,
-          p: 1.5,
-          pt: 7,
+          alignItems: "stretch",
+          height: "auto",
+          minHeight: "fit-content",
         }}
       >
         {visibility?.exitButton && (
-          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={0.5}>
+          <Stack direction="row">
             <ExitButton />
           </Stack>
         )}
@@ -56,9 +61,11 @@ export function AppBar() {
             {slots?.leading}
 
             <Stack flex={1}>
-              <Typography component="div" variant="body2" fontWeight="regular" color="text.secondary">
-                {slots?.overline}
-              </Typography>
+              {slots?.overline && (
+                <Typography component="div" variant="body2" fontWeight="regular" color="text.secondary">
+                  {slots.overline}
+                </Typography>
+              )}
 
               {title && (
                 <Typography variant="h6" fontWeight="medium">
@@ -80,7 +87,7 @@ export function AppBar() {
         {visibility?.projectSelector && <ProjectSelect />}
 
         {slots?.bottom}
-      </MuiAppBar>
-    </>
+      </Toolbar>
+    </MuiAppBar>
   );
 }

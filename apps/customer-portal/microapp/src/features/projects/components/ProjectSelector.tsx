@@ -13,15 +13,27 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { Suspense } from "react";
+import { useState } from "react";
 
-import { alpha, Box, CircularProgress, Popover, type PopoverProps, pxToRem, Stack, Typography } from "@wso2/oxygen-ui";
+import {
+  alpha,
+  Box,
+  CircularProgress,
+  Popover,
+  type PopoverProps,
+  pxToRem,
+  SearchBar,
+  Stack,
+  Typography,
+} from "@wso2/oxygen-ui";
+
+import { ProjectPopoverList } from "@features/projects/components";
 
 import { ErrorBoundary } from "@components/core";
 
-import { ProjectPopoverList } from "./ProjectPopoverList";
-
 export function ProjectSelector({ open, anchorEl, onClose }: PopoverProps) {
+  const [search, setSearch] = useState("");
+
   const fallback = (
     <Stack alignItems="center" py={2}>
       <CircularProgress size={20} />
@@ -35,33 +47,58 @@ export function ProjectSelector({ open, anchorEl, onClose }: PopoverProps) {
       anchorEl={anchorEl}
       onClose={onClose}
       transformOrigin={{
-        vertical: "center",
+        vertical: "top",
         horizontal: "center",
       }}
       anchorOrigin={{
-        vertical: "bottom",
+        vertical: "top",
         horizontal: "center",
       }}
       slotProps={{
         paper: {
           sx: (theme) => ({
-            py: 2,
             width: "100%",
+            display: "flex",
+            flexDirection: "column",
             border: `1px solid ${theme.palette.divider}`,
-            borderRadius: 3,
             boxShadow: `${alpha(theme.palette.text.primary, 0.3)} 0px 48px 100px 0px`,
-            mt: "var(--safe-top)",
+            maxHeight: 300,
+            position: "relative",
           }),
+        },
+        transition: {
+          onExited: () => setSearch(""),
         },
       }}
     >
-      <Typography color="text.secondary" fontWeight="medium" sx={{ fontSize: pxToRem(12) }} px={2}>
-        Select Project
-      </Typography>
+      <Stack
+        sx={{
+          gap: 1,
+          borderBottom: "1px solid",
+          borderColor: "divider",
+          bgcolor: "background.paper",
+          pt: 1,
+          pb: 1.5,
+          position: "sticky",
+          top: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <Typography color="text.secondary" sx={{ fontSize: pxToRem(12) }} px={1.5}>
+          Select Project
+        </Typography>
+        <SearchBar
+          fullWidth
+          placeholder="Search Projects"
+          sx={{ px: 1 }}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+      </Stack>
       <ErrorBoundary fallback={fallback}>
-        <Suspense fallback={fallback}>
-          <ProjectPopoverList onClose={onClose} />
-        </Suspense>
+        <Box sx={{ flex: 1, overflowY: "auto", py: 1 }}>
+          <ProjectPopoverList search={search} onClose={onClose} />
+        </Box>
       </ErrorBoundary>
     </Popover>
   );

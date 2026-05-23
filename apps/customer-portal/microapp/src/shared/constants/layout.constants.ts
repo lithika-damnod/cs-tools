@@ -15,10 +15,16 @@
 // under the License.
 import type { LayoutDeclaration } from "@context/layout";
 
-export const NO_ACTIVE_TAB = -1;
+export const Tab = {
+  None: -1,
+  Home: 0,
+  Support: 1,
+  Users: 2,
+  Profile: 3,
+} as const;
 
 export const DEFAULT_LAYOUT_CONFIG: LayoutDeclaration = {
-  tabIndex: NO_ACTIVE_TAB,
+  tabIndex: Tab.None,
   title: undefined,
   visibility: undefined,
   slots: undefined,

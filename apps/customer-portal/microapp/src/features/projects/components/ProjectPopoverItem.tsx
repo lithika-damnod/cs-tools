@@ -13,7 +13,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { Stack, Typography, useTheme } from "@wso2/oxygen-ui";
+import { Box, Skeleton, Stack, Typography } from "@wso2/oxygen-ui";
 import { Check } from "@wso2/oxygen-ui-icons-react";
 
 import type { Project } from "@features/projects/types/project.model";
@@ -24,24 +24,32 @@ type ProjectPopoverItemProps = Pick<Project, "name" | "metrics"> & {
 };
 
 export function ProjectPopoverItem({ name, active = false, onClick }: ProjectPopoverItemProps) {
-  const theme = useTheme();
-
   return (
     <Stack
       component="button"
       bgcolor={active ? "background.secondary" : "inherit"}
-      sx={{ cursor: "pointer", border: "none" }}
-      gap={0.6}
-      px={2}
-      py={0.5}
+      sx={{ cursor: "pointer", border: "none", width: "100%", gap: 1, px: 2, py: 0.5 }}
       onClick={onClick}
     >
       <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%" gap={1}>
-        <Typography variant="subtitle1" fontWeight="medium" color="text.primary" textAlign="left">
+        <Typography noWrap variant="subtitle1" fontWeight="medium" color="text.primary" textAlign="left">
           {name}
         </Typography>
-        {active && <Check style={{ flexShrink: 0 }} color={theme.palette.primary.main} />}
+
+        {active && (
+          <Box sx={{ flexShrink: 0, color: "primary.main" }}>
+            <Check size={22} />
+          </Box>
+        )}
       </Stack>
+    </Stack>
+  );
+}
+
+export function ProjectPopoverItemSkeleton() {
+  return (
+    <Stack sx={{ px: 2, py: 0.2, mb: 1 }}>
+      <Skeleton variant="text" width="100%" height={28} />
     </Stack>
   );
 }
