@@ -23,8 +23,8 @@ export function setLastVisitedProjectId(projectId: string | null): void {
   localStorage.setItem(LocalStorageKeys.lastVisitedProjectId, projectId);
 }
 
-export function getLastVisitedProjectId(): string | undefined {
+export function getLastVisitedProjectId(): string | null {
   const value = localStorage.getItem(LocalStorageKeys.lastVisitedProjectId);
-  if (!value || value === "null") return undefined;
+  if (!value || value === "null") return null;
   return value;
 }

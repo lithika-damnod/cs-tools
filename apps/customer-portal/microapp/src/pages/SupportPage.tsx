@@ -13,11 +13,23 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+import { useDeclareLayout } from "@context/layout";
+
 import { SupportView } from "@features/support/components";
+
+import { Tab } from "@shared/constants";
 
 import { Fab } from "@components/core";
 
 export default function SupportPage() {
+  useDeclareLayout({
+    tabIndex: Tab.Support,
+    visibility: {
+      exitButton: true,
+      projectSelector: true,
+    },
+  });
+
   return (
     <>
       <SupportView />

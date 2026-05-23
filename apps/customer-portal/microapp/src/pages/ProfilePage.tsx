@@ -7,6 +7,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { colors, Stack, Switch, Typography } from "@wso2/oxygen-ui";
 import { BookOpen, Bot, Clock4, Lock, Mail, Phone, User } from "@wso2/oxygen-ui-icons-react";
 
+import { useDeclareLayout } from "@context/layout";
+
 import { CHANGE_PASSWORD_URL } from "@config/endpoints";
 
 import { metadata } from "@features/metadata/api/metadata.queries";
@@ -15,7 +17,13 @@ import { useAppVersion, useMe, useProfileMutations, useProject } from "@features
 
 import { SectionCard } from "@shared/components/common";
 
+import { Tab } from "@shared/constants";
+
 export default function ProfilePage() {
+  useDeclareLayout({
+    tabIndex: Tab.Profile,
+  });
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const version = useAppVersion();

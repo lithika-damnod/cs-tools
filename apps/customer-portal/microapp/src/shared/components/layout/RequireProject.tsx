@@ -16,7 +16,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 import { useProject } from "@context/project";
-import ProjectScopeProvider from "@context/ProjectScopeProvider";
 
 const RequireProject = () => {
   const { projectId } = useProject();
@@ -25,11 +24,7 @@ const RequireProject = () => {
     return <Navigate to="/select" replace />;
   }
 
-  return (
-    <ProjectScopeProvider>
-      <Outlet />
-    </ProjectScopeProvider>
-  );
+  return <Outlet />;
 };
 
 export default RequireProject;

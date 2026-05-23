@@ -5,6 +5,6 @@ export const useCoreNavigation = () => {
 
   return {
     back: () => navigate(-1),
-    toHome: () => navigate("/"),
+    toHome: (options: { replace: boolean } = { replace: false }) => navigate("/", options),
   };
 };

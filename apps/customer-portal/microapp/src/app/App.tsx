@@ -15,7 +15,7 @@
 // under the License.
 import { Route, HashRouter as Router, Routes } from "react-router-dom";
 
-import AppProvider from "@app/providers";
+import Providers from "@app/providers";
 import {
   ChatPage,
   CreateCasePage,
@@ -42,7 +42,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <AppProvider>
+      <Providers>
         <ScrollHandler />
 
         <Routes>
@@ -79,7 +79,7 @@ const App: React.FC = () => {
             </Route>
           </Route>
         </Routes>
-      </AppProvider>
+      </Providers>
     </Router>
   );
 };

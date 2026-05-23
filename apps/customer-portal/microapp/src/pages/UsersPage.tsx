@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import { Button, Card, Divider, Grid, SearchBar, Stack, Typography } from "@wso2/oxygen-ui";
 import { Plus } from "@wso2/oxygen-ui-icons-react";
 
+import { useDeclareLayout } from "@context/layout";
 import { useNotify } from "@context/snackbar";
 
 import { WidgetMetric } from "@features/dashboard/components";
@@ -26,9 +27,17 @@ import { useFilters, useUserStats } from "@features/users/hooks";
 
 import { ErrorBoundary } from "@shared/components/core";
 
-import { ROUTES } from "@shared/constants";
+import { ROUTES, Tab } from "@shared/constants";
 
 export default function UsersPage() {
+  useDeclareLayout({
+    tabIndex: Tab.Users,
+    visibility: {
+      exitButton: true,
+      projectSelector: true,
+    },
+  });
+
   const notify = useNotify();
   const { total, registered, invited, admins } = useUserStats();
   const { set } = useFilters();

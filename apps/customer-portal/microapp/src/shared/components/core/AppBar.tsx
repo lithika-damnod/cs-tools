@@ -34,7 +34,7 @@ export function AppBar() {
       position="sticky"
       elevation={0}
       sx={{
-        backgroundColor: mode === "light" ? "background.paper" : "background.default",
+        backgroundColor: `${mode === "light" ? "white" : "black"} !important`,
         position: "sticky",
         pt: "var(--safe-top)",
       }}

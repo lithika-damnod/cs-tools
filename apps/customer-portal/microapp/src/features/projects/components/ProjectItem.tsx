@@ -5,7 +5,10 @@ import { useProject } from "@context/project";
 
 import type { Project } from "@features/projects/types/project.model";
 
+import { useNavigation } from "@shared/hooks";
+
 export function ProjectItem(props: Project) {
+  const { toHome } = useNavigation();
   const { setProjectId } = useProject();
 
   return (
@@ -43,7 +46,10 @@ export function ProjectItem(props: Project) {
           variant="contained"
           endIcon={<ArrowRight size={18} />}
           sx={{ textTransform: "initial" }}
-          onClick={() => setProjectId(props.id)}
+          onClick={() => {
+            setProjectId(props.id);
+            toHome({ replace: true });
+          }}
         >
           View Dashboard
         </Button>

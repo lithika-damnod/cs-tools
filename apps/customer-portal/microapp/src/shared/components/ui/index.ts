@@ -17,3 +17,4 @@
 export * from "./Timeline";
 export * from "./AuthorizationFallback";
 export * from "./Dot";
+export * from "./LoadingFallback";
