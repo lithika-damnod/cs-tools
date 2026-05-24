@@ -28,6 +28,7 @@ export function Filters({ type, variant = "full" }: { type: CaseType; variant?: 
   return (
     <ErrorBoundary fallback={<FiltersSkeleton />}>
       <FilterControls
+        variant={variant}
         placeholder={SEARCH_PLACEHOLDER_CONFIG[type]}
         tabs={tabs.map((filter) => ({ label: filter.label, value: filter.id }))}
       />
@@ -40,7 +41,7 @@ export function FiltersSkeleton({ variant = "full" }: { variant?: FilterControls
   const showTabs = variant !== "search-only"; /** Hide the filter tabs section */
 
   return (
-    <Stack gap={2} pb={1} width="100%">
+    <Stack gap={2} p={1} width="100%">
       {showSearch && <Skeleton variant="rectangular" height={36} sx={{ mt: 1, borderRadius: 1 }} />}
       {showTabs && (
         <Box sx={{ display: "flex", gap: 2, overflow: "hidden" }}>

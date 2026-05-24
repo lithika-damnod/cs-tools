@@ -3,7 +3,7 @@ import { ArrowLeft } from "@wso2/oxygen-ui-icons-react";
 
 export function BackButton({ onClick }: { onClick: () => void }) {
   return (
-    <IconButton aria-label="Go back" onClick={onClick} sx={{ p: 0 }} disableRipple>
+    <IconButton aria-label="Go back" onClick={onClick} sx={{ p: 0, m: 1 }} disableRipple>
       <ArrowLeft size={pxToRem(20)} />
     </IconButton>
   );

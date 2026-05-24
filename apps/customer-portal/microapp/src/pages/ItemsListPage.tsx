@@ -15,13 +15,24 @@
 // under the License.
 import { useQueryErrorResetBoundary } from "@tanstack/react-query";
 
+import { useDeclareLayout } from "@context/layout";
+
 import { FilterContent } from "@features/items/components";
+
+import { Tab } from "@shared/constants";
 
 import { ErrorState } from "@components/common";
 import { ErrorBoundary } from "@components/core";
 
 export default function ItemsListPage() {
   const { reset } = useQueryErrorResetBoundary();
+
+  useDeclareLayout({
+    tabIndex: Tab.Support,
+    visibility: {
+      backAction: true,
+    },
+  });
 
   return (
     <ErrorBoundary

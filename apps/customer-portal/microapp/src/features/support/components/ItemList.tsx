@@ -17,16 +17,11 @@ import { Suspense } from "react";
 
 import { ItemCardSkeleton, ItemListWrapper, ItemsListErrorBoundary, TabContent } from "@features/support/components";
 
-import { ROUTES, SUPPORT_TAB_VIEW_CONFIG } from "@shared/constants";
 import type { CaseType } from "@shared/types";
 
 export function ItemList({ tab }: { tab: CaseType }) {
   return (
-    <ItemListWrapper
-      title={SUPPORT_TAB_VIEW_CONFIG[tab].title}
-      subtitle={SUPPORT_TAB_VIEW_CONFIG[tab].subtitle}
-      viewAllPath={ROUTES[tab].all}
-    >
+    <ItemListWrapper type={tab}>
       <ItemsListErrorBoundary>
         <Suspense fallback={<TabContentSkeleton />}>
           <TabContent tab={tab} />

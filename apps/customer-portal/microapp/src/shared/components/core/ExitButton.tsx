@@ -11,7 +11,7 @@ export function ExitButton() {
 
   return (
     <>
-      <IconButton disableRipple color="error" sx={{ gap: 1 }} onClick={() => setOpen(true)}>
+      <IconButton disableRipple color="error" sx={{ gap: 1, p: 0, m: 0.8 }} onClick={() => setOpen(true)}>
         <Grip size={20} />
         <Typography>Go to Apps</Typography>
       </IconButton>

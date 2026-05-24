@@ -1,4 +1,4 @@
-import { Box, SearchBar, Skeleton, Stack, Tab, Tabs } from "@wso2/oxygen-ui";
+import { SearchBar, Stack, Tab, Tabs } from "@wso2/oxygen-ui";
 
 import { useFilters } from "@features/items/hooks";
 
@@ -21,24 +21,23 @@ export function FilterControls({ variant = "full", tabs, placeholder }: FilterCo
   const showTabs = variant !== "search-only"; /** Hide the filter tabs section */
 
   return (
-    <Stack gap={2} pb={1}>
+    <Stack gap={2} p={1} pb={0}>
       {showSearch && (
         <SearchBar
+          fullWidth
           size="small"
           placeholder={placeholder}
-          value={filters.search}
           onChange={(e) => set({ search: e.target.value })}
           sx={{
             mt: 1,
             bgcolor: "background.paper",
           }}
-          fullWidth
         />
       )}
 
       {showTabs && (
         <Tabs
-          value={filters.states ?? "all"}
+          value={filters.states?.[0] ?? "all"}
           scrollButtons={false}
           variant="scrollable"
           onChange={(_, value) => set({ states: value === "all" ? [] : [value] })}
@@ -70,6 +69,7 @@ export function FilterControls({ variant = "full", tabs, placeholder }: FilterCo
           }}
         >
           <Tab label="All" value="all" disableRipple />
+
           {tabs.map((tab, index) => (
             <Tab key={index} label={tab.label} value={tab.value} disableRipple />
           ))}

@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import type { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
 
+import { useDeclareLayout } from "@context/layout";
+
 import {
   AnnouncementItemCard,
   CaseItemCard,
@@ -9,6 +11,8 @@ import {
   ChatItemCard,
   EngagementItemCard,
   FilterContentSkeleton,
+  Filters,
+  ItemsListSubtitle,
   ItemsListWrapper,
   SecurityReportAnalysisItemCard,
   ServiceRequestItemCard,
@@ -32,6 +36,17 @@ import type { CaseType } from "@shared/types";
 export function CaseItemsList() {
   const { query, total, count } = useCaseItems();
 
+  useDeclareLayout(
+    {
+      title: "All Cases",
+      slots: {
+        bottom: <Filters type={CASE_TYPES.DEFAULT} />,
+        subtitle: <ItemsListSubtitle count={count} total={total} />,
+      },
+    },
+    [total, count],
+  );
+
   return (
     <ItemsList type={CASE_TYPES.DEFAULT} query={query} total={total}>
       {(item) => <CaseItemCard {...item} to="" />}
@@ -41,6 +56,17 @@ export function CaseItemsList() {
 
 export function ChatItemsList() {
   const { query, total, count } = useChatItems();
+
+  useDeclareLayout(
+    {
+      title: "All Chats",
+      slots: {
+        bottom: <Filters type={CASE_TYPES.CHAT} />,
+        subtitle: <ItemsListSubtitle count={count} total={total} />,
+      },
+    },
+    [total, count],
+  );
 
   return (
     <ItemsList type={CASE_TYPES.CHAT} query={query} total={total}>
@@ -52,6 +78,17 @@ export function ChatItemsList() {
 export function ServiceRequestItemsList() {
   const { query, total, count } = useServiceRequestItems();
 
+  useDeclareLayout(
+    {
+      title: "All Service Requests",
+      slots: {
+        bottom: <Filters type={CASE_TYPES.SERVICE_REQUEST} />,
+        subtitle: <ItemsListSubtitle count={count} total={total} />,
+      },
+    },
+    [total, count],
+  );
+
   return (
     <ItemsList type={CASE_TYPES.SERVICE_REQUEST} query={query} total={total}>
       {(item) => <ServiceRequestItemCard {...item} to="" />}
@@ -61,6 +98,17 @@ export function ServiceRequestItemsList() {
 
 export function ChangeRequestItemsList() {
   const { query, total, count } = useChangeRequestItems();
+
+  useDeclareLayout(
+    {
+      title: "All Change Requests",
+      slots: {
+        bottom: <Filters type={CASE_TYPES.CHANGE_REQUEST} />,
+        subtitle: <ItemsListSubtitle count={count} total={total} />,
+      },
+    },
+    [total, count],
+  );
 
   return (
     <ItemsList type={CASE_TYPES.CHANGE_REQUEST} query={query} total={total}>
@@ -72,6 +120,17 @@ export function ChangeRequestItemsList() {
 export function SecurityReportAnalysisItemsList() {
   const { query, total, count } = useSecurityReportAnalysisItems();
 
+  useDeclareLayout(
+    {
+      title: "All Service Requests",
+      slots: {
+        bottom: <Filters type={CASE_TYPES.SERVICE_REQUEST} />,
+        subtitle: <ItemsListSubtitle count={count} total={total} />,
+      },
+    },
+    [total, count],
+  );
+
   return (
     <ItemsList type={CASE_TYPES.SECURITY_REPORT_ANALYSIS} query={query} total={total}>
       {(item) => <SecurityReportAnalysisItemCard {...item} to="" />}
@@ -82,6 +141,17 @@ export function SecurityReportAnalysisItemsList() {
 export function EngagementItemsList() {
   const { query, total, count } = useEngagementItems();
 
+  useDeclareLayout(
+    {
+      title: "All Engagements",
+      slots: {
+        bottom: <Filters type={CASE_TYPES.ENGAGEMENT} />,
+        subtitle: <ItemsListSubtitle count={count} total={total} />,
+      },
+    },
+    [total, count],
+  );
+
   return (
     <ItemsList type={CASE_TYPES.ENGAGEMENT} query={query} total={total}>
       {(item) => <EngagementItemCard {...item} to="" />}
@@ -90,7 +160,14 @@ export function EngagementItemsList() {
 }
 
 export function AnnouncementItemsList() {
-  const { query, total, count } = useAnnouncementItems();
+  const { query, total } = useAnnouncementItems();
+
+  useDeclareLayout({
+    title: "All Announcements",
+    slots: {
+      bottom: <Filters variant="search-only" type={CASE_TYPES.ANNOUNCEMENT} />,
+    },
+  });
 
   return (
     <ItemsList type={CASE_TYPES.ANNOUNCEMENT} query={query} total={total}>

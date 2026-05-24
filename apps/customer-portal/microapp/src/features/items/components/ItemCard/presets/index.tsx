@@ -1,3 +1,5 @@
+import { Box } from "@wso2/oxygen-ui";
+
 import type { CaseSummary } from "@features/cases/types";
 import type { ChangeRequestSummary } from "@features/changes/types";
 import type { Chat } from "@features/chats/types";

@@ -11,7 +11,7 @@ import { stripHtmlTags } from "@shared/utils";
 
 function Root({ to, children }: { to: string; children: ReactNode }) {
   return (
-    <Card sx={{ textDecoration: "none" }}>
+    <Card sx={{ textDecoration: "none", mb: 2 }}>
       <CardActionArea component={Link} to={to}>
         <Stack bgcolor="background.paper" p={2} gap={2}>
           {children}
@@ -73,7 +73,7 @@ function Body({ title, description }: { title: string; description?: string }) {
           color="text.secondary"
           sx={{
             display: "-webkit-box",
-            WebkitLineClamp: 3,
+            WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
           }}

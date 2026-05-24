@@ -15,33 +15,28 @@
 // under the License.
 import type { ReactNode } from "react";
 
-import { Link } from "react-router-dom";
-
 import { Button, Card, Divider, pxToRem, Stack, Typography, useTheme } from "@wso2/oxygen-ui";
 import { ChevronRight } from "@wso2/oxygen-ui-icons-react";
 
-interface ItemListWrapperProps {
-  title: string;
-  subtitle?: string;
-  viewAllPath: string;
-  children: ReactNode;
-}
+import { SUPPORT_TAB_VIEW_CONFIG } from "@shared/constants";
+import { useNavigation } from "@shared/hooks";
+import type { CaseType } from "@shared/types";
 
-export function ItemListWrapper({ title, subtitle, viewAllPath, children }: ItemListWrapperProps) {
+export function ItemListWrapper({ type, children }: { type: CaseType; children: ReactNode }) {
   const theme = useTheme();
+  const { toAll } = useNavigation();
 
   return (
     <Card component={Stack} p={2} mt={2} gap={0.5}>
       <Stack direction="row" justifyContent="space-between" alignItems="center" pb={1} width="100%">
         <Stack mr={2} minWidth={0}>
-          <Typography variant="h6">{title}</Typography>
-          {subtitle && (
-            <Typography variant="subtitle2" color="text.secondary" noWrap>
-              {subtitle}
-            </Typography>
-          )}
+          <Typography variant="h6">{SUPPORT_TAB_VIEW_CONFIG[type].title}</Typography>
+
+          <Typography variant="subtitle2" color="text.secondary" noWrap>
+            {SUPPORT_TAB_VIEW_CONFIG[type].subtitle}
+          </Typography>
         </Stack>
-        <Button variant="text" component={Link} to={viewAllPath} sx={{ textTransform: "initial", flexShrink: 0 }}>
+        <Button variant="text" sx={{ flexShrink: 0 }} onClick={() => toAll(type)}>
           <Stack direction="row" gap={1}>
             <Typography variant="body1" color="primary">
               View All

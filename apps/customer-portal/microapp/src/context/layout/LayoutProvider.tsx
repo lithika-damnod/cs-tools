@@ -15,30 +15,23 @@
 // under the License.
 import { useCallback, useMemo, useState } from "react";
 
-import { useLocation } from "react-router-dom";
-
 import { LayoutContext, type LayoutContextType, type LayoutDeclaration } from "@context/layout";
 
 import { DEFAULT_LAYOUT_CONFIG } from "@shared/constants";
 
 export default function LayoutProvider({ children }: { children: React.ReactNode }) {
-  const { pathname } = useLocation();
   const [declaration, setDeclaration] = useState<LayoutDeclaration>(DEFAULT_LAYOUT_CONFIG);
 
   const declareLayout = useCallback((next: Partial<LayoutDeclaration>) => {
-    setDeclaration({
-      ...DEFAULT_LAYOUT_CONFIG,
+    setDeclaration((prev) => ({
+      ...prev,
       ...next,
-      visibility: { ...DEFAULT_LAYOUT_CONFIG.visibility, ...next.visibility },
-      slots: { ...DEFAULT_LAYOUT_CONFIG.slots, ...next.slots },
-    });
+      visibility: { ...prev.visibility, ...next.visibility },
+      slots: { ...prev.slots, ...next.slots },
+    }));
   }, []);
 
   const value: LayoutContextType = useMemo(() => ({ ...declaration, declareLayout }), [declaration]);
 
-  return (
-    <LayoutContext.Provider key={pathname} value={value}>
-      {children}
-    </LayoutContext.Provider>
-  );
+  return <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>;
 }

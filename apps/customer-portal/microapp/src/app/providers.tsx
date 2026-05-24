@@ -13,16 +13,20 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+import { useLocation } from "react-router-dom";
+
 import { AppProvider } from "@context/AppProvider";
 import LayoutProvider from "@context/layout/LayoutProvider";
 import SnackbarProvider from "@context/snackbar/SnackbarProvider";
 import { ColorModeProvider } from "@context/theme";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
+
   return (
     <AppProvider>
       <ColorModeProvider>
-        <LayoutProvider>
+        <LayoutProvider key={pathname}>
           <SnackbarProvider>{children}</SnackbarProvider>
         </LayoutProvider>
       </ColorModeProvider>

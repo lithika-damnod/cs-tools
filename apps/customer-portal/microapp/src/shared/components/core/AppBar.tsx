@@ -55,7 +55,7 @@ export function AppBar() {
         )}
 
         <Stack direction="row" justifyContent="space-between" alignItems="center" gap={1}>
-          <Stack direction="row" alignItems="center" gap={1.5} flex={1}>
+          <Stack direction="row" alignItems="center" gap={1} flex={1}>
             {visibility?.backAction && <BackButton onClick={back} />}
 
             {slots?.leading}

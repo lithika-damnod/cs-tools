@@ -2,7 +2,7 @@ import { Card, Divider, pxToRem, Skeleton, Stack } from "@wso2/oxygen-ui";
 
 export function ItemCardSkeleton() {
   return (
-    <Card sx={{ textDecoration: "none" }}>
+    <Card sx={{ textDecoration: "none", mb: 2 }}>
       <Stack bgcolor="background.paper" p={2} gap={2}>
         <Stack gap={0.8}>
           <Stack direction="row" justifyContent="space-between" gap={5}>
