@@ -32,7 +32,7 @@ export interface UserItemProps {
   lastActive: string;
 }
 
-export function UserItem({ firstName, lastName, email, roles }: User) {
+export function UserItem(props: User) {
   const theme = useTheme();
 
   return (
@@ -40,12 +40,12 @@ export function UserItem({ firstName, lastName, email, roles }: User) {
       component={Link}
       elevation={0}
       to="/users/edit" // TODO:
-      state={{ email, firstName, lastName, role: roles[0] }}
+      state={{ user: props }}
       sx={{ textDecoration: "none", p: 1 }}
     >
       <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
         <Stack direction="row" alignItems="center" gap={2}>
-          <UserAvatar>{firstName}</UserAvatar>
+          <UserAvatar>{props.firstName}</UserAvatar>
 
           <Stack minWidth={0}>
             <Stack direction="row" gap={1} alignItems="center">
@@ -61,16 +61,18 @@ export function UserItem({ firstName, lastName, email, roles }: User) {
                   overflow: "hidden",
                 }}
               >
-                {`${firstName} ${lastName}`}
+                {`${props.firstName} ${props.lastName}`}
               </Typography>
 
-              {roles.length > 0 && roles[0] !== ROLES.PORTAL_USER && <Chip size="small" label={capitalize(roles[0])} />}
+              {props.roles.length > 0 && props.roles[0] !== ROLES.PORTAL_USER && (
+                <Chip size="small" label={capitalize(props.roles[0])} />
+              )}
             </Stack>
 
             <Stack direction="row" alignItems="center" gap={1}>
               <Mail color={theme.palette.text.secondary} size={pxToRem(13)} />
               <Typography variant="subtitle2" fontWeight="regular" color="text.secondary">
-                {email}
+                {props.email}
               </Typography>
             </Stack>
           </Stack>

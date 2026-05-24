@@ -16,7 +16,7 @@
 import * as Yup from "yup";
 import { Button, CircularProgress, colors } from "@wso2/oxygen-ui";
 import { Phone } from "@wso2/oxygen-ui-icons-react";
-import { Form, useFormik } from "formik";
+import { Form, FormikContext, useFormik } from "formik";
 
 import { SelectField, TextField } from "@features/cases/components";
 import { ProfileEditCallout } from "@features/profile/components";
@@ -52,42 +52,44 @@ export default function ProfileEditPage() {
   });
 
   return (
-    <Form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <ProfileEditCallout />
+    <FormikContext value={{ handleSubmit, ...formik }}>
+      <Form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <ProfileEditCallout />
 
-      <SectionCard sx={{ gap: 4 }}>
-        <TextField
-          name="phoneNumber"
-          label="Phone Number"
-          placeholder="+0 (00) 0000 0000"
-          helperText="Include country code for international numbers"
-          slots={{ label: { startAdornment: <Phone size={16} color={colors.blue[500]} /> } }}
-          disabled={fetchingUser}
-        />
+        <SectionCard sx={{ gap: 4 }}>
+          <TextField
+            name="phoneNumber"
+            label="Phone Number"
+            placeholder="+0 (00) 0000 0000"
+            helperText="Include country code for international numbers"
+            slots={{ label: { startAdornment: <Phone size={16} color={colors.blue[500]} /> } }}
+            disabled={fetchingUser}
+          />
 
-        <SelectField
-          name="timeZone"
-          label="Timezone"
-          placeholder="No Timezone Selected"
-          options={metadata?.timeZones.map((tz) => ({ value: tz.label, label: tz.label })) ?? []}
-          helperText="Select your preferred timezone"
-          slots={{ label: { startAdornment: <Phone size={16} color={colors.blue[500]} /> } }}
-          disabled={fetchingUser || fetchingMetadata}
-        />
-      </SectionCard>
+          <SelectField
+            name="timeZone"
+            label="Timezone"
+            placeholder="No Timezone Selected"
+            options={metadata?.timeZones.map((tz) => ({ value: tz.label, label: tz.label })) ?? []}
+            helperText="Select your preferred timezone"
+            slots={{ label: { startAdornment: <Phone size={16} color={colors.blue[500]} /> } }}
+            disabled={fetchingUser || fetchingMetadata}
+          />
+        </SectionCard>
 
-      <Button
-        type="submit"
-        variant="contained"
-        startIcon={formik.isSubmitting ? <CircularProgress size={16} color="inherit" /> : undefined}
-      >
-        {formik.isSubmitting ? "Saving..." : "Save Changes"}
-      </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          startIcon={formik.isSubmitting ? <CircularProgress size={16} color="inherit" /> : undefined}
+        >
+          {formik.isSubmitting ? "Saving..." : "Save Changes"}
+        </Button>
 
-      <Button variant="outlined" sx={{ textTransform: "initial", bgcolor: "background.paper" }} onClick={back}>
-        Cancel
-      </Button>
-    </Form>
+        <Button variant="outlined" sx={{ textTransform: "initial", bgcolor: "background.paper" }} onClick={back}>
+          Cancel
+        </Button>
+      </Form>
+    </FormikContext>
   );
 }
 

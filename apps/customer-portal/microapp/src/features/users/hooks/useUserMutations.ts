@@ -13,7 +13,7 @@ export function useUserMutations() {
   const queryClient = useQueryClient();
   const { back } = useNavigation();
   const { projectId } = useProject();
-  const { initial } = useMode();
+  const { mode, initial } = useMode();
 
   const handleSuccess = () => {
     queryClient.resetQueries({ queryKey: ["users", projectId] });
@@ -27,16 +27,16 @@ export function useUserMutations() {
   });
 
   const edit = useMutation({
-    ...users.edit(projectId!, initial!.email),
+    ...users.edit(projectId!, initial?.email ?? ""),
     onSuccess: handleSuccess,
     onError: () => notify.error("Failed to edit user. Please try again."),
   });
 
   const remove = useMutation({
-    ...users.delete(projectId!, initial!.email),
+    ...users.delete(projectId!, initial?.email ?? ""),
     onSuccess: handleSuccess,
     onError: () => notify.error("Failed to delete user. Please try again."),
   });
 
-  return { create, edit, remove };
+  return { create, edit: mode === "edit" ? edit : undefined, remove: mode === "edit" ? remove : undefined };
 }

@@ -1,8 +1,6 @@
-import { Form } from "react-router-dom";
-
 import { Button, CircularProgress, InputAdornment, Stack, Typography } from "@wso2/oxygen-ui";
 import { Folder } from "@wso2/oxygen-ui-icons-react";
-import { useFormikContext } from "formik";
+import { Form, useFormikContext } from "formik";
 
 import { DEPLOYMENT_DISABLED_PROJECT_TYPES } from "@config/constants";
 
