@@ -20,22 +20,25 @@ export function useFilters() {
   };
 
   const patch = (partial: Partial<ListFilterParams>) => {
-    setSearchParams((prev) => {
-      if (partial.types) {
-        prev.delete("type");
-        partial.types.forEach((t) => prev.append("type", t));
-      }
-      if (partial.states) {
-        prev.delete("state");
-        partial.states.forEach((s) => prev.append("state", s));
-      }
-      if (partial.severities) {
-        prev.delete("severity");
-        partial.severities.forEach((s) => prev.append("severity", s));
-      }
-      if (partial.search !== undefined) prev.set("search", partial.search);
-      return prev;
-    });
+    setSearchParams(
+      (prev) => {
+        if (partial.types) {
+          prev.delete("type");
+          partial.types.forEach((t) => prev.append("type", t));
+        }
+        if (partial.states) {
+          prev.delete("state");
+          partial.states.forEach((s) => prev.append("state", s));
+        }
+        if (partial.severities) {
+          prev.delete("severity");
+          partial.severities.forEach((s) => prev.append("severity", s));
+        }
+        if (partial.search !== undefined) prev.set("search", partial.search);
+        return prev;
+      },
+      { replace: true },
+    );
   };
 
   const reset = () => setSearchParams(new URLSearchParams());
