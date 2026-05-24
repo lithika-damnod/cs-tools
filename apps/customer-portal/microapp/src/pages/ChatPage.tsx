@@ -17,21 +17,34 @@ import { useEffect, useRef, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { Stack } from "@wso2/oxygen-ui";
+import { Box, Stack } from "@wso2/oxygen-ui";
+import { MessageSquareQuote } from "@wso2/oxygen-ui-icons-react";
 
+import { useDeclareLayout } from "@context/layout";
 import { useProject } from "@context/project";
 
 import { Bubble, PromptCreateCase } from "@features/chats/components";
-import { useConversation } from "@features/chats/hooks/useConversation";
-import { useNovera } from "@features/chats/hooks/useNovera";
-import { useStream } from "@features/chats/hooks/useStream";
+import { useConversation, useNovera, useStream } from "@features/chats/hooks";
 
-import { ROUTES } from "@shared/constants";
+import { CommentBar } from "@shared/components/core";
+
+import { ROUTES, Tab } from "@shared/constants";
 import { scrollTo } from "@shared/utils";
 
-import { CommentBar } from "../features/detail/components";
-
 export default function ChatPage() {
+  useDeclareLayout({
+    tabIndex: Tab.Support,
+    title: "Chat with Novera",
+    visibility: { backAction: true },
+    slots: {
+      leading: (
+        <Box color="primary.main">
+          <MessageSquareQuote size={32} />
+        </Box>
+      ),
+    },
+  });
+
   const navigate = useNavigate();
   const { projectId } = useProject();
   const { draft, committed, pending, stream, finish, reset } = useStream();
@@ -68,7 +81,16 @@ export default function ChatPage() {
         {draft && <Bubble {...draft} onAnimationComplete={finish} />}
         <div ref={bottomRef} />
       </Stack>
-      <CommentBar />
+
+      <CommentBar
+        placeholder="Type a message..."
+        value={comment}
+        onChange={setComment}
+        onSend={handleSend}
+        loading={pending}
+        slots={{ top: messages.length > 1 ? <PromptCreateCase onCreateCase={handleCreateCase} /> : undefined }}
+        disabled={status === WebSocket.CLOSED}
+      />
     </>
   );
 }

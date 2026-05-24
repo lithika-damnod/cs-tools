@@ -1,6 +1,6 @@
 import type { ChangeEvent, KeyboardEvent, ReactNode } from "react";
 
-import { CircularProgress, IconButton, InputBase, pxToRem, Stack } from "@wso2/oxygen-ui";
+import { CircularProgress, IconButton, pxToRem, Stack, TextField } from "@wso2/oxygen-ui";
 import { SendHorizonal } from "@wso2/oxygen-ui-icons-react";
 
 import { useThemeMode } from "@context/theme";
@@ -10,7 +10,7 @@ interface CommentBarSlots {
   bottom?: ReactNode;
 }
 
-interface PinnedCommentBarProps {
+export interface PinnedCommentBarProps {
   value: string;
   placeholder?: string;
   loading?: boolean;
@@ -22,7 +22,7 @@ interface PinnedCommentBarProps {
 
 export function CommentBar({
   value,
-  placeholder = "Add Comment",
+  placeholder = "Add a comment...",
   loading = false,
   disabled = false,
   slots,
@@ -50,25 +50,27 @@ export function CommentBar({
   return (
     <Stack
       sx={{
-        px: 2,
-        py: 1.5,
-        gap: 1,
         borderTop: 1,
+        borderBottom: 1,
         borderColor: "divider",
         bgcolor: mode === "dark" ? "black" : "white",
+        position: "fixed",
+        bottom: 95,
+        left: 0,
+        right: 0,
       }}
     >
       {slots?.top}
 
-      <Stack direction="row" alignItems="center" sx={{ gap: 1 }}>
-        <InputBase
+      <Stack direction="row" alignItems="center" sx={{ gap: 1.5, px: 1.5, py: 2 }}>
+        <TextField
           fullWidth
           value={value}
           placeholder={placeholder}
           disabled={isDisabled}
           onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
           onKeyDown={handleKeyDown}
-          sx={{ fontSize: pxToRem(14) }}
+          sx={{ fontSize: 14 }}
         />
 
         <IconButton size="small" color="primary" onClick={handleSend} disabled={!canSend}>

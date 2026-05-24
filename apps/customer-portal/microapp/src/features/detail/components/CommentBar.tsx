@@ -26,22 +26,7 @@ export function CommentBar() {
       {/* Marks the end of the comment list; used as a scroll target */}
       <div ref={bottomRef} />
 
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: 90,
-          left: 0,
-          right: 0,
-        }}
-      >
-        <BaseCommentBar
-          value={comment}
-          onChange={setComment}
-          onSend={handleSend}
-          loading={isPending}
-          disabled={!data}
-        />
-      </Box>
+      <BaseCommentBar value={comment} onChange={setComment} onSend={handleSend} loading={isPending} disabled={!data} />
     </>
   );
 }
