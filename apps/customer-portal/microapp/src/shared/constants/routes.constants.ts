@@ -1,7 +1,6 @@
 import type { CaseType } from "@shared/types";
 
 export const ROUTES = {
-  multiple: { all: "/multiple/all" },
   default_case: { all: "/cases/all", by: (id: string) => `/cases/${id}`, create: "/create" },
   service_request: { all: "/service-requests/all", by: (id: string) => `/service-requests/${id}` },
   change_request: { all: "/change-requests/all", by: (id: string) => `/change-requests/${id}` },

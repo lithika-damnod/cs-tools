@@ -13,19 +13,21 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+import { CASE_TYPES } from "@shared/constants";
 
-export const ACTION_REQUIRED_CASE_STATUS_IDS = [18, 6];
-export const ACTION_REQUIRED_CHANGE_REQUEST_STATUS_IDS = [1, 5];
+export const OVERVIEW_CASE_TYPES = [
+  CASE_TYPES.DEFAULT,
+  CASE_TYPES.SERVICE_REQUEST,
+  CASE_TYPES.CHANGE_REQUEST,
+  CASE_TYPES.SECURITY_REPORT_ANALYSIS,
+  CASE_TYPES.ENGAGEMENT,
+];
+export const ACTION_REQUIRED_STATUS_IDS = [18, 6, 1, 5];
 
 export const OUTSTANDING_CASE_STATUS_IDS = [1, 10, 18, 1003, 6, 1006];
 export const OUTSTANDING_CONVERSATIONS_STATUS_IDS = [1, 2];
 export const OUTSTANDING_CHANGE_REQUESTS_STATUS_IDS = [5, -2, -1, 0, 1, 2];
+export const OUTSTANDING_SERVICE_REQUESTS_STATUS_IDS = [1, 10, 18, 1003, 6, 1006];
+export const OUTSTANDING_STATUS_IDS = [...OUTSTANDING_CASE_STATUS_IDS, ...OUTSTANDING_CHANGE_REQUESTS_STATUS_IDS];
 
-export const RESOLVED_CASE_STATUS_IDS = [3];
-export const RESOLVED_CHANGE_REQUEST_STATUS_IDS = [3];
-
-export const STATUS_MODE = {
-  ACTION_REQUIRED: "action_required",
-  OUTSTANDING: "outstanding",
-  RESOLVED: "resolved",
-} as const;
+export const RESOLVED_STATUS_IDS = [3];

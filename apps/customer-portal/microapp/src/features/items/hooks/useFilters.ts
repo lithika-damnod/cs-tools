@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 import type { CaseType } from "@shared/types";
 
@@ -11,6 +11,7 @@ export interface ListFilterParams {
 
 export function useFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { state } = useLocation();
 
   const filters: ListFilterParams = {
     types: searchParams.getAll("type") as CaseType[],
@@ -44,6 +45,7 @@ export function useFilters() {
   const reset = () => setSearchParams(new URLSearchParams());
 
   return {
+    state: state as { title?: string } | undefined,
     filters,
     set: patch,
     reset,

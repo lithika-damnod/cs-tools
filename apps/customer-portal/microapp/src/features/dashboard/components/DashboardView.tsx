@@ -13,6 +13,12 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+import { colors, Grid, pxToRem } from "@wso2/oxygen-ui";
+import { Activity, CircleCheck, Clock4, OctagonAlert } from "@wso2/oxygen-ui-icons-react";
+
+import { WidgetMetric, WidgetPieChart } from "@features/dashboard/components";
+import type { useDashboardStats } from "@features/dashboard/hooks/useDashboardStats";
+
 import {
   DASHBOARD_METRIC_ACTION_REQUIRED,
   DASHBOARD_METRIC_AVG_RESPONSE_TIME,
@@ -21,13 +27,8 @@ import {
   DASHBOARD_WIDGET_OUTSTANDING_ENGAGEMENTS,
   DASHBOARD_WIDGET_OUTSTANDING_OPERATIONS,
   DASHBOARD_WIDGET_OUTSTANDING_SUPPORT_CASES,
-} from "@root/src/shared/constants";
-import { useNavigation } from "@root/src/shared/hooks";
-import { colors, Grid, pxToRem } from "@wso2/oxygen-ui";
-import { Activity, CircleCheck, Clock4, OctagonAlert } from "@wso2/oxygen-ui-icons-react";
-
-import { WidgetMetric, WidgetPieChart } from "@features/dashboard/components";
-import type { useDashboardStats } from "@features/dashboard/hooks/useDashboardStats";
+} from "@shared/constants";
+import { useNavigation } from "@shared/hooks";
 
 type DashboardViewProps = ReturnType<typeof useDashboardStats>;
 

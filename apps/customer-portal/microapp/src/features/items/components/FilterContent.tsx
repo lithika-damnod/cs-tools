@@ -1,3 +1,4 @@
+import { useDeclareLayout } from "@root/src/context/layout";
 import { Stack } from "@wso2/oxygen-ui";
 
 import {
@@ -17,10 +18,17 @@ import { EmptyState } from "@shared/components/common";
 import { CASE_TYPES } from "@shared/constants";
 
 export function FilterContent() {
-  const { filters } = useFilters();
+  const { state, filters } = useFilters();
   const { total, isResolving } = useItems();
 
   if (!isResolving && total === 0) return <EmptyState />;
+
+  useDeclareLayout({
+    title: state?.title,
+    visibility: {
+      backAction: true,
+    },
+  });
 
   return (
     <Stack gap={2}>

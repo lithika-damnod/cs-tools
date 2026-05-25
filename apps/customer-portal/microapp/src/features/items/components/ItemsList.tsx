@@ -23,6 +23,7 @@ import {
   useChangeRequestItems,
   useChatItems,
   useEngagementItems,
+  useFilters,
   useInfiniteListTail,
   useSecurityReportAnalysisItems,
   useServiceRequestItems,
@@ -35,6 +36,7 @@ import type { CaseType } from "@shared/types";
 
 export function CaseItemsList() {
   const { query, total, count } = useCaseItems();
+  const { filters } = useFilters();
 
   useDeclareLayout(
     {
@@ -44,6 +46,7 @@ export function CaseItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
+    { enabled: filters.types.length === 1 },
     [total, count],
   );
 
@@ -56,6 +59,7 @@ export function CaseItemsList() {
 
 export function ChatItemsList() {
   const { query, total, count } = useChatItems();
+  const { filters } = useFilters();
 
   useDeclareLayout(
     {
@@ -65,6 +69,7 @@ export function ChatItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
+    { enabled: filters.types.length === 1 },
     [total, count],
   );
 
@@ -77,6 +82,7 @@ export function ChatItemsList() {
 
 export function ServiceRequestItemsList() {
   const { query, total, count } = useServiceRequestItems();
+  const { filters } = useFilters();
 
   useDeclareLayout(
     {
@@ -86,6 +92,7 @@ export function ServiceRequestItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
+    { enabled: filters.types.length === 1 },
     [total, count],
   );
 
@@ -98,6 +105,7 @@ export function ServiceRequestItemsList() {
 
 export function ChangeRequestItemsList() {
   const { query, total, count } = useChangeRequestItems();
+  const { filters } = useFilters();
 
   useDeclareLayout(
     {
@@ -107,6 +115,7 @@ export function ChangeRequestItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
+    { enabled: filters.types.length === 1 },
     [total, count],
   );
 
@@ -119,6 +128,7 @@ export function ChangeRequestItemsList() {
 
 export function SecurityReportAnalysisItemsList() {
   const { query, total, count } = useSecurityReportAnalysisItems();
+  const { filters } = useFilters();
 
   useDeclareLayout(
     {
@@ -128,6 +138,7 @@ export function SecurityReportAnalysisItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
+    { enabled: filters.types.length === 1 },
     [total, count],
   );
 
@@ -140,6 +151,7 @@ export function SecurityReportAnalysisItemsList() {
 
 export function EngagementItemsList() {
   const { query, total, count } = useEngagementItems();
+  const { filters } = useFilters();
 
   useDeclareLayout(
     {
@@ -149,6 +161,7 @@ export function EngagementItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
+    { enabled: filters.types.length === 1 },
     [total, count],
   );
 
@@ -161,13 +174,17 @@ export function EngagementItemsList() {
 
 export function AnnouncementItemsList() {
   const { query, total } = useAnnouncementItems();
+  const { filters } = useFilters();
 
-  useDeclareLayout({
-    title: "All Announcements",
-    slots: {
-      bottom: <Filters variant="search-only" type={CASE_TYPES.ANNOUNCEMENT} />,
+  useDeclareLayout(
+    {
+      title: "All Announcements",
+      slots: {
+        bottom: <Filters variant="search-only" type={CASE_TYPES.ANNOUNCEMENT} />,
+      },
     },
-  });
+    { enabled: filters.types.length === 1 },
+  );
 
   return (
     <ItemsList type={CASE_TYPES.ANNOUNCEMENT} query={query} total={total}>
