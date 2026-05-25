@@ -15,5 +15,6 @@
 // under the License.
 
 export * from "./SettingsItem";
+export * from "./SettingsSection";
 export * from "./ProfileTitleSlot";
 export * from "./ProfileEditCallout";

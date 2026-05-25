@@ -5,8 +5,8 @@ export function UserAvatar({ children }: { children: string }) {
   return (
     <Avatar
       sx={(theme) => ({
-        height: 40,
-        width: 40,
+        height: 36,
+        width: 36,
         bgcolor: "primary.main",
         fontSize: theme.typography.h5,
         fontWeight: "medium",

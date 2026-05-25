@@ -12,16 +12,17 @@ import { useDeclareLayout } from "@context/layout";
 import { CHANGE_PASSWORD_URL } from "@config/endpoints";
 
 import { metadata } from "@features/metadata/api/metadata.queries";
-import { SettingsItem } from "@features/profile/components";
+import { ProfileTitleSlot, SettingsItem, SettingsSection } from "@features/profile/components";
 import { useAppVersion, useMe, useProfileMutations, useProject } from "@features/profile/hooks";
-
-import { SectionCard } from "@shared/components/common";
 
 import { Tab } from "@shared/constants";
 
 export default function ProfilePage() {
   useDeclareLayout({
     tabIndex: Tab.Profile,
+    slots: {
+      bottom: <ProfileTitleSlot />,
+    },
   });
 
   const queryClient = useQueryClient();
@@ -37,7 +38,7 @@ export default function ProfilePage() {
 
   return (
     <Stack gap={2.5}>
-      <SectionCard title="Account Information">
+      <SettingsSection title="Account Information">
         <SettingsItem label="Email" value={me?.email} slotProps={{ icon: { component: Mail } }} loading={isLoading} />
 
         <SettingsItem
@@ -53,9 +54,9 @@ export default function ProfilePage() {
           slotProps={{ icon: { component: Clock4 } }}
           loading={isLoading}
         />
-      </SectionCard>
+      </SettingsSection>
 
-      <SectionCard title="Settings">
+      <SettingsSection title="Settings">
         <SettingsItem
           label="Change Password"
           suffix="chevron"
@@ -75,9 +76,9 @@ export default function ProfilePage() {
           slotProps={{ icon: { component: User } }}
           onClick={() => navigate("/profile/update")}
         />
-      </SectionCard>
+      </SettingsSection>
 
-      <SectionCard title="AI Features">
+      <SettingsSection title="AI Features">
         <SettingsItem
           label="AI Chat Assistant"
           description="Enable AI-powered chat support"
@@ -103,7 +104,7 @@ export default function ProfilePage() {
             />
           }
         />
-      </SectionCard>
+      </SettingsSection>
 
       {version && (
         <Typography variant="caption" color="text.secondary" textAlign="center" sx={{ py: 1 }}>

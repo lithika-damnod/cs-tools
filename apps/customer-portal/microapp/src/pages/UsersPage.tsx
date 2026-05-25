@@ -67,7 +67,7 @@ export default function UsersPage() {
       </Grid>
 
       <Card component={Stack} p={2} mt={2} gap={0.5} divider={<Divider />}>
-        <Stack direction="row" justifyContent="space-between" pb={1}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" pb={1}>
           <Typography variant="h6">All Users</Typography>
           <Button component={Link} to={ROUTES.users.invite} startIcon={<Plus />} sx={{ textTransform: "none" }}>
             Add

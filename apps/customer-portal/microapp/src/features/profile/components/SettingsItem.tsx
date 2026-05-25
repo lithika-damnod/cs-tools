@@ -40,7 +40,7 @@ export function SettingsItem({
         textDecoration: "none",
         color: "inherit",
         bgcolor: "background.paper",
-        direction: "row",
+        flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
       }}
