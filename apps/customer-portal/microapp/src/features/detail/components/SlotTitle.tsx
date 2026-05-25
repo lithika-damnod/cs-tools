@@ -16,7 +16,7 @@ export function SlotTitle({ variant = "default", type, id, title }: SlotTitlePro
 
   return (
     <Stack height={40}>
-      <MetaRow icon={<Icon color={color} size={pxToRem(16)} />} id={id} variant={variant} />
+      <MetaRow icon={<Icon color={color} size={20} />} id={id} variant={variant} />
       {variant === "shrunk" && <TitleRow title={title} />}
     </Stack>
   );
@@ -67,7 +67,7 @@ function TitleRow({ title }: { title?: string }) {
   );
 }
 
-const springTransition: Transition = { type: "spring", stiffness: 300, damping: 30 };
+const springTransition: Transition = { type: "spring", stiffness: 300, damping: 50 };
 
 const metaRowVariants: Variants = {
   normal: { opacity: 1, scale: 1, y: 0, transition: springTransition },

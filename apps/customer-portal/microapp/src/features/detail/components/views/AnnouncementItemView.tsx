@@ -17,7 +17,7 @@ export function AnnouncementItemView() {
   const { data, isLoading } = useCase();
 
   return (
-    <Layout type={type} title={data?.title} id={data?.id}>
+    <Layout type={type} title={data?.title} id={data?.number}>
       {isLoading ? (
         <CircularProgress size={20} />
       ) : (

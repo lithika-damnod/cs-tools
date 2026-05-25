@@ -9,7 +9,7 @@ import { useTitleSlotVariant } from "@features/detail/hooks";
 
 import { type MenuOptionProps } from "@shared/components/detail";
 
-import { COMMENT_ENABLED_TYPES } from "@shared/constants";
+import { COMMENT_ENABLED_TYPES, Tab } from "@shared/constants";
 import type { CaseType } from "@shared/types";
 
 type LayoutProps = {
@@ -25,12 +25,20 @@ type LayoutProps = {
 export function Layout({ type, title, id, children, actions }: LayoutProps) {
   const { ref, variant } = useTitleSlotVariant();
 
-  useDeclareLayout({
-    title: <SlotTitle variant={variant} type={type} id={id} title={title} />,
-    slots: {
-      trailing: actions ? <SlotActions disabled={actions.every((o) => o.hidden)} options={actions} /> : undefined,
+  useDeclareLayout(
+    {
+      tabIndex: Tab.Support,
+      title: <SlotTitle variant={variant} type={type} id={id} title={title} />,
+      visibility: {
+        backAction: true,
+      },
+      slots: {
+        trailing: actions ? <SlotActions disabled={actions.every((o) => o.hidden)} options={actions} /> : undefined,
+      },
     },
-  });
+    { enabled: true },
+    [type, title, id, actions, variant],
+  );
 
   return (
     <>

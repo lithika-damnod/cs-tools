@@ -19,4 +19,6 @@ export const SCROLL_OVERRIDES: Array<{ path: string; position: "top" | "bottom" 
   { path: "/conversations/:id", position: "bottom" },
   { path: "/service-requests/:id", position: "bottom" },
   { path: "/change-requests/:id", position: "bottom" },
+  { path: "/engagements/:id", position: "bottom" },
+  { path: "/security-report-analysis/:id", position: "bottom" },
 ];

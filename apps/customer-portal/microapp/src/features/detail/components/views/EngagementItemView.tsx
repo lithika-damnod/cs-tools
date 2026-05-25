@@ -18,7 +18,11 @@ export function EngagementItemView() {
   const { data, isLoading } = useCase();
 
   return (
-    <Layout type={type} title={data?.title} id={data?.id}>
+    <Layout
+      type={type}
+      title={data?.title}
+      id={data?.internalId && data?.number ? `${data.internalId} | ${data.number}` : undefined}
+    >
       <SectionCard title="Request Information">
         <Grid spacing={1.5} container>
           <Grid size={12}>

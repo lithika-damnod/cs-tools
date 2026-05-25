@@ -16,7 +16,11 @@ export function ChangeRequestItemView() {
   const { data, isLoading } = useChangeRequest();
 
   return (
-    <Layout type={type} title={data?.title} id={data?.id}>
+    <Layout
+      type={type}
+      title={data?.title}
+      id={data?.internalId && data?.number ? `${data.internalId} | ${data.number}` : undefined}
+    >
       <SectionCard title="Change Information">
         <Grid spacing={1.5} container>
           <Grid size={12}>

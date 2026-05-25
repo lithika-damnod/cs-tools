@@ -17,7 +17,7 @@ export function ChatItemView() {
   const { data, isLoading } = useChat();
 
   return (
-    <Layout type={type} title={data?.description} id={data?.id}>
+    <Layout type={type} title={data?.description} id={data?.number}>
       <SectionCard>
         <Grid spacing={1.5} container>
           <Grid size={6}>

@@ -18,7 +18,12 @@ export function CaseItemView() {
   const actions = useActions();
 
   return (
-    <Layout type={type} title={data?.title} id={data?.id} actions={actions}>
+    <Layout
+      type={type}
+      title={data?.title}
+      id={data?.internalId && data?.number ? `${data.internalId} | ${data.number}` : undefined}
+      actions={actions}
+    >
       <SectionCard title="Case Information">
         <Grid spacing={1.5} container>
           <Grid size={6}>
