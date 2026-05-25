@@ -15,8 +15,6 @@
 // under the License.
 import { useEffect, useRef, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
-
 import { Box, Stack } from "@wso2/oxygen-ui";
 import { MessageSquareQuote } from "@wso2/oxygen-ui-icons-react";
 
@@ -24,12 +22,12 @@ import { useDeclareLayout } from "@context/layout";
 import { useProject } from "@context/project";
 
 import { Bubble, PromptCreateCase } from "@features/chats/components";
-import { useConversation, useNovera, useStream } from "@features/chats/hooks";
+import { useClassify, useConversation, useEnvProducts, useNovera, useStream } from "@features/chats/hooks";
 
 import { CommentBar } from "@shared/components/core";
 
-import { ROUTES, Tab } from "@shared/constants";
-import { scrollTo } from "@shared/utils";
+import { Tab } from "@shared/constants";
+import { scrollTo, toTranscript } from "@shared/utils";
 
 export default function ChatPage() {
   useDeclareLayout({
@@ -45,11 +43,12 @@ export default function ChatPage() {
     },
   });
 
-  const navigate = useNavigate();
-  const { projectId } = useProject();
+  const { projectId, projectTypeId } = useProject();
   const { draft, committed, pending, stream, finish, reset } = useStream();
   const { messages, append } = useConversation(committed, reset);
   const { status, send } = useNovera(projectId!, stream);
+  const classify = useClassify(messages);
+  const { envProducts } = useEnvProducts();
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const [comment, setComment] = useState("");
@@ -63,7 +62,11 @@ export default function ChatPage() {
   };
 
   const handleCreateCase = () => {
-    navigate(ROUTES.default_case.create, { state: { messages } });
+    classify.mutate({
+      projectTypeId,
+      chatHistory: toTranscript(messages),
+      envProducts,
+    });
   };
 
   useEffect(() => {
@@ -88,7 +91,12 @@ export default function ChatPage() {
         onChange={setComment}
         onSend={handleSend}
         loading={pending}
-        slots={{ top: messages.length > 1 ? <PromptCreateCase onCreateCase={handleCreateCase} /> : undefined }}
+        slots={{
+          top:
+            messages.length > 1 ? (
+              <PromptCreateCase pending={classify.isPending} onCreateCase={handleCreateCase} />
+            ) : undefined,
+        }}
         disabled={status === WebSocket.CLOSED}
       />
     </>

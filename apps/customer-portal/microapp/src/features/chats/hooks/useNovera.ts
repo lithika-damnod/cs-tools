@@ -12,7 +12,7 @@ import { useEnvProducts } from "./useEnvProducts";
 
 export function useNovera(projectId: string, onData: (data: NoveraResponse) => void) {
   const { id: userId } = useMe();
-  const { envProducts } = useEnvProducts(projectId);
+  const { envProducts } = useEnvProducts();
   const [ws, setWs] = useState<WebSocket | null>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
 

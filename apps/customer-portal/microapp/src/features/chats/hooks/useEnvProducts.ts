@@ -15,11 +15,14 @@
 // under the License.
 import { useQueries, useQuery } from "@tanstack/react-query";
 
+import { useProject } from "@context/project";
+
 import { buildEnvProducts } from "@features/chats/services/chatHistory.service";
 import { projects } from "@features/projects/api/projects.queries";
 
-export function useEnvProducts(projectId: string) {
-  const { data: deployments = [], isLoading: deploymentsLoading } = useQuery(projects.deployments(projectId));
+export function useEnvProducts() {
+  const { projectId } = useProject();
+  const { data: deployments = [], isLoading: deploymentsLoading } = useQuery(projects.deployments(projectId!));
 
   const productQueries = useQueries({
     queries: deployments.map((deployment) => ({
