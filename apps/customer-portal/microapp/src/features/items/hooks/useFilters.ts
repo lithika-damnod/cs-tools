@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { useLocation, useSearchParams } from "react-router-dom";
 
 import type { CaseType } from "@shared/types";
@@ -13,12 +15,15 @@ export function useFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { state } = useLocation();
 
-  const filters: ListFilterParams = {
-    types: searchParams.getAll("type") as CaseType[],
-    states: searchParams.getAll("state") || undefined,
-    severities: searchParams.getAll("severity") || undefined,
-    search: searchParams.get("search") ?? "",
-  };
+  const filters: ListFilterParams = useMemo(
+    () => ({
+      types: searchParams.getAll("type") as CaseType[],
+      states: searchParams.getAll("state") || undefined,
+      severities: searchParams.getAll("severity") || undefined,
+      search: searchParams.get("search") ?? "",
+    }),
+    [searchParams],
+  );
 
   const patch = (partial: Partial<ListFilterParams>) => {
     setSearchParams(
