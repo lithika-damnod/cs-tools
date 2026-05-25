@@ -37,11 +37,8 @@ import type { CaseType } from "@shared/types";
 export function CaseItemsList() {
   const { query, total, count } = useCaseItems();
   const { filters } = useFilters();
-  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
 
-  useLayoutEffect(() => {
-    console.log("value of enabled: ", enabled);
-  }, [enabled]);
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
 
   useDeclareLayout(
     {
@@ -66,6 +63,8 @@ export function ChatItemsList() {
   const { query, total, count } = useChatItems();
   const { filters } = useFilters();
 
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+
   useDeclareLayout(
     {
       title: "All Chats",
@@ -74,7 +73,7 @@ export function ChatItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) === 1 },
+    { enabled },
     [total, count],
   );
 
@@ -89,6 +88,8 @@ export function ServiceRequestItemsList() {
   const { query, total, count } = useServiceRequestItems();
   const { filters } = useFilters();
 
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+
   useDeclareLayout(
     {
       title: "All Service Requests",
@@ -97,7 +98,7 @@ export function ServiceRequestItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) === 1 },
+    { enabled },
     [total, count],
   );
 
@@ -112,6 +113,8 @@ export function ChangeRequestItemsList() {
   const { query, total, count } = useChangeRequestItems();
   const { filters } = useFilters();
 
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+
   useDeclareLayout(
     {
       title: "All Change Requests",
@@ -120,7 +123,7 @@ export function ChangeRequestItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) === 1 },
+    { enabled },
     [total, count],
   );
 
@@ -135,15 +138,17 @@ export function SecurityReportAnalysisItemsList() {
   const { query, total, count } = useSecurityReportAnalysisItems();
   const { filters } = useFilters();
 
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+
   useDeclareLayout(
     {
-      title: "All Service Requests",
+      title: "All Security Report Analysis",
       slots: {
         bottom: <Filters type={CASE_TYPES.SERVICE_REQUEST} />,
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) === 1 },
+    { enabled },
     [total, count],
   );
 
@@ -158,6 +163,8 @@ export function EngagementItemsList() {
   const { query, total, count } = useEngagementItems();
   const { filters } = useFilters();
 
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+
   useDeclareLayout(
     {
       title: "All Engagements",
@@ -166,7 +173,7 @@ export function EngagementItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) === 1 },
+    { enabled },
     [total, count],
   );
 
@@ -178,17 +185,21 @@ export function EngagementItemsList() {
 }
 
 export function AnnouncementItemsList() {
-  const { query, total } = useAnnouncementItems();
+  const { query, total, count } = useAnnouncementItems();
   const { filters } = useFilters();
+
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
 
   useDeclareLayout(
     {
       title: "All Announcements",
       slots: {
         bottom: <Filters variant="search-only" type={CASE_TYPES.ANNOUNCEMENT} />,
+        subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) === 1 },
+    { enabled },
+    [total, count],
   );
 
   return (

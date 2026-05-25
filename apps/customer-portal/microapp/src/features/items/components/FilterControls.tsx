@@ -21,7 +21,7 @@ export function FilterControls({ variant = "full", tabs, placeholder }: FilterCo
   const showTabs = variant !== "search-only"; /** Hide the filter tabs section */
 
   return (
-    <Stack gap={2} p={1} pb={0}>
+    <Stack p={1} pb={0} mt={-1}>
       {showSearch && (
         <SearchBar
           fullWidth
@@ -30,6 +30,7 @@ export function FilterControls({ variant = "full", tabs, placeholder }: FilterCo
           onChange={(e) => set({ search: e.target.value })}
           sx={{
             mt: 1,
+            mb: 2,
             bgcolor: "background.paper",
           }}
         />
