@@ -5,7 +5,6 @@ import { useProject } from "@context/project";
 import type { Case } from "@features/cases/types";
 
 import { CASE_TYPES, OUTSTANDING_CASES_BY_SEVERITY_TITLE, ROUTES } from "@shared/constants";
-import type { ModeType } from "@shared/types";
 
 export const useCaseNavigation = () => {
   const navigate = useNavigate();
@@ -13,9 +12,16 @@ export const useCaseNavigation = () => {
 
   return {
     toBySeverity: (id: string | number, label: string) =>
-      navigate(ROUTES[CASE_TYPES.DEFAULT].all, {
-        state: { mode: { type: "severity", id, title: OUTSTANDING_CASES_BY_SEVERITY_TITLE(label) } as ModeType },
-      }),
+      navigate(
+        {
+          pathname: "/support/all",
+          search: new URLSearchParams([
+            ["type", CASE_TYPES.DEFAULT],
+            ["severity", String(id)],
+          ]).toString(),
+        },
+        { state: { title: OUTSTANDING_CASES_BY_SEVERITY_TITLE(label) } },
+      ),
 
     toCaseCreate: () => navigate(noveraEnabled ? ROUTES[CASE_TYPES.CHAT].create : ROUTES[CASE_TYPES.DEFAULT].create),
     toRelativeCaseCreate: (data: Case) => navigate(ROUTES[CASE_TYPES.DEFAULT].create, { state: { case: data } }),

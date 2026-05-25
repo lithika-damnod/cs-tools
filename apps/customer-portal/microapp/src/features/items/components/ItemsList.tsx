@@ -46,7 +46,7 @@ export function CaseItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 },
+    { enabled: filters.types.length === 1 && !filters.severities?.length },
     [total, count],
   );
 
@@ -69,7 +69,7 @@ export function ChatItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 },
+    { enabled: filters.types.length === 1 && !filters.severities?.length },
     [total, count],
   );
 
@@ -92,7 +92,7 @@ export function ServiceRequestItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 },
+    { enabled: filters.types.length === 1 && !filters.severities?.length },
     [total, count],
   );
 
@@ -115,7 +115,7 @@ export function ChangeRequestItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 },
+    { enabled: filters.types.length === 1 && !filters.severities?.length },
     [total, count],
   );
 
@@ -138,7 +138,7 @@ export function SecurityReportAnalysisItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 },
+    { enabled: filters.types.length === 1 && !filters.severities?.length },
     [total, count],
   );
 
@@ -161,7 +161,7 @@ export function EngagementItemsList() {
         subtitle: <ItemsListSubtitle count={count} total={total} />,
       },
     },
-    { enabled: filters.types.length === 1 },
+    { enabled: filters.types.length === 1 && !filters.severities?.length },
     [total, count],
   );
 
@@ -183,7 +183,7 @@ export function AnnouncementItemsList() {
         bottom: <Filters variant="search-only" type={CASE_TYPES.ANNOUNCEMENT} />,
       },
     },
-    { enabled: filters.types.length === 1 },
+    { enabled: filters.types.length === 1 && !filters.severities?.length },
   );
 
   return (
