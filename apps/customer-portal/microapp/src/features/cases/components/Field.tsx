@@ -149,7 +149,7 @@ export function TextField({
 
       <MuiTextField
         {...field}
-        value={value}
+        value={value ?? field.value}
         error={meta.touched && Boolean(meta.error)}
         placeholder={placeholder}
         multiline={multiline}
@@ -186,7 +186,7 @@ interface FieldLabelProps {
 
 function FieldLabel({ label, required, startAdornment, endAdornment }: FieldLabelProps) {
   return (
-    <Stack direction="row" justifyContent="space-between" alignItems="end" gap={1}>
+    <Stack direction="row" alignItems="center" gap={1}>
       {/* Optional element displayed at the beginning of the label row */}
       {startAdornment}
 

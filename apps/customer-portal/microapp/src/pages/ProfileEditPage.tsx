@@ -14,21 +14,36 @@
 // specific language governing permissions and limitations
 // under the License.
 import * as Yup from "yup";
-import { Button, CircularProgress, colors } from "@wso2/oxygen-ui";
-import { Phone } from "@wso2/oxygen-ui-icons-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { Button, CircularProgress, colors, Stack } from "@wso2/oxygen-ui";
+import { Clock, Phone } from "@wso2/oxygen-ui-icons-react";
 import { Form, FormikContext, useFormik } from "formik";
+
+import { useDeclareLayout } from "@context/layout";
+import { useNotify } from "@context/snackbar";
 
 import { SelectField, TextField } from "@features/cases/components";
 import { ProfileEditCallout } from "@features/profile/components";
 import { useMe, useProfileMutations } from "@features/profile/hooks";
 import { useMetadata } from "@features/profile/hooks";
+import { users } from "@features/users/api/users.queries";
 import type { EditMeDto } from "@features/users/types";
 
 import { SectionCard } from "@shared/components/common";
 
+import { Tab } from "@shared/constants";
 import { useNavigation } from "@shared/hooks";
 
 export default function ProfileEditPage() {
+  useDeclareLayout({
+    tabIndex: Tab.Profile,
+    title: "Update Profile",
+    slots: { subtitle: "Update your contact information" },
+    visibility: { backAction: true },
+  });
+
+  const queryClient = useQueryClient();
+  const notify = useNotify();
   const { back } = useNavigation();
   const { data: me, isPending: fetchingUser } = useMe();
   const { data: metadata, isPending: fetchingMetadata } = useMetadata();
@@ -42,11 +57,23 @@ export default function ProfileEditPage() {
     validateOnBlur: true,
     validateOnChange: true,
     validationSchema: validationSchema,
+    enableReinitialize: true,
     onSubmit: async (values) => {
       const payload = Object.fromEntries(
         Object.entries(values).filter(([key, value]) => value !== formik.initialValues[key as keyof EditMeDto]),
       );
-      await edit.mutateAsync(payload);
+
+      const response = await edit.mutateAsync(payload);
+      const isUpdated = Object.entries(payload).every(
+        ([key, value]) => response[key as keyof typeof response] === value,
+      );
+
+      if (!isUpdated) {
+        notify.error("Failed to update profile. Please try again.");
+        return;
+      }
+
+      queryClient.invalidateQueries({ queryKey: users.me().queryKey });
       back(); // navigate back on success
     },
   });
@@ -54,40 +81,43 @@ export default function ProfileEditPage() {
   return (
     <FormikContext value={{ handleSubmit, ...formik }}>
       <Form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <ProfileEditCallout />
+        <Stack gap={2}>
+          <ProfileEditCallout />
 
-        <SectionCard sx={{ gap: 4 }}>
-          <TextField
-            name="phoneNumber"
-            label="Phone Number"
-            placeholder="+0 (00) 0000 0000"
-            helperText="Include country code for international numbers"
-            slots={{ label: { startAdornment: <Phone size={16} color={colors.blue[500]} /> } }}
-            disabled={fetchingUser}
-          />
+          <SectionCard sx={{ gap: 4 }}>
+            <TextField
+              name="phoneNumber"
+              label="Phone Number"
+              placeholder="+0 (00) 0000 0000"
+              helperText="Include country code for international numbers"
+              slots={{ label: { startAdornment: <Phone size={16} color={colors.blue[500]} /> } }}
+              disabled={fetchingUser}
+            />
 
-          <SelectField
-            name="timeZone"
-            label="Timezone"
-            placeholder="No Timezone Selected"
-            options={metadata?.timeZones.map((tz) => ({ value: tz.label, label: tz.label })) ?? []}
-            helperText="Select your preferred timezone"
-            slots={{ label: { startAdornment: <Phone size={16} color={colors.blue[500]} /> } }}
-            disabled={fetchingUser || fetchingMetadata}
-          />
-        </SectionCard>
+            <SelectField
+              name="timeZone"
+              label="Timezone"
+              placeholder="No Timezone Selected"
+              options={metadata?.timeZones.map((tz) => ({ value: tz.label, label: tz.label })) ?? []}
+              helperText="Select your preferred timezone"
+              slots={{ label: { startAdornment: <Clock size={16} color={colors.purple[500]} /> } }}
+              disabled={fetchingUser || fetchingMetadata}
+            />
+          </SectionCard>
 
-        <Button
-          type="submit"
-          variant="contained"
-          startIcon={formik.isSubmitting ? <CircularProgress size={16} color="inherit" /> : undefined}
-        >
-          {formik.isSubmitting ? "Saving..." : "Save Changes"}
-        </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            startIcon={formik.isSubmitting ? <CircularProgress size={16} color="inherit" /> : undefined}
+            disabled={!formik.dirty}
+          >
+            {formik.isSubmitting ? "Saving..." : "Save Changes"}
+          </Button>
 
-        <Button variant="outlined" sx={{ textTransform: "initial", bgcolor: "background.paper" }} onClick={back}>
-          Cancel
-        </Button>
+          <Button variant="outlined" sx={{ textTransform: "initial", bgcolor: "background.paper" }} onClick={back}>
+            Cancel
+          </Button>
+        </Stack>
       </Form>
     </FormikContext>
   );
