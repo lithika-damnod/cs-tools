@@ -23,12 +23,12 @@ export function FilterContent() {
 
   if (!isResolving && total === 0) return <EmptyState />;
 
-  useDeclareLayout({
-    title: state?.title,
-    visibility: {
-      backAction: true,
+  useDeclareLayout(
+    {
+      title: state?.title,
     },
-  });
+    { enabled: Boolean(state?.title) },
+  );
 
   return (
     <Stack gap={2}>
