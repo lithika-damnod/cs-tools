@@ -6,9 +6,14 @@ import { GroupAccordion } from "@shared/components/ui/GroupAccordion";
 
 import type { CaseType } from "@shared/types";
 
-export function ItemsListWrapper({ type, children }: { type: CaseType; children: ReactNode }) {
+export function ItemsListWrapper({ type, count, children }: { type: CaseType; count?: number; children: ReactNode }) {
   const { filters } = useFilters();
 
-  if (filters.types.length > 1) return <GroupAccordion type={type}>{children}</GroupAccordion>;
+  if (filters.types.length > 1)
+    return (
+      <GroupAccordion type={type} count={count}>
+        {children}
+      </GroupAccordion>
+    );
   return <Fragment>{children}</Fragment>;
 }

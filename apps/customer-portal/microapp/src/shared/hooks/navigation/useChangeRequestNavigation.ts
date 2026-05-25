@@ -15,7 +15,7 @@ export const useChangeRequestNavigation = () => {
         {
           pathname: "/support/all",
           search: new URLSearchParams([
-            ...[[" type", CASE_TYPES.CHANGE_REQUEST]],
+            ...[["type", CASE_TYPES.CHANGE_REQUEST]],
             ...OUTSTANDING_CHANGE_REQUESTS_STATUS_IDS.map((state) => ["state", String(state)]),
           ]).toString(),
         },

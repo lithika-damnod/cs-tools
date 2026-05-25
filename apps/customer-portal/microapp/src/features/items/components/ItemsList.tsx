@@ -215,7 +215,7 @@ function ItemsList<TItem, TError>({
   const tail = useInfiniteListTail(total ?? 0);
 
   return (
-    <ItemsListWrapper type={type}>
+    <ItemsListWrapper type={type} count={total}>
       <InfiniteList {...query} sentinel={<FilterContentSkeleton />} tail={tail}>
         {children}
       </InfiniteList>
