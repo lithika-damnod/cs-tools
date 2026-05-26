@@ -21,6 +21,7 @@ import { CASE_TYPES } from "@shared/constants";
 export function useCaseItems(enabled: boolean = true) {
   const { projectId } = useProject();
   const filters = useCaseFiltersFromParams();
+
   const unfiltered = useInfiniteQuery({ ...cases.paginated(projectId!, { filters: {} }), enabled });
   const filtered = useInfiniteQuery({ ...cases.paginated(projectId!, { filters }), enabled });
 

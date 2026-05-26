@@ -1,3 +1,4 @@
+import { CASE_TYPES } from "@root/src/shared/constants";
 import { SearchBar, Stack, Tab, Tabs } from "@wso2/oxygen-ui";
 
 import { useFilters } from "@features/items/hooks";
@@ -38,10 +39,17 @@ export function FilterControls({ variant = "full", tabs, placeholder }: FilterCo
 
       {showTabs && (
         <Tabs
-          value={filters.states?.[0] ?? "all"}
+          value={
+            (filters.types?.[0] === CASE_TYPES.CHANGE_REQUEST ? filters.states?.[0] : filters.statuses?.[0]) ?? "all"
+          }
           scrollButtons={false}
           variant="scrollable"
-          onChange={(_, value) => set({ states: value === "all" ? [] : [value] })}
+          onChange={(_, value) =>
+            set({
+              [filters.types?.[0] === CASE_TYPES.CHANGE_REQUEST ? "states" : "statuses"]:
+                value === "all" ? [] : [value],
+            })
+          }
           sx={{
             "& .MuiTabs-flexContainer": {
               gap: 1.2,

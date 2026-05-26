@@ -16,7 +16,7 @@ export const useServiceRequestNavigation = () => {
           pathname: "/support/all",
           search: new URLSearchParams([
             ...[["type", CASE_TYPES.SERVICE_REQUEST]],
-            ...OUTSTANDING_SERVICE_REQUESTS_STATUS_IDS.map((state) => ["state", String(state)]),
+            ...OUTSTANDING_SERVICE_REQUESTS_STATUS_IDS.map((state) => ["status", String(state)]),
           ]).toString(),
         },
 

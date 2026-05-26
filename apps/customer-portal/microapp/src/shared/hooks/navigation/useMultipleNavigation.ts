@@ -1,17 +1,22 @@
 import { useNavigate } from "react-router-dom";
 
+import { useProject } from "@context/project";
+
 import {
+  ACTION_REQUIRED_CASE_STATUS_IDS,
+  ACTION_REQUIRED_CHANGE_REQUEST_STATUS_IDS,
   ACTION_REQUIRED_ITEMS_TITLE,
-  ACTION_REQUIRED_STATUS_IDS,
   CLOSED_ITEMS_TITLE,
+  OUTSTANDING_CASE_STATUS_IDS,
+  OUTSTANDING_CHANGE_REQUESTS_STATUS_IDS,
   OUTSTANDING_ITEMS_TITLE,
-  OUTSTANDING_STATUS_IDS,
   OVERVIEW_CASE_TYPES,
   RESOLVED_STATUS_IDS,
 } from "@shared/constants";
 
 export const useMultipleNavigation = () => {
   const navigate = useNavigate();
+  const { features } = useProject();
 
   return {
     toClosedItems: () =>
@@ -32,7 +37,10 @@ export const useMultipleNavigation = () => {
           pathname: "/support/all",
           search: new URLSearchParams([
             ...OVERVIEW_CASE_TYPES.map((type) => ["type", type]),
-            ...OUTSTANDING_STATUS_IDS.map((state) => ["state", String(state)]),
+            ...OUTSTANDING_CASE_STATUS_IDS.map((state) => ["status", String(state)]),
+            ...(features?.hasChangeRequestReadAccess
+              ? OUTSTANDING_CHANGE_REQUESTS_STATUS_IDS.map((state) => ["state", String(state)])
+              : []),
           ]).toString(),
         },
         { state: { title: OUTSTANDING_ITEMS_TITLE } },
@@ -44,7 +52,10 @@ export const useMultipleNavigation = () => {
           pathname: "/support/all",
           search: new URLSearchParams([
             ...OVERVIEW_CASE_TYPES.map((type) => ["type", type]),
-            ...ACTION_REQUIRED_STATUS_IDS.map((state) => ["state", String(state)]),
+            ...ACTION_REQUIRED_CASE_STATUS_IDS.map((state) => ["status", String(state)]),
+            ...(features?.hasChangeRequestReadAccess
+              ? ACTION_REQUIRED_CHANGE_REQUEST_STATUS_IDS.map((state) => ["state", String(state)])
+              : []),
           ]).toString(),
         },
         { state: { title: ACTION_REQUIRED_ITEMS_TITLE } },

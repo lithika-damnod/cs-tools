@@ -9,7 +9,7 @@ export function useCaseFiltersFromParams(): GetCasesRequestDto["filters"] {
 
   return {
     searchQuery: filters.search,
-    statusIds: filters.states?.filter((id) => available?.caseStates.map((s) => s.id).includes(id)).map(Number),
+    statusIds: filters.statuses?.filter((id) => available?.caseStates.map((s) => s.id).includes(id)).map(Number),
     severityId: filters.severities?.[0] ? Number(filters.severities[0]) : undefined,
   };
 }
@@ -20,7 +20,9 @@ export function useChatFiltersFromParams() {
 
   return {
     searchQuery: filters.search,
-    stateKeys: filters.states?.filter((id) => available?.conversationStates.map((s) => s.id).includes(id)).map(Number),
+    stateKeys: filters.statuses
+      ?.filter((id) => available?.conversationStates.map((s) => s.id).includes(id))
+      .map(Number),
   };
 }
 

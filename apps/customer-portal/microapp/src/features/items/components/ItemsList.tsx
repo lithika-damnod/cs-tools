@@ -38,7 +38,7 @@ export function CaseItemsList() {
   const { query, total, count } = useCaseItems();
   const { filters } = useFilters();
 
-  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.statuses?.length ?? 0) <= 1;
 
   useDeclareLayout(
     {
@@ -53,7 +53,7 @@ export function CaseItemsList() {
   );
 
   return (
-    <ItemsList type={CASE_TYPES.DEFAULT} query={query} total={total}>
+    <ItemsList type={CASE_TYPES.DEFAULT} query={query} total={count}>
       {(item) => <CaseItemCard {...item} />}
     </ItemsList>
   );
@@ -63,7 +63,7 @@ export function ChatItemsList() {
   const { query, total, count } = useChatItems();
   const { filters } = useFilters();
 
-  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.statuses?.length ?? 0) <= 1;
 
   useDeclareLayout(
     {
@@ -78,7 +78,7 @@ export function ChatItemsList() {
   );
 
   return (
-    <ItemsList type={CASE_TYPES.CHAT} query={query} total={total}>
+    <ItemsList type={CASE_TYPES.CHAT} query={query} total={count}>
       {(item) => <ChatItemCard {...item} />}
     </ItemsList>
   );
@@ -88,7 +88,7 @@ export function ServiceRequestItemsList() {
   const { query, total, count } = useServiceRequestItems();
   const { filters } = useFilters();
 
-  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.statuses?.length ?? 0) <= 1;
 
   useDeclareLayout(
     {
@@ -103,7 +103,7 @@ export function ServiceRequestItemsList() {
   );
 
   return (
-    <ItemsList type={CASE_TYPES.SERVICE_REQUEST} query={query} total={total}>
+    <ItemsList type={CASE_TYPES.SERVICE_REQUEST} query={query} total={count}>
       {(item) => <ServiceRequestItemCard {...item} />}
     </ItemsList>
   );
@@ -128,7 +128,7 @@ export function ChangeRequestItemsList() {
   );
 
   return (
-    <ItemsList type={CASE_TYPES.CHANGE_REQUEST} query={query} total={total}>
+    <ItemsList type={CASE_TYPES.CHANGE_REQUEST} query={query} total={count}>
       {(item) => <ChangeRequestItemCard {...item} />}
     </ItemsList>
   );
@@ -138,7 +138,7 @@ export function SecurityReportAnalysisItemsList() {
   const { query, total, count } = useSecurityReportAnalysisItems();
   const { filters } = useFilters();
 
-  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.statuses?.length ?? 0) <= 1;
 
   useDeclareLayout(
     {
@@ -153,7 +153,7 @@ export function SecurityReportAnalysisItemsList() {
   );
 
   return (
-    <ItemsList type={CASE_TYPES.SECURITY_REPORT_ANALYSIS} query={query} total={total}>
+    <ItemsList type={CASE_TYPES.SECURITY_REPORT_ANALYSIS} query={query} total={count}>
       {(item) => <SecurityReportAnalysisItemCard {...item} />}
     </ItemsList>
   );
@@ -163,7 +163,7 @@ export function EngagementItemsList() {
   const { query, total, count } = useEngagementItems();
   const { filters } = useFilters();
 
-  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.statuses?.length ?? 0) <= 1;
 
   useDeclareLayout(
     {
@@ -178,7 +178,7 @@ export function EngagementItemsList() {
   );
 
   return (
-    <ItemsList type={CASE_TYPES.ENGAGEMENT} query={query} total={total}>
+    <ItemsList type={CASE_TYPES.ENGAGEMENT} query={query} total={count}>
       {(item) => <EngagementItemCard {...item} />}
     </ItemsList>
   );
@@ -188,7 +188,7 @@ export function AnnouncementItemsList() {
   const { query, total, count } = useAnnouncementItems();
   const { filters } = useFilters();
 
-  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.states?.length ?? 0) <= 1;
+  const enabled = filters.types.length === 1 && !filters.severities?.length && (filters.statuses?.length ?? 0) <= 1;
 
   useDeclareLayout(
     {
@@ -203,7 +203,7 @@ export function AnnouncementItemsList() {
   );
 
   return (
-    <ItemsList type={CASE_TYPES.ANNOUNCEMENT} query={query} total={total}>
+    <ItemsList type={CASE_TYPES.ANNOUNCEMENT} query={query} total={count}>
       {(item) => <AnnouncementItemCard {...item} />}
     </ItemsList>
   );
