@@ -17,7 +17,7 @@ import { type CreateCaseFormValues, useAutoFill, useCreateCase, useCreateCaseFor
 export function CreateCaseForm() {
   useAutoFill();
 
-  const { state, create } = useCreateCase();
+  const { state } = useCreateCase();
   const { projects, deployments, products, issueTypes, severities } = useCreateCaseFormOptions();
   const { values, setFieldValue, ...formik } = useFormikContext<CreateCaseFormValues>();
   const { classified, remove } = useClassification();
@@ -137,11 +137,10 @@ export function CreateCaseForm() {
           type="submit"
           variant="contained"
           sx={{ textTransform: "initial" }}
-          startIcon={
-            formik.isSubmitting || create.isPending ? <CircularProgress size={16} color="inherit" /> : undefined
-          }
+          startIcon={formik.isSubmitting ? <CircularProgress size={16} color="inherit" /> : undefined}
+          disabled={formik.isSubmitting}
         >
-          {formik.isSubmitting ? "Saving..." : "Create Case"}
+          {formik.isSubmitting ? "Creating..." : "Create Case"}
         </Button>
       </Stack>
     </Form>

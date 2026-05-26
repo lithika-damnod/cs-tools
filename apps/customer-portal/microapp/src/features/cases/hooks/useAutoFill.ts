@@ -7,62 +7,68 @@ import { type CreateCaseFormValues, useCreateCase, useCreateCaseFormOptions } fr
 
 export function useAutoFill() {
   const { setFieldValue } = useFormikContext<CreateCaseFormValues>();
+  const { deployments, products, issueTypes, severities } = useCreateCaseFormOptions();
   const { set } = useClassification();
-  const { projects, deployments, products, issueTypes, severities } = useCreateCaseFormOptions();
-
   const { state } = useCreateCase();
-  const classifications = state.classifications;
 
-  const hasRunRef = useRef(false);
+  const classifications = state.classifications;
+  const fieldsSet = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    if (!classifications || hasRunRef.current) return;
-
-    const isReady = [projects, deployments, products, issueTypes, severities].every(({ pending }) => !pending);
-    if (!isReady) return;
-
-    const classifiedFields: string[] = [];
+    if (!classifications) return;
 
     const { caseInfo, issueType, severityLevel } = classifications;
     const { environment, productName, shortDescription, description } = caseInfo || {};
+    const classifiedFields: string[] = [];
 
-    const deploymentMatch = deployments.options.find((d) => d.label === environment);
-    if (deploymentMatch) {
-      setFieldValue("deployment", String(deploymentMatch.value));
-      classifiedFields.push("deployment");
+    if (!deployments.pending && !fieldsSet.current.has("deployment")) {
+      const match = deployments.options.find((d) => d.label === environment);
+      if (match) {
+        setFieldValue("deployment", match.value);
+        classifiedFields.push("deployment");
+        fieldsSet.current.add("deployment");
+      }
     }
 
-    const productMatch = products.options.find((p) => p.label === productName);
-    if (productMatch) {
-      setFieldValue("product", String(productMatch.value));
-      classifiedFields.push("product");
+    if (!products.pending && !fieldsSet.current.has("product")) {
+      const match = products.options.find((p) => p.label === productName);
+      if (match) {
+        setFieldValue("product", match.value);
+        classifiedFields.push("product");
+        fieldsSet.current.add("product");
+      }
     }
 
-    const typeMatch = issueTypes.options.find((i) => i.label === issueType);
-    if (typeMatch) {
-      setFieldValue("type", String(typeMatch.value));
-      classifiedFields.push("type");
+    if (!issueTypes.pending && !fieldsSet.current.has("type")) {
+      const match = issueTypes.options.find((i) => i.label === issueType);
+      if (match) {
+        setFieldValue("type", match.value);
+        classifiedFields.push("type");
+        fieldsSet.current.add("type");
+      }
     }
 
-    const severityMatch = severities.options.find((s) => s.label === severityLevel);
-    if (severityMatch) {
-      setFieldValue("severity", String(severityMatch.value));
-      classifiedFields.push("severity");
+    if (!severities.pending && !fieldsSet.current.has("severity")) {
+      const match = severities.options.find((s) => s.label === severityLevel);
+      if (match) {
+        setFieldValue("severity", match.value);
+        classifiedFields.push("severity");
+        fieldsSet.current.add("severity");
+      }
     }
 
-    if (shortDescription) {
+    if (shortDescription && !fieldsSet.current.has("title")) {
       setFieldValue("title", shortDescription);
       classifiedFields.push("title");
+      fieldsSet.current.add("title");
     }
 
-    if (description) {
+    if (description && !fieldsSet.current.has("description")) {
       setFieldValue("description", description);
       classifiedFields.push("description");
+      fieldsSet.current.add("description");
     }
 
-    if (classifiedFields.length > 0) {
-      set(classifiedFields);
-    }
-    hasRunRef.current = true;
-  }, [classifications, deployments, products, issueTypes, severities]);
+    if (classifiedFields.length > 0) set(classifiedFields);
+  }, [classifications, deployments, products, issueTypes, severities, setFieldValue, set]);
 }

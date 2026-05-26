@@ -51,7 +51,7 @@ export function useCreateCaseForm() {
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values) => {
-      create.mutateAsync({
+      await create.mutateAsync({
         type: "default_case",
         projectId: values.project,
         deploymentId: values.deployment,

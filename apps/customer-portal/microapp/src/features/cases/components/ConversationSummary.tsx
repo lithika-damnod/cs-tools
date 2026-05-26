@@ -13,7 +13,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { Accordion, AccordionDetails, AccordionSummary, Box, Card, pxToRem, Stack, Typography } from "@wso2/oxygen-ui";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Card, Stack, Typography } from "@wso2/oxygen-ui";
 import { ChevronDown, MessagesSquare } from "@wso2/oxygen-ui-icons-react";
 
 import { useCreateCase } from "@features/cases/hooks";
@@ -28,7 +28,7 @@ export function ConversationSummary() {
     <Card sx={{ bgcolor: "background.paper" }} p={1.5} component={Stack} gap={1}>
       <Stack direction="row" alignItems="center" gap={1}>
         <Box color="primary.main">
-          <MessagesSquare size={18} />
+          <MessagesSquare size={20} />
         </Box>
         <Typography variant="body1" fontWeight="medium">
           Conversation Summary
@@ -58,8 +58,8 @@ export function ConversationSummary() {
             }}
             disableGutters
           >
-            <AccordionSummary expandIcon={<ChevronDown size={pxToRem(20)} />} sx={{ p: 0 }}>
-              <Typography variant="subtitle1" color="text.secondary" component="span">
+            <AccordionSummary expandIcon={<ChevronDown size={18} />} sx={{ p: 0 }}>
+              <Typography variant="body2" color="text.secondary" component="span">
                 View Full Conversation
               </Typography>
             </AccordionSummary>

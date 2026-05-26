@@ -13,14 +13,25 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+import { useLocation } from "react-router-dom";
+
 import { FormikContext } from "formik";
+
+import { useDeclareLayout } from "@context/layout";
 
 import { CreateCaseForm } from "@features/cases/components";
 import { ClassificationProvider } from "@features/cases/context";
 import { useCreateCaseForm } from "@features/cases/hooks";
 
 export default function CreateCasePage() {
+  const location = useLocation();
   const formik = useCreateCaseForm();
+  const { title } = (location.state as { title?: string } | null) ?? {};
+
+  useDeclareLayout({
+    title: title ?? "Create Case",
+    visibility: { backAction: true },
+  });
 
   return (
     <FormikContext value={formik}>
