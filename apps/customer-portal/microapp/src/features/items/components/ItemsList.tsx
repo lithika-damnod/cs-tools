@@ -1,4 +1,4 @@
-import { type ReactNode, useLayoutEffect } from "react";
+import { type ReactNode } from "react";
 
 import type { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
 

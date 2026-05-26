@@ -21,14 +21,14 @@ export function FilterContent() {
   const { state, filters } = useFilters();
   const { total, isResolving } = useItems();
 
-  if (!isResolving && total === 0) return <EmptyState />;
-
   useDeclareLayout(
     {
       title: state?.title,
     },
     { enabled: Boolean(state?.title) },
   );
+
+  if (!isResolving && total === 0) return <EmptyState />;
 
   return (
     <Stack gap={2}>

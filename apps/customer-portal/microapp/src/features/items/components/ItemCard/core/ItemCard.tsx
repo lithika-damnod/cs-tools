@@ -38,7 +38,7 @@ function Header({
   return (
     <Stack direction="row" justifyContent="space-between" gap={3}>
       <Stack direction="row" alignItems="center" gap={1} sx={{ flex: 1, minWidth: 0 }}>
-        <Icon size={pxToRem(19)} color={iconColor} style={{ flexShrink: 0 }} />
+        <Icon size={20} color={iconColor} style={{ flexShrink: 0 }} />
         <Typography noWrap variant="subtitle2" color="text.secondary">
           {internalId && (
             <>
