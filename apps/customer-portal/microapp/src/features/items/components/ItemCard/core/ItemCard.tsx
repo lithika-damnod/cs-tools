@@ -6,14 +6,13 @@ import { Link } from "react-router-dom";
 import { Box, Card, CardActionArea, Divider, pxToRem, Stack, Typography } from "@wso2/oxygen-ui";
 import { Calendar, ChevronRight } from "@wso2/oxygen-ui-icons-react";
 
-import { useDateTime } from "@shared/hooks";
 import { stripHtmlTags } from "@shared/utils";
 
 function Root({ to, children }: { to: string; children: ReactNode }) {
   return (
     <Card sx={{ textDecoration: "none", mb: 2 }}>
       <CardActionArea component={Link} to={to}>
-        <Stack bgcolor="background.paper" p={2} gap={2}>
+        <Stack bgcolor="background.paper" p={2} gap={1}>
           {children}
         </Stack>
       </CardActionArea>
@@ -105,29 +104,33 @@ function ScheduledDate({ date }: { date: Date | undefined }) {
   );
 }
 
-function MetaField({ label, children }: { label: string; children?: ReactNode }) {
+function MetaField({ label, children }: { label?: string; children?: ReactNode }) {
   return (
     <Stack>
-      <Typography variant="caption" color="text.secondary">
-        {label}
-      </Typography>
+      {label && (
+        <Typography variant="caption" color="text.secondary">
+          {label}
+        </Typography>
+      )}
       <Typography variant="caption">{children}</Typography>
     </Stack>
   );
 }
 
-function Footer({ timestamp, label, children }: { timestamp: Date; label: string; children?: ReactNode }) {
-  const { fromNow } = useDateTime();
-
+function Footer({ timestamp, fields = [] }: { timestamp: string; fields?: { label?: string; value: ReactNode }[] }) {
   return (
     <>
       <Divider />
       <Stack direction="row" justifyContent="space-between" alignItems="center" gap={5}>
-        <Stack direction="row" gap={3}>
-          {label && <MetaField label={label}>{children}</MetaField>}
+        <Stack direction="row" alignItems="center" gap={3}>
+          {fields?.map(({ label, value }) => (
+            <MetaField key={label} label={label}>
+              {value}
+            </MetaField>
+          ))}
         </Stack>
         <Typography variant="caption" color="text.secondary">
-          {fromNow(timestamp)}
+          {timestamp}
         </Typography>
       </Stack>
     </>
