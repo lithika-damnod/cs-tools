@@ -13,7 +13,7 @@ export function InvitationExpiryCallout() {
       sx={{ bgcolor: "components.popover.state.active.background" }}
     >
       <Box sx={{ color: "primary.main" }}>
-        <Clock4 size={50} />
+        <Clock4 size={20} />
       </Box>
       <Typography variant="subtitle2" fontWeight="medium" color="text.secondary">
         Important: &nbsp;
