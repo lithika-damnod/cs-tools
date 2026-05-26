@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeftRightIcon, CheckIcon, PlusIcon } from "@wso2/oxygen-ui-icons-react";
+import { CheckIcon, PlusIcon, RotateCcwIcon } from "@wso2/oxygen-ui-icons-react";
 
 import { useNotify } from "@context/snackbar";
 
@@ -8,6 +8,7 @@ import { useCase, useRequiredParams } from "@features/detail/hooks";
 
 import type { MenuOptionProps } from "@shared/components/detail";
 
+import { STATUS_ALLOWING_REJECTION, STATUS_ALLOWING_RELATED_CASE, STATUS_ALLOWING_RESOLUTION } from "@shared/constants";
 import { useNavigation } from "@shared/hooks";
 
 export function useActions(): MenuOptionProps[] {
@@ -31,20 +32,20 @@ export function useActions(): MenuOptionProps[] {
       label: "Mark as Resolved",
       color: "success",
       icon: <CheckIcon />,
-      hidden: !["1", "10", "1003", "6", "18", "1006"].includes(data.statusId),
+      hidden: !STATUS_ALLOWING_RESOLUTION.includes(data.statusId),
       onClick: () => mutation.mutate({ stateKey: 3 }),
     },
     {
-      label: "Mark as Waiting on WSO2",
-      color: "warning",
-      icon: <ArrowLeftRightIcon />,
-      hidden: !["6", "18"].includes(data.statusId),
+      label: "Reject Solution",
+      color: "error",
+      icon: <RotateCcwIcon />,
+      hidden: !STATUS_ALLOWING_REJECTION.includes(data.statusId),
       onClick: () => mutation.mutate({ stateKey: 1003 }),
     },
     {
       label: "Created Related Case",
       icon: <PlusIcon />,
-      hidden: !["3"].includes(data.statusId),
+      hidden: !STATUS_ALLOWING_RELATED_CASE.includes(data.statusId),
       onClick: () => toRelativeCaseCreate(data),
     },
   ];

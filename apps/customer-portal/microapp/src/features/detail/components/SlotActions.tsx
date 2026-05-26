@@ -11,7 +11,7 @@ interface SlotActionsProps {
   disabled?: boolean;
 }
 
-export function SlotActions({ title, options = [], disabled }: SlotActionsProps) {
+export function SlotActions({ title = "More Options", options = [], disabled }: SlotActionsProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
