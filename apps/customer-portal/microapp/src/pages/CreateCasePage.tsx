@@ -23,12 +23,15 @@ import { CreateCaseForm } from "@features/cases/components";
 import { ClassificationProvider } from "@features/cases/context";
 import { useCreateCaseForm } from "@features/cases/hooks";
 
+import { Tab } from "@shared/constants";
+
 export default function CreateCasePage() {
   const location = useLocation();
   const formik = useCreateCaseForm();
   const { title } = (location.state as { title?: string } | null) ?? {};
 
   useDeclareLayout({
+    tabIndex: Tab.Support,
     title: title ?? "Create Case",
     visibility: { backAction: true },
   });
