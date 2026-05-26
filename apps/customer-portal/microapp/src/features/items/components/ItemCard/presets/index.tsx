@@ -6,15 +6,15 @@ import type { ServiceRequestSummary } from "@features/service-requests/types";
 
 import { PriorityChip, StatusChip } from "@shared/components/support";
 
-import { CASE_TYPE_CONFIGS, CASE_TYPES } from "@shared/constants";
+import { CASE_TYPE_CONFIGS, CASE_TYPES, ROUTES } from "@shared/constants";
 import { useDateTime } from "@shared/hooks";
 
-export function CaseItemCard({ to, ...props }: CaseSummary & { to: string }) {
+export function CaseItemCard(props: CaseSummary) {
   const { fromNow } = useDateTime();
   const { icon, color } = CASE_TYPE_CONFIGS[CASE_TYPES.DEFAULT];
 
   return (
-    <ItemCard.Root to={to}>
+    <ItemCard.Root to={ROUTES[CASE_TYPES.DEFAULT].by(props.id)}>
       <ItemCard.Header
         icon={icon}
         iconColor={color}
@@ -37,12 +37,12 @@ export function CaseItemCard({ to, ...props }: CaseSummary & { to: string }) {
   );
 }
 
-export function ChatItemCard({ to, ...props }: Chat & { to: string }) {
+export function ChatItemCard(props: Chat) {
   const { fromNow } = useDateTime();
   const { icon, color } = CASE_TYPE_CONFIGS[CASE_TYPES.CHAT];
 
   return (
-    <ItemCard.Root to={to}>
+    <ItemCard.Root to={ROUTES[CASE_TYPES.CHAT].by(props.id)}>
       <ItemCard.Header
         icon={icon}
         iconColor={color}
@@ -62,12 +62,12 @@ export function ChatItemCard({ to, ...props }: Chat & { to: string }) {
   );
 }
 
-export function ServiceRequestItemCard({ to, ...props }: ServiceRequestSummary & { to: string }) {
+export function ServiceRequestItemCard(props: ServiceRequestSummary) {
   const { fromNow } = useDateTime();
   const { icon, color } = CASE_TYPE_CONFIGS[CASE_TYPES.SERVICE_REQUEST];
 
   return (
-    <ItemCard.Root to={to}>
+    <ItemCard.Root to={ROUTES[CASE_TYPES.SERVICE_REQUEST].by(props.id)}>
       <ItemCard.Header
         icon={icon}
         iconColor={color}
@@ -90,12 +90,12 @@ export function ServiceRequestItemCard({ to, ...props }: ServiceRequestSummary &
   );
 }
 
-export function ChangeRequestItemCard({ to, ...props }: ChangeRequestSummary & { to: string }) {
+export function ChangeRequestItemCard(props: ChangeRequestSummary) {
   const { fromNow } = useDateTime();
   const { icon, color } = CASE_TYPE_CONFIGS[CASE_TYPES.CHANGE_REQUEST];
 
   return (
-    <ItemCard.Root to={to}>
+    <ItemCard.Root to={ROUTES[CASE_TYPES.CHANGE_REQUEST].by(props.id)}>
       <ItemCard.Header
         icon={icon}
         iconColor={color}
@@ -119,12 +119,12 @@ export function ChangeRequestItemCard({ to, ...props }: ChangeRequestSummary & {
   );
 }
 
-export function SecurityReportAnalysisItemCard({ to, ...props }: CaseSummary & { to: string }) {
+export function SecurityReportAnalysisItemCard(props: CaseSummary) {
   const { fromNow } = useDateTime();
   const { icon, color } = CASE_TYPE_CONFIGS[CASE_TYPES.SECURITY_REPORT_ANALYSIS];
 
   return (
-    <ItemCard.Root to={to}>
+    <ItemCard.Root to={ROUTES[CASE_TYPES.SECURITY_REPORT_ANALYSIS].by(props.id)}>
       <ItemCard.Header
         icon={icon}
         iconColor={color}
@@ -147,12 +147,12 @@ export function SecurityReportAnalysisItemCard({ to, ...props }: CaseSummary & {
   );
 }
 
-export function EngagementItemCard({ to, ...props }: CaseSummary & { to: string }) {
+export function EngagementItemCard(props: CaseSummary) {
   const { fromNow } = useDateTime();
   const { icon, color } = CASE_TYPE_CONFIGS[CASE_TYPES.ENGAGEMENT];
 
   return (
-    <ItemCard.Root to={to}>
+    <ItemCard.Root to={ROUTES[CASE_TYPES.ENGAGEMENT].by(props.id)}>
       <ItemCard.Header
         icon={icon}
         iconColor={color}
@@ -174,12 +174,12 @@ export function EngagementItemCard({ to, ...props }: CaseSummary & { to: string 
   );
 }
 
-export function AnnouncementItemCard({ to, ...props }: CaseSummary & { to: string }) {
+export function AnnouncementItemCard(props: CaseSummary) {
   const { fromNow } = useDateTime();
   const { icon, color } = CASE_TYPE_CONFIGS[CASE_TYPES.ANNOUNCEMENT];
 
   return (
-    <ItemCard.Root to={to}>
+    <ItemCard.Root to={ROUTES[CASE_TYPES.ANNOUNCEMENT].by(props.id)}>
       <ItemCard.Header icon={icon} iconColor={color} number={props.number} />
       <ItemCard.Body title={props.title} description={props.description.trim()} />
       <ItemCard.Footer

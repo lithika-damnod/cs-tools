@@ -54,7 +54,7 @@ export function CaseItemsList() {
 
   return (
     <ItemsList type={CASE_TYPES.DEFAULT} query={query} total={total}>
-      {(item) => <CaseItemCard {...item} to="" />}
+      {(item) => <CaseItemCard {...item} />}
     </ItemsList>
   );
 }
@@ -79,7 +79,7 @@ export function ChatItemsList() {
 
   return (
     <ItemsList type={CASE_TYPES.CHAT} query={query} total={total}>
-      {(item) => <ChatItemCard {...item} to="" />}
+      {(item) => <ChatItemCard {...item} />}
     </ItemsList>
   );
 }
@@ -104,7 +104,7 @@ export function ServiceRequestItemsList() {
 
   return (
     <ItemsList type={CASE_TYPES.SERVICE_REQUEST} query={query} total={total}>
-      {(item) => <ServiceRequestItemCard {...item} to="" />}
+      {(item) => <ServiceRequestItemCard {...item} />}
     </ItemsList>
   );
 }
@@ -129,7 +129,7 @@ export function ChangeRequestItemsList() {
 
   return (
     <ItemsList type={CASE_TYPES.CHANGE_REQUEST} query={query} total={total}>
-      {(item) => <ChangeRequestItemCard {...item} to="" />}
+      {(item) => <ChangeRequestItemCard {...item} />}
     </ItemsList>
   );
 }
@@ -154,7 +154,7 @@ export function SecurityReportAnalysisItemsList() {
 
   return (
     <ItemsList type={CASE_TYPES.SECURITY_REPORT_ANALYSIS} query={query} total={total}>
-      {(item) => <SecurityReportAnalysisItemCard {...item} to="" />}
+      {(item) => <SecurityReportAnalysisItemCard {...item} />}
     </ItemsList>
   );
 }
@@ -179,7 +179,7 @@ export function EngagementItemsList() {
 
   return (
     <ItemsList type={CASE_TYPES.ENGAGEMENT} query={query} total={total}>
-      {(item) => <EngagementItemCard {...item} to="" />}
+      {(item) => <EngagementItemCard {...item} />}
     </ItemsList>
   );
 }
@@ -204,7 +204,7 @@ export function AnnouncementItemsList() {
 
   return (
     <ItemsList type={CASE_TYPES.ANNOUNCEMENT} query={query} total={total}>
-      {(item) => <AnnouncementItemCard {...item} to="" />}
+      {(item) => <AnnouncementItemCard {...item} />}
     </ItemsList>
   );
 }
