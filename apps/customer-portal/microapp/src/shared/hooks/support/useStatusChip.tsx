@@ -1,6 +1,6 @@
 import { useFilters } from "@context/filters";
 
-import { CASE_STATUS_CHIP_COLOR_CONFIG, CASE_TYPES } from "@shared/constants";
+import { CASE_TYPES, STATUS_CHIP_COLOR_CONFIG } from "@shared/constants";
 import type { CaseType } from "@shared/types";
 
 type ChipData = { label: string; color: string };
@@ -18,6 +18,6 @@ export function useStatusChip(type: CaseType, id?: string): ChipData | null {
 
   return {
     label: items.find((item) => item.id === id)?.label ?? "N/A",
-    color: CASE_STATUS_CHIP_COLOR_CONFIG[type]?.[id ?? ""] ?? "default",
+    color: STATUS_CHIP_COLOR_CONFIG[type]?.[id ?? ""] ?? "default",
   };
 }
