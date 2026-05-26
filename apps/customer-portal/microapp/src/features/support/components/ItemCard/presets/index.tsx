@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import type { CaseSummary } from "@src/features/cases/types";
 import type { Chat } from "@src/features/chats/types";
 import type { ServiceRequestSummary } from "@src/features/service-requests/types";
@@ -27,10 +29,10 @@ export function CaseItemCard({
       <ItemCard.Header icon={icon} iconColor={color} number={number} internalId={internalId} />
       <ItemCard.Title>{title}</ItemCard.Title>
       <ItemCard.Meta label={assigned ?? "Not Assigned"}>
-        <StatusChip type={type} size="small" id={statusId} />
+        <PriorityChip size="small" id={severityId} />
       </ItemCard.Meta>
       <ItemCard.Footer timestamp={createdOn}>
-        <PriorityChip size="small" id={severityId} />
+        <StatusChip type={type} size="small" id={statusId} />
       </ItemCard.Footer>
     </ItemCard.Root>
   );
@@ -44,10 +46,10 @@ export function ChatItemCard({ id, description, number, statusId, count, created
     <ItemCard.Root to={ROUTES[type].by(id)}>
       <ItemCard.Header icon={icon} iconColor={color} number={number} />
       <ItemCard.Title>{description}</ItemCard.Title>
-      <ItemCard.Meta label={`${count} messages`} suffix="0 KB">
+      <ItemCard.Meta label={`${count} messages`} suffix="0 KB" />
+      <ItemCard.Footer timestamp={createdOn}>
         <StatusChip type={type} size="small" id={statusId} />
-      </ItemCard.Meta>
-      <ItemCard.Footer timestamp={createdOn} />
+      </ItemCard.Footer>
     </ItemCard.Root>
   );
 }
@@ -64,16 +66,17 @@ export function ServiceRequestItemCard({
 }: ServiceRequestSummary) {
   const type = CASE_TYPES.SERVICE_REQUEST;
   const { icon, color } = CASE_TYPE_CONFIGS[type];
+  useEffect(() => {
+    console.log("priorityId", severityId);
+  }, [severityId]);
 
   return (
     <ItemCard.Root to={ROUTES[type].by(id)}>
       <ItemCard.Header icon={icon} iconColor={color} number={number} internalId={internalId} />
       <ItemCard.Title>{title}</ItemCard.Title>
-      <ItemCard.Meta label={issueType ?? "Unspecified"}>
-        <StatusChip type={type} size="small" id={statusId} />
-      </ItemCard.Meta>
+      <ItemCard.Meta label={issueType ?? "Unspecified"} />
       <ItemCard.Footer timestamp={createdOn}>
-        <PriorityChip size="small" id={severityId} />
+        <StatusChip type={type} size="small" id={statusId} />
       </ItemCard.Footer>
     </ItemCard.Root>
   );
@@ -98,11 +101,11 @@ export function ChangeRequestItemCard({
       <ItemCard.Header icon={icon} iconColor={color} number={number} internalId={internalId} />
       <ItemCard.Title>{title}</ItemCard.Title>
       <ItemCard.Meta label={requestType ?? "Unspecified"}>
-        <StatusChip type={type} size="small" id={statusId} />
+        <PriorityChip type={type} size="small" prefix="Impact" id={impactId} />
       </ItemCard.Meta>
       <ItemCard.ScheduledDate date={endDate} />
       <ItemCard.Footer timestamp={createdOn}>
-        <PriorityChip type={type} size="small" prefix="Impact" id={impactId} />
+        <StatusChip type={type} size="small" id={statusId} />
       </ItemCard.Footer>
     </ItemCard.Root>
   );
@@ -114,7 +117,6 @@ export function SecurityReportAnalysisItemCard({
   number,
   internalId,
   statusId,
-  severityId,
   deployment,
   createdOn,
 }: CaseSummary) {
@@ -125,11 +127,9 @@ export function SecurityReportAnalysisItemCard({
     <ItemCard.Root to={ROUTES[type].by(id)}>
       <ItemCard.Header icon={icon} iconColor={color} number={number} internalId={internalId} />
       <ItemCard.Title>{title}</ItemCard.Title>
-      <ItemCard.Meta label={deployment ?? "No Environment"}>
-        <StatusChip type={type} size="small" id={statusId} />
-      </ItemCard.Meta>
+      <ItemCard.Meta label={deployment ?? "No Environment"} />
       <ItemCard.Footer timestamp={createdOn}>
-        <PriorityChip size="small" id={severityId} />
+        <StatusChip type={type} size="small" id={statusId} />
       </ItemCard.Footer>
     </ItemCard.Root>
   );
