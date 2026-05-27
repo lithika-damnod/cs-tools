@@ -19,7 +19,7 @@ import { ENGAGEMENTS_TYPE_PIE_COLORS, PROJECT_SEVERITY_PIE_COLORS } from "@confi
 
 import type { CasesStatsDto } from "@features/cases/types/case.dto";
 import type { ChangeRequestsStatsDto } from "@features/changes/types/change.dto";
-import type { PieDataItem } from "@features/dashboard/components/PieChartWidget";
+import type { PieDataItem } from "@features/dashboard/components";
 import type { ProjectFeaturesDto } from "@features/projects/types/project.dto";
 
 import { overrideOrDefault } from "@shared/utils/string.utils";
@@ -32,7 +32,7 @@ export type DashboardStats = {
   resolvedThisMonth: number | undefined;
   averageResponseTime: number | undefined;
   outstandingSupportCasesPieData: (PieDataItem & { id: string | number })[] | undefined;
-  outstandingEngagementsPieData: (PieDataItem & { id: string | number })[];
+  outstandingEngagementsPieData: (PieDataItem & { id: string | number })[] | undefined;
   outstandingOperationsPieData: (PieDataItem & { id: string | number })[] | undefined;
 };
 
@@ -75,13 +75,13 @@ export function computeDashboardStats(
     color: PROJECT_SEVERITY_PIE_COLORS[item.id] || colors.grey[500],
   }));
 
-  const outstandingEngagementsPieData: (PieDataItem & { id: string | number })[] =
+  const outstandingEngagementsPieData: (PieDataItem & { id: string | number })[] | undefined =
     engagementCaseTypeStats?.outstandingEngagementTypeCount.map((item) => ({
       id: item.id,
       label: overrideOrDefault(item.label),
       value: item.count,
       color: ENGAGEMENTS_TYPE_PIE_COLORS[item.label] || colors.grey[500],
-    })) ?? [];
+    })) ?? undefined;
 
   const operationsData: (PieDataItem & { id: string | number })[] = [];
 
