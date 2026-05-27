@@ -80,7 +80,7 @@ export function toComment(dto: CommentDto): Comment {
 export function toAttachment(dto: AttachmentDto): Attachment {
   return {
     id: dto.id,
-    type: /^image\//.test(dto.type) ? "image" : "others",
+    type: /^image\//.test(dto.type) ? "image" : dto.type === "application/pdf" ? "pdf" : "others",
     fileName: dto.name,
     downloadUrl: dto.downloadUrl,
     createdOn: toDate(dto.createdOn),

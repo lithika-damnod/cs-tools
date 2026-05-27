@@ -13,41 +13,18 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { useQueryClient } from "@tanstack/react-query";
-import { Box, Card, IconButton, pxToRem, Skeleton, Stack, Typography } from "@wso2/oxygen-ui";
-import { Download, Image, Paperclip } from "@wso2/oxygen-ui-icons-react";
+import { Box, Card, IconButton, Skeleton, Stack, Typography } from "@wso2/oxygen-ui";
+import { ArrowUpRight, Image, Paperclip } from "@wso2/oxygen-ui-icons-react";
 
-import { cases } from "@features/cases/api/cases.queries";
+import { usePreview } from "@context/preview";
+
 import type { Attachment } from "@features/cases/types/case.model";
 
 import { useDateTime } from "@shared/hooks/useDateTime";
 
-export function AttachmentItem({
-  attachment,
-  onPreview,
-}: {
-  attachment: Attachment;
-  onPreview: (attachment: Attachment, blob: Blob) => void;
-}) {
-  const queryClient = useQueryClient();
+export function AttachmentItem({ attachment }: { attachment: Attachment }) {
   const { fromNow } = useDateTime();
-
-  const handlePreview = async () => {
-    const data = await queryClient.fetchQuery(cases.attachment(attachment.id));
-
-    const [prefix, base64] = data.content.split(",");
-    const mimeType = prefix.split(":")[1].split(";")[0];
-
-    const byteCharacters = atob(base64);
-    const byteArray = new Uint8Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteArray[i] = byteCharacters.charCodeAt(i);
-    }
-
-    const blob = new Blob([byteArray], { type: mimeType });
-
-    onPreview(attachment, blob);
-  };
+  const { open } = usePreview();
 
   return (
     <Card sx={{ p: 1.5 }}>
@@ -66,7 +43,7 @@ export function AttachmentItem({
             color: "text.secondary",
           }}
         >
-          {attachment.type === "image" ? <Image size={pxToRem(18)} /> : <Paperclip size={pxToRem(18)} />}
+          {attachment.type === "image" ? <Image size={18} /> : <Paperclip size={18} />}
         </Box>
 
         <Stack gap={0.25} minWidth={0} flex={1}>
@@ -79,8 +56,8 @@ export function AttachmentItem({
           </Typography>
         </Stack>
 
-        <IconButton onClick={handlePreview}>
-          <Download size={pxToRem(18)} />
+        <IconButton onClick={() => open(attachment)}>
+          <ArrowUpRight size={18} />
         </IconButton>
       </Stack>
     </Card>

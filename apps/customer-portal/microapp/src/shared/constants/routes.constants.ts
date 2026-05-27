@@ -13,3 +13,5 @@ export const ROUTES = {
   },
   users: { invite: "/users/invite", edit: "/users/edit" },
 } satisfies Record<CaseType, unknown> & Record<string, unknown>;
+
+export const PDF_JS_DIST_CDN = (version: string) => `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`;

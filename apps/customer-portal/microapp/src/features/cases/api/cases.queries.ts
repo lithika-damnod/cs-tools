@@ -13,7 +13,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { infiniteQueryOptions, mutationOptions, queryOptions } from "@tanstack/react-query";
+import { infiniteQueryOptions, mutationOptions, queryOptions, skipToken } from "@tanstack/react-query";
 
 import {
   classifyCase,
@@ -78,5 +78,10 @@ export const cases = {
   attachments: (id: string, body: Partial<Omit<Pagination, "totalRecords">> = {}) =>
     queryOptions({ queryKey: ["cases", id, "attachments"], queryFn: () => getAttachments(id, body) }),
 
-  attachment: (id: string) => queryOptions({ queryKey: ["attachment", id], queryFn: () => getAttachment(id) }),
+  attachment: (id: string | undefined) =>
+    queryOptions<{ content: string }>({
+      queryKey: ["attachment", id],
+      queryFn: id ? () => getAttachment(id) : skipToken,
+      staleTime: Infinity,
+    }),
 };

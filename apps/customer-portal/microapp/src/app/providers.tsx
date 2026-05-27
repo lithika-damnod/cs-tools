@@ -17,6 +17,7 @@ import { useLocation } from "react-router-dom";
 
 import { AppProvider } from "@context/AppProvider";
 import LayoutProvider from "@context/layout/LayoutProvider";
+import { PreviewProvider } from "@context/preview";
 import SnackbarProvider from "@context/snackbar/SnackbarProvider";
 import { ColorModeProvider } from "@context/theme";
 
@@ -27,7 +28,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <AppProvider>
       <ColorModeProvider>
         <LayoutProvider key={pathname}>
-          <SnackbarProvider>{children}</SnackbarProvider>
+          <SnackbarProvider>
+            <PreviewProvider>{children}</PreviewProvider>
+          </SnackbarProvider>
         </LayoutProvider>
       </ColorModeProvider>
     </AppProvider>

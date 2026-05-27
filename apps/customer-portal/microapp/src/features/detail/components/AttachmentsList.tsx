@@ -19,7 +19,7 @@ export function AttachmentsList() {
   return (
     <Stack gap={1.5}>
       {data.map((attachment) => (
-        <AttachmentItem key={attachment.id} attachment={attachment} onPreview={() => {}} /> /* TODO: */
+        <AttachmentItem key={attachment.id} attachment={attachment} />
       ))}
     </Stack>
   );
