@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 
 import { useProject } from "@context/project";
 
+import { useLastMonthRange } from "@features/items/hooks";
+
 import {
   ACTION_REQUIRED_CASE_STATUS_IDS,
   ACTION_REQUIRED_CHANGE_REQUEST_STATUS_IDS,
@@ -17,6 +19,7 @@ import {
 export const useMultipleNavigation = () => {
   const navigate = useNavigate();
   const { features } = useProject();
+  const { start, end } = useLastMonthRange();
 
   return {
     toClosedItems: () =>
@@ -26,6 +29,10 @@ export const useMultipleNavigation = () => {
           search: new URLSearchParams([
             ...OVERVIEW_CASE_TYPES.map((type) => ["type", type]),
             ...RESOLVED_STATUS_IDS.map((state) => ["state", String(state)]),
+            ...[
+              ["startDate", start],
+              ["endDate", end],
+            ],
           ]).toString(),
         },
         { state: { title: CLOSED_ITEMS_TITLE } },

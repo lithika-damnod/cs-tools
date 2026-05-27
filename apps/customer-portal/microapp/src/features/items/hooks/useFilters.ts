@@ -7,10 +7,11 @@ import type { CaseType } from "@shared/types";
 export interface ListFilterParams {
   types: CaseType[];
   statuses?: string[];
+  states?: string[]; // Only exists for Type: Change Requests
   severities?: string[];
   search?: string;
-
-  states?: string[]; // Only exists for Type: Change Requests
+  startDate?: string;
+  endDate?: string;
 }
 
 export function useFilters() {
@@ -21,10 +22,11 @@ export function useFilters() {
     () => ({
       types: searchParams.getAll("type") as CaseType[],
       statuses: searchParams.getAll("status") || undefined,
+      states: searchParams.getAll("state") || undefined, // Only exists for Type: Change Requests
       severities: searchParams.getAll("severity") || undefined,
-      search: searchParams.get("search") ?? "",
-
-      states: searchParams.getAll("state") || undefined,
+      search: searchParams.get("search") || undefined,
+      startDate: searchParams.get("startDate") || undefined,
+      endDate: searchParams.get("endDate") || undefined,
     }),
     [searchParams],
   );
@@ -53,6 +55,10 @@ export function useFilters() {
         }
 
         if (partial.search !== undefined) prev.set("search", partial.search);
+
+        if (partial.startDate !== undefined) prev.set("startDate", partial.startDate);
+
+        if (partial.endDate !== undefined) prev.set("endDate  ", partial.endDate);
 
         return prev;
       },
