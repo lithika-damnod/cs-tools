@@ -74,5 +74,5 @@ export function StatusChip({ id, type = CASE_TYPES.DEFAULT, ...props }: StatusCh
 }
 
 function SkeletonChip() {
-  return <Skeleton variant="text" width={50} height={30} />;
+  return <Skeleton variant="text" width={50} height={32} />;
 }

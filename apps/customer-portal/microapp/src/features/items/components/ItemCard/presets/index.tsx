@@ -73,7 +73,6 @@ export function ServiceRequestItemCard(props: ServiceRequestSummary) {
         iconColor={color}
         number={props.number}
         internalId={props.internalId}
-        chips={<PriorityChip size="small" id={props.severityId} />}
         status={<StatusChip type={CASE_TYPES.SERVICE_REQUEST} size="small" id={props.statusId} />}
       />
       <ItemCard.Body title={props.title} description={props.description} />
@@ -130,7 +129,6 @@ export function SecurityReportAnalysisItemCard(props: CaseSummary) {
         iconColor={color}
         number={props.number}
         internalId={props.internalId}
-        chips={<PriorityChip size="small" id={props.severityId} />}
         status={<StatusChip type={CASE_TYPES.SECURITY_REPORT_ANALYSIS} size="small" id={props.statusId} />}
       />
       <ItemCard.Body title={props.title} description={props.description} />
