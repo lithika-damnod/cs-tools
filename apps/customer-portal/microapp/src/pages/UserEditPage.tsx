@@ -13,10 +13,10 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { useEffect } from "react";
-
 import { Button, CircularProgress, Stack, TextField } from "@wso2/oxygen-ui";
 import { Form, FormikContext, useFormik } from "formik";
+
+import { useDeclareLayout } from "@context/layout";
 
 import {
   InvitationCallout,
@@ -30,7 +30,7 @@ import type { Role } from "@features/users/types";
 
 import { SectionCard } from "@shared/components/common";
 
-import { DEFAULT_USER_ROLE, ROLES, USER_EDIT_MODES } from "@shared/constants";
+import { DEFAULT_USER_ROLE, ROLES, Tab, USER_EDIT_MODES } from "@shared/constants";
 import { useNavigation } from "@shared/hooks";
 
 export interface EditUserFormValues {
@@ -69,9 +69,11 @@ export default function UserEditPage() {
     },
   });
 
-  useEffect(() => {
-    console.log("mode: ", mode, "initial: ", initial);
-  }, [mode, initial]);
+  useDeclareLayout({
+    tabIndex: Tab.Users,
+    title: initial ? "Edit User" : "Invite New User",
+    visibility: { backAction: true },
+  });
 
   const { values, dirty, getFieldProps, setFieldValue } = formik;
 
