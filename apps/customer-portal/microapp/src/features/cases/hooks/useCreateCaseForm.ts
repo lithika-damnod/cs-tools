@@ -1,9 +1,16 @@
+import { useNavigate } from "react-router-dom";
+
 import * as Yup from "yup";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
 
 import { useProject } from "@context/project";
 
+import { cases } from "@features/cases/api/cases.queries";
+import type { AttachmentFile } from "@features/cases/components";
 import { useCreateCase } from "@features/cases/hooks";
+
+import { toBase64 } from "@shared/utils/attachments.utils";
 
 export interface CreateCaseFormValues {
   project: string;
@@ -13,6 +20,7 @@ export interface CreateCaseFormValues {
   severity: string;
   title: string;
   description: string;
+  attachments: AttachmentFile[];
 }
 
 const validationSchema = Yup.object({
@@ -36,6 +44,9 @@ const validationSchema = Yup.object({
 export function useCreateCaseForm() {
   const { projectId } = useProject();
   const { state, create } = useCreateCase();
+  const createAttachmentMutation = useMutation(cases.createAttachment);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const formik = useFormik<CreateCaseFormValues>({
     initialValues: {
@@ -46,12 +57,13 @@ export function useCreateCaseForm() {
       description: "",
       type: "",
       severity: "",
+      attachments: [],
     },
     validationSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values) => {
-      await create.mutateAsync({
+      const response = await create.mutateAsync({
         type: "default_case",
         projectId: values.project,
         deploymentId: values.deployment,
@@ -62,6 +74,23 @@ export function useCreateCaseForm() {
         severityKey: Number(values.severity),
         relatedCaseId: state?.case?.id,
       });
+
+      await Promise.all(
+        values.attachments.map(async (attachment) => {
+          const content = await toBase64(attachment.raw);
+          await createAttachmentMutation.mutateAsync({
+            caseId: response.id,
+            type: attachment.type,
+            name: attachment.name,
+            content,
+          });
+        }),
+      );
+
+      queryClient.invalidateQueries({ queryKey: ["cases"] });
+      setTimeout(() => {
+        navigate(`/cases/${response.id}`);
+      }, 500);
     },
   });
 

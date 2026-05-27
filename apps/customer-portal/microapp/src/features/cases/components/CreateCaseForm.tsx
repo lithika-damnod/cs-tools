@@ -5,6 +5,7 @@ import { Form, useFormikContext } from "formik";
 import { DEPLOYMENT_DISABLED_PROJECT_TYPES } from "@config/constants";
 
 import {
+  AttachmentField,
   CaseReference,
   ClassificationBadge,
   ConversationSummary,
@@ -129,6 +130,8 @@ export function CreateCaseForm() {
             }}
             onChange={(e) => remove([e.target.name])}
           />
+
+          <AttachmentField onChange={(attachments) => setFieldValue("attachments", attachments)} />
         </Stack>
 
         {state.messages.length > 0 && <ConversationSummary />}

@@ -227,6 +227,12 @@ export interface AttachmentDto {
   description: string | null;
 }
 
+export interface CreateAttachmentRequestDto {
+  type: string;
+  name: string;
+  content: string;
+}
+
 export interface GetProductsRequestDto {
   filters?: {
     productCategories?: string[];

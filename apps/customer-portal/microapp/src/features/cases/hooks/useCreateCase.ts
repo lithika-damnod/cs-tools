@@ -13,9 +13,9 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import { useNotify } from "@context/snackbar";
 
@@ -30,20 +30,12 @@ interface CreateCaseNavigationState {
 }
 
 export function useCreateCase() {
-  const navigate = useNavigate();
   const notify = useNotify();
-  const queryClient = useQueryClient();
   const location = useLocation();
   const state = location.state as CreateCaseNavigationState | null;
 
   const mutation = useMutation({
     ...cases.create,
-    onSuccess: ({ id }) => {
-      queryClient.invalidateQueries({ queryKey: ["cases"] });
-      setTimeout(() => {
-        navigate(`/cases/${id}`);
-      }, 500);
-    },
     onError: () => {
       notify.error("Failed to create case. Please try again.");
     },

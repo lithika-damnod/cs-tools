@@ -17,6 +17,7 @@ import { infiniteQueryOptions, mutationOptions, queryOptions, skipToken } from "
 
 import {
   classifyCase,
+  createAttachment,
   createCase,
   createComment,
   editCase,
@@ -30,6 +31,7 @@ import {
 } from "@features/cases/api/cases.api";
 import type {
   CaseClassificationRequestDto,
+  CreateAttachmentRequestDto,
   CreateCaseRequestDto,
   CreateCommentRequestDto,
   EditCaseRequestDto,
@@ -84,4 +86,9 @@ export const cases = {
       queryFn: id ? () => getAttachment(id) : skipToken,
       staleTime: Infinity,
     }),
+
+  createAttachment: mutationOptions({
+    mutationFn: ({ caseId, ...body }: CreateAttachmentRequestDto & { caseId: string }) =>
+      createAttachment(caseId, body),
+  }),
 };

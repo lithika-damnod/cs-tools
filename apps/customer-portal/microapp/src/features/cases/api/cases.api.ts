@@ -38,6 +38,7 @@ import type {
   CasesStatsDto,
   CommentDto,
   CommentsDto,
+  CreateAttachmentRequestDto,
   CreateCaseRequestDto,
   CreateCaseResponseDto,
   CreateCommentRequestDto,
@@ -120,4 +121,8 @@ export const getAttachments = async (
 
 export const getAttachment = async (id: string): Promise<{ content: string }> => {
   return (await apiClient.get<{ content: string }>(ATTACHMENT_DETAIL_ENDPOINT(id))).data;
+};
+
+export const createAttachment = async (id: string, body: CreateAttachmentRequestDto): Promise<void> => {
+  await apiClient.post<CommentDto>(CASE_ATTACHMENTS_ENDPOINT(id), body);
 };
