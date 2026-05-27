@@ -5,7 +5,7 @@ import { CommentsList, InfoField, Layout } from "@features/detail/components";
 import { useServiceRequest } from "@features/detail/hooks";
 
 import { SectionCard } from "@shared/components/common";
-import { PriorityChip, StatusChip } from "@shared/components/support";
+import { StatusChip } from "@shared/components/support";
 
 import { CASE_TYPES } from "@shared/constants";
 import { useDateTime } from "@shared/hooks";
@@ -34,15 +34,11 @@ export function ServiceRequestItemView() {
           </Grid>
 
           <Grid size={6}>
-            <InfoField label="Status" value={<StatusChip type={type} id={data?.statusId} size="small" />} />
-          </Grid>
-
-          <Grid size={6}>
-            <InfoField label="Priority" value={<PriorityChip id={data?.severityId} size="small" />} />
-          </Grid>
-
-          <Grid size={6}>
             <InfoField label="Requested By" value={data?.createdBy ?? "N/A"} icon={User} loading={isLoading} />
+          </Grid>
+
+          <Grid size={6}>
+            <InfoField label="Status" value={<StatusChip type={type} id={data?.statusId} size="small" />} />
           </Grid>
 
           <Grid size={6}>

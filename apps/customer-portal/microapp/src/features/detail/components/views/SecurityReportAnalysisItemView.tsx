@@ -5,7 +5,7 @@ import { CommentsList, InfoField, Layout } from "@features/detail/components";
 import { useCase } from "@features/detail/hooks";
 
 import { SectionCard } from "@shared/components/common";
-import { PriorityChip, StatusChip } from "@shared/components/support";
+import { StatusChip } from "@shared/components/support";
 
 import { CASE_TYPES } from "@shared/constants";
 import { useDateTime } from "@shared/hooks";
@@ -32,6 +32,11 @@ export function SecurityReportAnalysisItemView() {
               value={data?.description ? stripHtmlTags(data.description) : "No Description"}
             />
           </Grid>
+
+          <Grid size={6}>
+            <InfoField label="Requested By" value={data?.createdBy ?? "N/A"} icon={User} loading={isLoading} />
+          </Grid>
+
           <Grid size={6}>
             <InfoField
               loading={isLoading}
@@ -39,22 +44,15 @@ export function SecurityReportAnalysisItemView() {
               value={<StatusChip type={type} id={data?.statusId} size="small" />}
             />
           </Grid>
-          <Grid size={6}>
-            <InfoField
-              loading={isLoading}
-              label="Priority"
-              value={<PriorityChip id={data?.severityId} size="small" />}
-            />
-          </Grid>
-          <Grid size={6}>
-            <InfoField label="Requested By" value={data?.createdBy ?? "N/A"} icon={User} loading={isLoading} />
-          </Grid>
+
           <Grid size={6}>
             <InfoField label="Assigned To" value={data?.assigned ?? "N/A"} icon={Users} loading={isLoading} />
           </Grid>
+
           <Grid size={6}>
             <InfoField label="Created" value={data?.createdOn && format(data.createdOn)} loading={isLoading} />
           </Grid>
+
           <Grid size={6}>
             <InfoField label="Last Updated" value={data?.updatedOn && fromNow(data.updatedOn)} loading={isLoading} />
           </Grid>
