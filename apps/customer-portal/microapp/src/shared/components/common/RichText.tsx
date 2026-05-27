@@ -15,6 +15,8 @@
 // under the License.
 import { useEffect, useRef } from "react";
 
+import { cases } from "@root/src/features/cases/api/cases.queries";
+import { useQueryClient } from "@tanstack/react-query";
 import { Box, pxToRem, styled } from "@wso2/oxygen-ui";
 
 import { openUrl } from "@bridge/index";
@@ -53,10 +55,13 @@ export const RichTextBase = styled(Box)(({ theme }) => ({
     fontFamily: "inherit !important",
     lineHeight: "inherit !important",
   },
+
+  "& img": { width: "100%" },
 }));
 
 export const RichText = (props: React.ComponentProps<typeof RichTextBase>) => {
   const ref = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const el = ref.current;
@@ -77,6 +82,33 @@ export const RichText = (props: React.ComponentProps<typeof RichTextBase>) => {
     el.addEventListener("click", handler);
     return () => el.removeEventListener("click", handler);
   }, []);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const images = Array.from(ref.current.querySelectorAll<HTMLImageElement>("img[src]"));
+
+    Promise.all(
+      images.map(async (image) => {
+        image.style.visibility = "hidden";
+
+        const originalSrc = image.getAttribute("src");
+        if (!originalSrc) return;
+        if (originalSrc.startsWith("blob:") || originalSrc.startsWith("data:")) return;
+
+        const id = originalSrc.split("/").pop()?.split(".")[0];
+        if (!id) return;
+
+        try {
+          const { content: data } = await queryClient.fetchQuery(cases.attachment(id));
+          if (!data) return;
+          image.src = data;
+        } finally {
+          image.style.visibility = "visible";
+        }
+      }),
+    );
+  }, [props.dangerouslySetInnerHTML]);
 
   return <RichTextBase ref={ref} {...props} />;
 };
