@@ -16,9 +16,11 @@ export function BubbleUser({ content, timestamp }: BubbleUserProps) {
           {content}
         </Typography>
         <Stack direction="row" justifyContent="end">
-          <Typography variant="subtitle2" color="text.disabled" mt={1}>
-            {timestamp}
-          </Typography>
+          {timestamp && (
+            <Typography variant="subtitle2" color="text.disabled" mt={1}>
+              {timestamp}
+            </Typography>
+          )}
         </Stack>
       </Card>
     </Stack>

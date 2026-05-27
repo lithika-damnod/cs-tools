@@ -29,12 +29,9 @@ export function useDateTime() {
     [toUtc, tz],
   );
 
-  const fromNow = useCallback(
-    (date: Date | string) => {
-      return toUtc(date).tz(tz).fromNow();
-    },
-    [toUtc, tz],
-  );
+  const fromNow = useCallback((date: Date | string) => {
+    return dayjs.utc(date).fromNow();
+  }, []);
 
   const toDate = useCallback(
     (date: Date | string) => {

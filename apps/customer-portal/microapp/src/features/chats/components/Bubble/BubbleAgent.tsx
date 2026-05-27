@@ -1,5 +1,4 @@
-import { Card, pxToRem, Stack, Typography } from "@wso2/oxygen-ui";
-import { Sparkle } from "@wso2/oxygen-ui-icons-react";
+import { Card, Stack, Typography } from "@wso2/oxygen-ui";
 
 import type { ChatMessage } from "@features/chats/types";
 
@@ -24,10 +23,19 @@ export function BubbleAgent({
 }: BubbleAgentProps) {
   return (
     <Stack direction="row" justifyContent="start" width="100%">
-      <Card component={Stack} p={1.5} width="100%" sx={{ bgcolor: "background.paper" }}>
+      <Card
+        component={Stack}
+        p={1.5}
+        width="100%"
+        sx={{
+          bgcolor: "background.paper",
+          border: "1px solid color-mix(in srgb, var(--oxygen-palette-primary-main) 25%, transparent)",
+          boxShadow: "inset 0 0 16px color-mix(in srgb, var(--oxygen-palette-primary-main) 12%, transparent)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
         <Stack direction="row" justifyContent="space-between" gap={1} mb={0.5}>
-          <Sparkle size={pxToRem(18)} style={{ color: "var(--oxygen-palette-primary-main)" }} />
-
           {thinking ? (
             <Typography
               noWrap
@@ -49,12 +57,13 @@ export function BubbleAgent({
             >
               {thinking}
             </Typography>
-          ) : (
+          ) : timestamp ? (
             <Typography variant="subtitle2" color="text.disabled">
-              {timestamp ?? "Just Now"}
+              {timestamp}
             </Typography>
-          )}
+          ) : null}
         </Stack>
+
         <Typography variant="body2" component="span" sx={{ "& > *": { margin: 0, lineHeight: 1.7 } }}>
           <TypewriterText
             tokens={content.split("")}
