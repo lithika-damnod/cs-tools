@@ -16,6 +16,8 @@
 import type { MeDto, UserDto } from "@features/users/types/user.dto";
 import type { Me, Role, User } from "@features/users/types/user.model";
 
+import { ROLES } from "@shared/constants";
+
 export function toMe(dto: MeDto): Me {
   return {
     id: dto.id,
@@ -30,9 +32,11 @@ export function toMe(dto: MeDto): Me {
 
 export function toUser(dto: UserDto): User {
   const roles: Role[] = [];
-  if (dto.isCsAdmin) roles.push("Admin");
-  if (dto.isSecurityContact) roles.push("System User");
-  else roles.push("Portal User");
+  if (dto.isCsAdmin) roles.push(ROLES.ADMIN);
+  if (dto.isSecurityContact) roles.push(ROLES.SECURITY_CONTACT);
+  if (dto.isCsIntegrationUser) roles.push(ROLES.SYSTEM_USER);
+  if (dto.isPortalUser) roles.push(ROLES.PORTAL_USER);
+  else roles.push(ROLES.PORTAL_USER);
 
   return {
     id: dto.id,

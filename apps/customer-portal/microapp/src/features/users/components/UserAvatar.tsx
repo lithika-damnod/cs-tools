@@ -1,14 +1,14 @@
 import { getAvatarInitials } from "@root/src/shared/utils";
 import { Avatar } from "@wso2/oxygen-ui";
 
-export function UserAvatar({ children }: { children: string }) {
+export function UserAvatar({ size = "medium", children }: { size?: "medium" | "large"; children: string }) {
   return (
     <Avatar
       sx={(theme) => ({
-        height: 36,
-        width: 36,
+        height: size === "large" ? 52 : 36,
+        width: size === "large" ? 52 : 36,
         bgcolor: "primary.main",
-        fontSize: theme.typography.h5,
+        fontSize: size === "large" ? theme.typography.h3 : theme.typography.h5,
         fontWeight: "medium",
       })}
     >

@@ -15,13 +15,11 @@
 // under the License.
 import { Link } from "react-router-dom";
 
-import { Card, Chip, pxToRem, Skeleton, Stack, Typography, useTheme } from "@wso2/oxygen-ui";
-import { ChevronRight, Mail } from "@wso2/oxygen-ui-icons-react";
+import { Box, Card, pxToRem, Skeleton, Stack, Typography, useTheme } from "@wso2/oxygen-ui";
+import { ChevronRight, Crown, Mail } from "@wso2/oxygen-ui-icons-react";
 
 import { UserAvatar } from "@features/users/components";
 import type { Role, User } from "@features/users/types";
-
-import { capitalize } from "@shared/utils/string.utils";
 
 import { ROLES } from "@shared/constants";
 
@@ -64,8 +62,10 @@ export function UserItem(props: User) {
                 {`${props.firstName} ${props.lastName}`}
               </Typography>
 
-              {props.roles.length > 0 && props.roles[0] !== ROLES.PORTAL_USER && (
-                <Chip size="small" label={capitalize(props.roles[0])} />
+              {props.roles.includes(ROLES.ADMIN) && (
+                <Box sx={{ color: "primary.main" }}>
+                  <Crown size={18} />
+                </Box>
               )}
             </Stack>
 
@@ -78,7 +78,7 @@ export function UserItem(props: User) {
           </Stack>
         </Stack>
 
-        <ChevronRight color={theme.palette.text.secondary} size={pxToRem(18)} style={{ flexShrink: 0 }} />
+        <ChevronRight color={theme.palette.text.secondary} size={18} style={{ flexShrink: 0 }} />
       </Stack>
     </Card>
   );

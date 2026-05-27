@@ -13,6 +13,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+import type { RoleOptionProps } from "@features/users/components";
 import type { Role } from "@features/users/types";
 
 export const ErrorMessages = {
@@ -38,9 +39,29 @@ export const CASE_TYPES = {
 export const ROLES = {
   ADMIN: "Admin",
   PORTAL_USER: "Portal User",
+  SECURITY_CONTACT: "Security Contact",
   SYSTEM_USER: "System User",
 } as const;
 
 export const DEFAULT_USER_ROLE: Role = ROLES.PORTAL_USER;
+
+export const ROLE_OPTIONS: RoleOptionProps[] = [
+  {
+    role: ROLES.ADMIN,
+    description: "Full administrative privileges, billing control, and user management.",
+  },
+  {
+    role: ROLES.PORTAL_USER,
+    description: "Can log in to and access the Support Portal",
+  },
+  {
+    role: ROLES.SECURITY_CONTACT,
+    description: "Receives security bulletins and critical security announcements",
+  },
+  {
+    role: ROLES.SYSTEM_USER,
+    description: "Used exclusively for system to system integrations. Cannot log in to the Support Portal",
+  },
+];
 
 export const ADMIN_ROLE_ID = "sn_customerservice.customer_admin";

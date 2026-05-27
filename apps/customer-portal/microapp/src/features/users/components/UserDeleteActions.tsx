@@ -13,7 +13,7 @@ export function UserDeleteActions() {
 
   const handleConfirm = () => {
     setOpen(false);
-    remove.mutate();
+    remove?.mutate();
   };
 
   return (
@@ -23,19 +23,18 @@ export function UserDeleteActions() {
           Danger Zone
         </Typography>
         <Typography variant="subtitle2" color="text.secondary">
-          Send an email invitation directly to a user to join this project. The invitation link will be valid for 7
-          days.
+          Irreversible actions that permanently affect this user. Please proceed with caution.
         </Typography>
 
         <Button
           variant="contained"
           color="error"
-          disabled={remove.isPending}
-          startIcon={remove.isPending ? <CircularProgress size={16} color="inherit" /> : <Trash2 />}
+          disabled={remove?.isPending}
+          startIcon={remove?.isPending ? <CircularProgress size={16} color="inherit" /> : <Trash2 />}
           sx={{ mt: 3 }}
           onClick={() => setOpen(true)}
         >
-          {remove.isPending ? "Removing..." : "Remove User from Project"}
+          {remove?.isPending ? "Removing..." : "Remove User from Project"}
         </Button>
       </Card>
 

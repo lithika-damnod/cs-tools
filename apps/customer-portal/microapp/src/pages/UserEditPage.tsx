@@ -13,13 +13,14 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+import { useEffect } from "react";
+
 import { Button, CircularProgress, Stack, TextField } from "@wso2/oxygen-ui";
 import { Form, FormikContext, useFormik } from "formik";
 
 import {
   InvitationCallout,
   InvitationExpiryCallout,
-  InvitationOverview,
   RoleField,
   UserDeleteActions,
   UserOverview,
@@ -57,8 +58,10 @@ export default function UserEditPage() {
           contactEmail: values.email,
           contactFirstName: values.firstName,
           contactLastName: values.lastName,
-          isCsIntegrationUser: false,
-          isSecurityContact: values.roles[0] === ROLES.SYSTEM_USER,
+          isCsAdmin: values.roles.includes(ROLES.ADMIN),
+          isCsIntegrationUser: values.roles.includes(ROLES.SYSTEM_USER),
+          isPortalUser: values.roles.includes(ROLES.PORTAL_USER),
+          isSecurityContact: values.roles.includes(ROLES.SECURITY_CONTACT),
         });
       } else {
         edit!.mutate({ isSecurityContact: values.roles[0] === ROLES.SYSTEM_USER });
@@ -66,7 +69,11 @@ export default function UserEditPage() {
     },
   });
 
-  const { values, dirty, getFieldProps } = formik;
+  useEffect(() => {
+    console.log("mode: ", mode, "initial: ", initial);
+  }, [mode, initial]);
+
+  const { values, dirty, getFieldProps, setFieldValue } = formik;
 
   return (
     <FormikContext value={formik}>
@@ -110,15 +117,10 @@ export default function UserEditPage() {
           </SectionCard>
 
           <SectionCard title="User Role">
-            <RoleField {...getFieldProps("role")} />
+            <RoleField value={values.roles} onChange={(updated) => setFieldValue("roles", updated)} />
           </SectionCard>
 
-          {mode === USER_EDIT_MODES.INVITE && (
-            <>
-              <InvitationOverview />
-              <InvitationExpiryCallout />
-            </>
-          )}
+          {mode === USER_EDIT_MODES.INVITE && <InvitationExpiryCallout />}
 
           {mode === USER_EDIT_MODES.EDIT && <UserDeleteActions />}
 

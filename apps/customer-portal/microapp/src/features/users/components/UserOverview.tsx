@@ -11,8 +11,8 @@ export function UserOverview() {
   const { email, firstName, lastName } = initial;
 
   return (
-    <Card component={Stack} textAlign="center" alignItems="center" gap={1} p={3}>
-      <UserAvatar>{initial.firstName}</UserAvatar>
+    <Card component={Stack} textAlign="center" alignItems="center" gap={1} p={3} sx={{ bgcolor: "background.paper" }}>
+      <UserAvatar size="large">{initial.firstName}</UserAvatar>
       <Stack textAlign="center" gap={0.5}>
         <Typography variant="h5" fontWeight="medium">
           {firstName + " " + lastName}

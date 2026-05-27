@@ -20,6 +20,5 @@ export * from "./UserItem";
 export * from "./UsersList";
 export * from "./UserOverview";
 export * from "./UserDeleteActions";
-export * from "./InvitationOverview";
 export * from "./InvitationCallout";
 export * from "./InvitationExpiryCallout";

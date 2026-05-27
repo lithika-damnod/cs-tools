@@ -19,6 +19,7 @@ import type { ProjectFeaturesDto } from "@features/projects/types/project.dto";
 
 export type ProjectContextType = {
   projectId: string | null;
+  projectName: string | null;
   noveraEnabled: boolean;
   kbReferencesEnabled: boolean;
   features?: ProjectFeaturesDto;

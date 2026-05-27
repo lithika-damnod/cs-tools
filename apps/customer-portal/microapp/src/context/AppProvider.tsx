@@ -72,6 +72,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       <ProjectContext.Provider
         value={{
           projectId,
+          projectName: project.data?.name ?? null,
           noveraEnabled: project.data?.agentEnabled ?? false,
           kbReferencesEnabled: project.data?.kbReferencesEnabled ?? false,
           features: features.data,

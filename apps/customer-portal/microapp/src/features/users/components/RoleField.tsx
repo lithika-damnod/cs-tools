@@ -13,11 +13,11 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { Chip, FormControlLabel, Radio, RadioGroup, Stack, useRadioGroup } from "@wso2/oxygen-ui";
+import { Checkbox, Stack, Typography } from "@wso2/oxygen-ui";
 
 import type { Role } from "@features/users/types";
 
-import { ROLES } from "@shared/constants";
+import { DEFAULT_USER_ROLE, ROLE_OPTIONS, ROLES } from "@shared/constants";
 
 interface RoleFieldProps {
   value: Role[];
@@ -25,30 +25,51 @@ interface RoleFieldProps {
 }
 
 export function RoleField({ value, onChange }: RoleFieldProps) {
+  const handleSelection = (role: Role) => {
+    if (role === ROLES.SYSTEM_USER) {
+      // If SYSTEM_USER is being selected, it becomes the only active role.
+      // If it's already selected, deselect it and set the default role as the current value.
+      onChange(value.includes(role) ? [DEFAULT_USER_ROLE] : [ROLES.SYSTEM_USER]);
+    } else {
+      // If any other role is selected, strip out SYSTEM_USER and toggle the chosen role.
+      const current = value.filter((r) => r !== ROLES.SYSTEM_USER);
+      const updated = current.includes(role) ? current.filter((r) => r !== role) : [...current, role];
+      onChange(updated);
+    }
+  };
+
   return (
-    <RadioGroup value={value ? value[0] : undefined} onChange={(event) => onChange([event.target.value as Role])}>
-      <Stack gap={0.5}>
-        <RoleOption>{ROLES.PORTAL_USER}</RoleOption>
-        <RoleOption>{ROLES.SYSTEM_USER}</RoleOption>
-      </Stack>
-    </RadioGroup>
+    <Stack gap={1}>
+      {ROLE_OPTIONS.map(({ role, description }) => (
+        <RoleOption
+          key={role}
+          role={role}
+          description={description}
+          checked={value.includes(role)}
+          onChange={() => handleSelection(role)}
+        />
+      ))}
+    </Stack>
   );
 }
 
-export function RoleOption({ children: role }: { children: string }) {
-  const radioGroup = useRadioGroup();
-  const checked = radioGroup?.value === role;
+export interface RoleOptionProps {
+  role: Role;
+  description: string;
+  checked?: boolean;
+  onChange?: () => void;
+}
 
+export function RoleOption({ role, description, checked = false, onChange }: RoleOptionProps) {
   return (
-    <FormControlLabel
-      value={role}
-      control={<Radio />}
-      labelPlacement="start"
-      label={<Chip size="small" label={role} color={checked ? "primary" : "default"} />}
-      sx={{
-        m: 0,
-        justifyContent: "space-between",
-      }}
-    />
+    <Stack direction="row" alignItems="start" gap={1}>
+      <Checkbox value={role} checked={checked} onChange={onChange} />
+      <Stack>
+        <Typography variant="body2">{role}</Typography>
+        <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 }}>
+          {description}
+        </Typography>
+      </Stack>
+    </Stack>
   );
 }
