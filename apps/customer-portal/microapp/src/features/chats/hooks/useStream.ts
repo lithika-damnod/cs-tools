@@ -54,7 +54,14 @@ export function useStream() {
       case "token":
         setAnimationComplete(false);
         setDraft((prev) => {
-          if (!prev) return null;
+          if (!prev)
+            return {
+              author: MESSAGE_AUTHOR_TYPES.AGENT,
+              content: response.content,
+              thinking: true,
+              animated: true,
+            };
+
           return {
             ...prev,
             content: prev.content + response.content,
