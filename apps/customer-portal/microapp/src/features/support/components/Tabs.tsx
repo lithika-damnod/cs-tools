@@ -26,8 +26,14 @@ interface TabsProps {
 }
 
 export function Tabs({ value, onTabChange }: TabsProps) {
-  const { features: { hasServiceRequestReadAccess, hasChangeRequestReadAccess, hasEngagementsReadAccess } = {} } =
-    useProject();
+  const {
+    features: {
+      hasServiceRequestReadAccess,
+      hasChangeRequestReadAccess,
+      hasEngagementsReadAccess,
+      hasSraReadAccess,
+    } = {},
+  } = useProject();
 
   return (
     <MuiTabs variant="scrollable" value={value} onChange={(_, value) => onTabChange(value)}>
@@ -51,11 +57,13 @@ export function Tabs({ value, onTabChange }: TabsProps) {
         />
       )}
 
-      <Tab
-        label={CASE_TYPE_PLURAL_LABELS[CASE_TYPES.SECURITY_REPORT_ANALYSIS]}
-        value={CASE_TYPES.SECURITY_REPORT_ANALYSIS}
-        disableRipple
-      />
+      {hasSraReadAccess && (
+        <Tab
+          label={CASE_TYPE_PLURAL_LABELS[CASE_TYPES.SECURITY_REPORT_ANALYSIS]}
+          value={CASE_TYPES.SECURITY_REPORT_ANALYSIS}
+          disableRipple
+        />
+      )}
 
       {hasEngagementsReadAccess && (
         <Tab label={CASE_TYPE_PLURAL_LABELS[CASE_TYPES.ENGAGEMENT]} value={CASE_TYPES.ENGAGEMENT} disableRipple />

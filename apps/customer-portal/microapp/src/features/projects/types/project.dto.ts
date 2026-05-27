@@ -128,6 +128,7 @@ export interface ProjectFeaturesDto {
   hasServiceRequestWriteAccess: boolean;
   hasServiceRequestReadAccess: boolean;
   hasSraWriteAccess: boolean;
+  hasSraReadAccess: boolean;
   hasChangeRequestReadAccess: boolean;
   hasEngagementsReadAccess: boolean;
   hasUpdatesReadAccess: boolean;

@@ -33,7 +33,8 @@ export function useDashboardStats(): {
   const { toBySeverity, toOutstandingServiceRequests, toOutstandingChangeRequests } = useNavigation();
   const { projectId, features } = useProject();
 
-  const { hasServiceRequestReadAccess, hasChangeRequestReadAccess, hasEngagementsReadAccess } = features ?? {};
+  const { hasServiceRequestReadAccess, hasChangeRequestReadAccess, hasEngagementsReadAccess, hasSraReadAccess } =
+    features ?? {};
 
   const { data: defaultCaseTypeStats } = useQuery(cases.stats(projectId!, { caseTypes: [CASE_TYPES.DEFAULT] }));
 
@@ -56,7 +57,7 @@ export function useDashboardStats(): {
     cases.stats(projectId!, {
       caseTypes: [
         CASE_TYPES.DEFAULT,
-        CASE_TYPES.SECURITY_REPORT_ANALYSIS,
+        ...(hasSraReadAccess ? [CASE_TYPES.SECURITY_REPORT_ANALYSIS] : []),
         ...(hasEngagementsReadAccess ? [CASE_TYPES.ENGAGEMENT] : []),
         ...(hasServiceRequestReadAccess ? [CASE_TYPES.SERVICE_REQUEST] : []),
       ],
