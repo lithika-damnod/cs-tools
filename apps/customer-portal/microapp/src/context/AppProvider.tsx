@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 
 import { useQueries } from "@tanstack/react-query";
 
+import { FiltersContext } from "@context/filters";
 import { MeContext } from "@context/me";
 import { ProjectContext } from "@context/project";
 
@@ -13,8 +14,6 @@ import { AuthorizationFallback, LoadingFallback } from "@shared/components/ui";
 
 import { ADMIN_ROLE_ID } from "@shared/constants";
 import { getLastVisitedProjectId, setLastVisitedProjectId } from "@shared/utils";
-
-import { FiltersContext } from "./filters";
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const lastVisitedProjectId = getLastVisitedProjectId();
@@ -54,6 +53,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   ) {
     if (projectId) setAndStoreProjectId(null);
     return <AuthorizationFallback />;
+  }
+
+  // Skip project selection and redirect directly when the user only has access to one project.
+  if (page.data.pagination.totalRecords === 1) {
+    setAndStoreProjectId(page.data[0].id);
   }
 
   return (
