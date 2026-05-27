@@ -15,5 +15,5 @@
 // under the License.
 
 export function toDate(value: string): Date {
-  return new Date(value.replace(" ", "T"));
+  return new Date(value.replace(" ", "T") + "Z");
 }

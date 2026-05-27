@@ -14,6 +14,7 @@ import { useDateTime } from "@shared/hooks";
 export function CommentsList() {
   const { format } = useDateTime();
   const { comments, isLoading } = useComments();
+
   useEffect(scrollToBottom, [comments]);
 
   if (isLoading) return <CommentsListSkeleton />;
