@@ -24,3 +24,9 @@ export function scrollTo(
 
   ref.current?.scrollIntoView(opts);
 }
+
+export function scrollToBottom() {
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  });
+}

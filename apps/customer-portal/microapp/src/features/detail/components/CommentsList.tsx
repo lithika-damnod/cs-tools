@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+
+import { scrollToBottom } from "@root/src/shared/utils";
 import { Stack, Typography } from "@wso2/oxygen-ui";
 import DOMPurify from "dompurify";
 
@@ -11,6 +14,7 @@ import { useDateTime } from "@shared/hooks";
 export function CommentsList() {
   const { format } = useDateTime();
   const { comments, isLoading } = useComments();
+  useEffect(scrollToBottom, [comments]);
 
   if (isLoading) return <CommentsListSkeleton />;
 

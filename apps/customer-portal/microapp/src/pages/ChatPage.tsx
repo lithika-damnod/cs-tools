@@ -13,7 +13,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Box, Stack } from "@wso2/oxygen-ui";
 import { MessageSquareQuote } from "@wso2/oxygen-ui-icons-react";
@@ -27,7 +27,7 @@ import { useClassify, useConversation, useEnvProducts, useNovera, useStream } fr
 import { CommentBar } from "@shared/components/core";
 
 import { Tab } from "@shared/constants";
-import { scrollTo, toTranscript } from "@shared/utils";
+import { scrollToBottom, toTranscript } from "@shared/utils";
 
 export default function ChatPage() {
   useDeclareLayout({
@@ -50,7 +50,6 @@ export default function ChatPage() {
   const classify = useClassify(messages);
   const { envProducts } = useEnvProducts();
 
-  const bottomRef = useRef<HTMLDivElement>(null);
   const [comment, setComment] = useState("");
 
   const handleSend = () => {
@@ -69,9 +68,7 @@ export default function ChatPage() {
     });
   };
 
-  useEffect(() => {
-    scrollTo(bottomRef);
-  }, [messages, draft]);
+  useEffect(scrollToBottom, [messages, draft?.content]);
 
   return (
     <>
@@ -82,7 +79,6 @@ export default function ChatPage() {
 
         {/* Temporary message bubble for streamed content */}
         {draft && <Bubble {...draft} onAnimationComplete={finish} />}
-        <div ref={bottomRef} />
       </Stack>
 
       <CommentBar
