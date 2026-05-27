@@ -2,6 +2,8 @@ import { Button, CircularProgress, InputAdornment, Stack, Typography } from "@ws
 import { Folder } from "@wso2/oxygen-ui-icons-react";
 import { Form, useFormikContext } from "formik";
 
+import { useProject } from "@context/project";
+
 import { DEPLOYMENT_DISABLED_PROJECT_TYPES } from "@config/constants";
 
 import {
@@ -19,7 +21,8 @@ export function CreateCaseForm() {
   useAutoFill();
 
   const { state } = useCreateCase();
-  const { projects, deployments, products, issueTypes, severities } = useCreateCaseFormOptions();
+  const { projectName } = useProject();
+  const { deployments, products, issueTypes, severities } = useCreateCaseFormOptions();
   const { values, setFieldValue, ...formik } = useFormikContext<CreateCaseFormValues>();
   const { classified, remove } = useClassification();
 
@@ -29,12 +32,12 @@ export function CreateCaseForm() {
 
       <Stack pb={5} gap={5}>
         <Stack gap={2}>
-          <SelectField
+          <TextField
             required
             disabled
             name="project"
             label="Project"
-            options={projects.options}
+            value={projectName || "No project name available"}
             slots={{
               input: {
                 startAdornment: (
