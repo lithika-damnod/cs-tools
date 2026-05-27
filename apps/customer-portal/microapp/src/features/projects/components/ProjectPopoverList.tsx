@@ -16,6 +16,7 @@ export function ProjectPopoverList({ search, onClose }: { search: string; onClos
   return (
     <InfiniteList
       {...query}
+      virtualize={false}
       sentinel={<ProjectPopoverListSkeleton />}
       tail={
         totalRecords === 0 && (

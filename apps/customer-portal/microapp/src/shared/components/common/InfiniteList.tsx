@@ -26,9 +26,10 @@ interface InfiniteListProps<TItem, TError>
   children: (item: TItem, index: number) => React.ReactNode;
   sentinel: React.ReactNode;
   tail?: React.ReactNode;
+  virtualize?: boolean;
 }
 
-export function InfiniteList<TItem, TError>(props: InfiniteListProps<TItem, TError>) {
+export function InfiniteList<TItem, TError>({ virtualize = true, ...props }: InfiniteListProps<TItem, TError>) {
   const { children, sentinel, tail, data, hasNextPage, isFetchingNextPage, fetchNextPage } = props;
   const scrollRef = useRef<HTMLDivElement>(null);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -65,30 +66,38 @@ export function InfiniteList<TItem, TError>(props: InfiniteListProps<TItem, TErr
 
   return (
     <div ref={scrollRef} style={{ height: "100%", overflow: "auto" }}>
-      <div
-        style={{
-          height: virtualizer.getTotalSize(),
-          width: "100%",
-          position: "relative",
-        }}
-      >
-        {virtualizer.getVirtualItems().map((virtualItem) => (
-          <div
-            key={virtualItem.key}
-            data-index={virtualItem.index}
-            ref={virtualizer.measureElement}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              transform: `translateY(${virtualItem.start}px)`,
-            }}
-          >
-            {children(allItems[virtualItem.index], virtualItem.index)}
-          </div>
-        ))}
-      </div>
+      {virtualize ? (
+        <div
+          style={{
+            height: virtualizer.getTotalSize(),
+            width: "100%",
+            position: "relative",
+          }}
+        >
+          {virtualizer.getVirtualItems().map((virtualItem) => (
+            <div
+              key={virtualItem.key}
+              data-index={virtualItem.index}
+              ref={virtualizer.measureElement}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                transform: `translateY(${virtualItem.start}px)`,
+              }}
+            >
+              {children(allItems[virtualItem.index], virtualItem.index)}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div>
+          {allItems.map((item, index) => (
+            <div key={index}>{children(item, index)}</div>
+          ))}
+        </div>
+      )}
 
       {(!data || hasNextPage) && <div ref={sentinelRef}>{sentinel}</div>}
 
